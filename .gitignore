@@ -11,6 +11,11 @@ _main.run.xml
 _todo.md
 _bookdown_files
 
+*_cache/
+/cache/
+*_files/
+/files/
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
