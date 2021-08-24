@@ -3,7 +3,7 @@ library(ggplot2)
 
 set.seed(1234)
 
-# Definición de parámetros
+# Parámetros
 N     <- 2000                 # Número de simulaciones
 alpha <- 0.05                 # Nivel de significancia
 z     <- qnorm(1 - alpha / 2) # Cuantil de la distribución normal
@@ -22,12 +22,18 @@ lim.sup <- prob + z * sqrt(prob * (1 - prob) / 1:N)
 df <- data.frame(sim = 1:N, prob, lim.inf, lim.sup)
 
 # Gráfica
-ggplot(df, aes(x = sim, y = prob)) +
+p <- ggplot(df, aes(x = sim, y = prob)) +
     geom_line(colour = 'black') +
     geom_ribbon(aes(ymin = lim.inf, ymax = lim.sup), alpha = 0.1) +
     geom_hline(yintercept = 2 * r / (pi * d)) +
-    labs(title = "Aguja de Buffon \nSimulación",
-         x = "Número de simulaciones",
-         y = "Probabilidad") +
+    labs(title = 'Aguja de Buffon \nSimulación',
+         x = 'Número de simulaciones',
+         y = 'Probabilidad') +
     ylim(0, 1) +
     theme_minimal()
+
+ggsave(path = 'simulation2021/exercises/',
+       filename = 'aguja_de_Buffon.svg',
+       plot = p,
+       width = 15,
+       height = 10)
