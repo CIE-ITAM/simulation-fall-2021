@@ -79,7 +79,7 @@ P(X > t + s \mid X > t) &= \frac{P\left(X > t + s, X > t \right)}{P(X > t)}\\
 
 Simulamos la posible llegada de un cliente $Y \sim \text{Bernoulli}(0.9)$ tal que dicho cliente llega $(X \mid Y = 1) = 5 + u_1$, donde $u_1 \sim P(\text{llegada})$. Finalmente, para determinar el tiempo de salida $u_3$, necesitamos $u_2 \sim P(\text{tiempo de consulta})$ tal que $u_3 = u_1 + u_2$.
 
-Así pues, para 100 pacientes:
+Así pues, para 50 pacientes:
 
 ```{r}
 N <- 50 # número de pacientes
