@@ -3,12 +3,12 @@ library(tidyr)
 
 set.seed(1234)
 
-# Parámetros
-N      <- 5000 # Número de simulaciones
+# Par?metros
+N      <- 5000 # N?mero de simulaciones
 count  <- rep(0, 18)
 probs  <- rep(0, 18)
 
-# Simulación
+# Simulaci?n
 die1 <- sample(1:6, N, replace = TRUE) # dado 1
 die2 <- sample(1:6, N, replace = TRUE) # dado 2
 die3 <- sample(1:6, N, replace = TRUE) # dado 3
@@ -31,7 +31,7 @@ df.1 <- data.frame(number = 1:18, probs)
 df.2 <- data.frame(sim = 1:N, nine = prob.09, ten = prob.10)
 df.2 <- df.2 %>% gather(number, prob, nine, ten)
 
-# Gráficas
+# Gr?ficas
 
 p.1 <- ggplot(df.1, aes(x = number, y = probs)) +
     geom_bar(stat = 'identity', fill = 'black') +
@@ -44,10 +44,10 @@ p.2 <- ggplot(df.2, aes(x = sim, y = prob, colour = number)) +
     geom_line() +
     scale_color_manual(values = c('tomato2', 'black'),
                        labels = c('9', '10')) +
-    labs(title = 'Dados de Galileo \nSimulación',
-         x = 'Número de simulaciones',
+    labs(title = 'Dados de Galileo \nSimulaci?n',
+         x = 'N?mero de simulaciones',
          y = 'Probabilidad',
-         colour = 'Número') +
+         colour = 'N?mero') +
     ylim(0, 1) +
     theme_minimal()
 
