@@ -76,6 +76,108 @@ P(X > t + s \mid X > t) &= \frac{P\left(X > t + s, X > t \right)}{P(X > t)}\\
                         &= P(X > s) .
 \end{align*}
 
+# Problema 2 
+
+```{r}
+lanzamientos<-rbinom(500,1,0.5)
+lanzamientos[lanzamientos==0]<-"A"
+lanzamientos[lanzamientos==1]<-"S"
+y<-c()
+cont<-0
+for(i in 1:500){
+  if(lanzamientos[i]=="S"){
+  cont=cont+1
+  y[i]=cont
+  } else{y[i]=cont}  
+}
+```
+
+## Inciso (i) 
+
+```{r}
+x<-c(1:500)
+y1<-y/x
+```
+```{r,echo=FALSE}
+plot(x,y1,xlab="n",ylab="r/n",main="# de soles/n por cada n lanzamientos",type="l",ylim=c(0,0.9))
+```
+
+## Inciso (ii)
+
+```{r}
+y2<-2*y-x
+```
+```{r,echo=FALSE}
+plot(x,y2,xlab="n",ylab="2r-n",main="Diferencia entre soles y águilas por cada n lanzamientos",type="l")
+```
+
+Podemos observar que la razón r/n se aproxima a 0.5 cuando el número de lanzamientos tiende a infinito; comportamiento que tiene sentido ya que al haber una probabilidad de 1/2 de obtener un águila o un sol, sabemos que aproximadamente en la mitad de nuestros lanzamientos tiraremos un sol.
+
+En el segundo gráfico, podemos ver que la diferencia entre el número de águilas y soles obtenidos se centra alrededor del 0: es decir, conforme vamos aumentando el número de lanzamientos, tenemos aproximadamente la misma cantidad de soles y de águilas.  
+
+# Problema 3 
+
+Los supuestos iniciales que consideramos para modelar la situación de las personas que llegaron a la isla fueron los siguientes:
+  1. Las personas llegan a la isla con 20 años de edad. 
+  2. No hay cambios de pareja a lo largo del tiempo. 
+  3. Todas las personas recién llegadas se emparejan (es decir, hay 3 parejas).
+  4. Cada pareja puede tener 1 bebé al año con probabilidad 0.6. La probabilidad de que el bebé sea hombre es de 0.4 y de que sea mujer 0.6. 
+  5. La probabilidad de que el bebé sobreviva es de 0.7 
+  6. Las parejas pueden tener, a lo más, 2 bebés. 
+
+```{r}
+n<-6 #población total inicial
+t<-c(1:10) #años transcurridos 
+sexo<-c("M","M","M","H","H","H") 
+edad<-c(20,20,20,20,20,20)
+pareja<-c("S","S","S","S","S","S")
+num_hijos<-c(0,0,0,NaN,NaN,NaN)
+tabla<-data.frame(sexo,edad,pareja,num_hijos)
+cols<-c("sexo","edad","pareja","num_hijos")
+tabla_nuevos<-data.frame()
+
+for (tiempo in t){
+  for (persona in 1:6){
+semilla_embarazo<-rbinom(1,1,0.6)
+semilla_sexo<-rbinom(1,1,0.6)
+semilla_muerte<-rbinom(1,1,0.3)
+if (tabla[persona,3]=="S" && tabla[persona,1]=="M" && tabla[persona,4]<2){
+  if (semilla_embarazo==1){
+    if(semilla_sexo==1){
+      dato_nuevo<-c("M",0,"N",0)
+      n<-n+1}
+    else{dato_nuevo<-c("H",0,"N",NaN)
+           
+         n<-n+1}
+    if(semilla_muerte==1){
+      dato_nuevo<-NaN
+      n<-n-1}
+    else{tabla[persona,4]=tabla[persona,4]+1
+    tabla_nuevos<-rbind(tabla_nuevos,dato_nuevo)}
+  }
+}
+}
+if (n>11){
+  #print(tiempo)
+  colnames(tabla_nuevos)<-c("sexo","edad","pareja","num_hijos")
+  break} 
+}
+
+```
+
+En las siguientes tablas (tabla de población original y tabla de bebés recié nacidos), podemos observar el comportamiento de la población tomando en cuenta los supuestos previamente mencionados. Al ejecutar el código anterior un total de 10 veces, obtuvimos que el tiempo (t) en que la población de duplica es de 3,6,7,3,8,4,5,5,7 y 4 años, promediando un total de 5.2 años. 
+
+```{r,echo=FALSE}
+print(tabla)
+print(tabla_nuevos)
+```
+
+Otros supuestos que se pueden tomar, a largo plazo, que nos parecieron adecuados para un problema de este estilo son: 
+- A qué edad los bebés pueden emparejarse y comenzar a reproducirse 
+- Cambios de parejas entre las personas. 
+- Número límite de bebés
+- Edad a la que las mujeres dejan de tener bebés 
+
 # Problema 4
 
 Simulamos la posible llegada de un cliente $Y \sim \text{Bernoulli}(0.9)$ tal que dicho cliente llega $(X \mid Y = 1) = 5 + u_1$, donde $u_1 \sim P(\text{llegada})$. Finalmente, para determinar el tiempo de salida $u_3$, necesitamos $u_2 \sim P(\text{tiempo de consulta})$ tal que $u_3 = u_1 + u_2$.
