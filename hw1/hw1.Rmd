@@ -257,7 +257,7 @@ ggplot(queue, aes(x = Var1, y = Freq, group = 1)) +
 
 # Problema 5
 
-5. Probar que la parte fraccionaria de la suma de uniforemes $[0,1]$ $U_1 + \cdots + U_k$ es también uniforme en el intervalo [0,1]. (\textit{hint:} usar inducción matemática)
+Probar que la parte fraccionaria de la suma de uniforemes $[0,1]$ $U_1 + \cdots + U_k$ es también uniforme en el intervalo [0,1]. (\textit{hint:} usar inducción matemática)
 
 \vspace{3mm}
 
@@ -410,10 +410,23 @@ cuadradoMedio <- function(semilla){
 }
 
 ```
+\newpage
 
 Lista de ciclos cuando la semilla pertence al conjunto {1,...,99}
 
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('periodos cm 1-99.jpg')
+```
+
+\newpage
+
 El método del cuadrado medio es de baja calidad para la generación de números aleatorios ya que puede degenerar fácilmente en cero resultando en una lista de números aleatorios corta. Además, este método no pasa pruebas estándares de independecia y aleatoriedad por lo que no se recomienda su uso más que para fines didácticos. 
+
+Diagrama de flujo de algorítmo de cuadrado medio 
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('diagrama de flujo cuadradomedio.jpg')
+```
 
 \newpage
 
