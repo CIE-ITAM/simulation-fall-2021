@@ -7,7 +7,6 @@ output:
     tufte::tufte_handout:
     citation_package: natbib
 latex_engine: xelatex
-bibliography: skeleton.bib
 link-citations: yes
 ---
 
@@ -76,48 +75,70 @@ P(X > t + s \mid X > t) &= \frac{P\left(X > t + s, X > t \right)}{P(X > t)}\\
                         &= P(X > s) .
 \end{align*}
 
+\newpage
+
 # Problema 2 
 
 ```{r}
-lanzamientos<-rbinom(500,1,0.5)
-lanzamientos[lanzamientos==0]<-"A"
-lanzamientos[lanzamientos==1]<-"S"
-y<-c()
-cont<-0
-for(i in 1:500){
-  if(lanzamientos[i]=="S"){
-  cont=cont+1
-  y[i]=cont
-  } else{y[i]=cont}  
+lanzamientos <- rbinom(500, 1, 0.5)
+lanzamientos[lanzamientos == 0] <- "A"
+lanzamientos[lanzamientos == 1] <- "S"
+y <- c()
+cont <- 0
+for (i in 1:500) {
+  if (lanzamientos[i] == "S") {
+    cont = cont + 1
+    y[i] = cont
+  } else{
+    y[i] = cont
+  }
 }
 ```
 
 ## Inciso (i) 
 
 ```{r}
-x<-c(1:500)
-y1<-y/x
+x <- c(1:500)
+y1 <- y / x
 ```
-```{r,echo=FALSE}
-plot(x,y1,xlab="n",ylab="r/n",main="# de soles/n por cada n lanzamientos",type="l",ylim=c(0,0.9))
+```{r,fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
+plot(
+  x,
+  y1,
+  xlab = "n",
+  ylab = "r/n",
+  main = "Número de soles/n por cada n lanzamientos",
+  type = "l",
+  ylim = c(0, 0.9)
+)
 ```
 
 ## Inciso (ii)
 
 ```{r}
-y2<-2*y-x
+y2 <- 2 * y - x
 ```
-```{r,echo=FALSE}
-plot(x,y2,xlab="n",ylab="2r-n",main="Diferencia entre soles y águilas por cada n lanzamientos",type="l")
+```{r,fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
+plot(
+  x,
+  y2,
+  xlab = "n",
+  ylab = "2r-n",
+  main = "Diferencia entre soles y águilas por cada n lanzamientos",
+  type = "l"
+)
 ```
 
 Podemos observar que la razón r/n se aproxima a 0.5 cuando el número de lanzamientos tiende a infinito; comportamiento que tiene sentido ya que al haber una probabilidad de 1/2 de obtener un águila o un sol, sabemos que aproximadamente en la mitad de nuestros lanzamientos tiraremos un sol.
 
 En el segundo gráfico, podemos ver que la diferencia entre el número de águilas y soles obtenidos se centra alrededor del 0: es decir, conforme vamos aumentando el número de lanzamientos, tenemos aproximadamente la misma cantidad de soles y de águilas.  
 
+\newpage
+
 # Problema 3 
 
 Los supuestos iniciales que consideramos para modelar la situación de las personas que llegaron a la isla fueron los siguientes:
+
   1. Las personas llegan a la isla con 20 años de edad. 
   2. No hay cambios de pareja a lo largo del tiempo. 
   3. Todas las personas recién llegadas se emparejan (es decir, hay 3 parejas).
@@ -126,43 +147,50 @@ Los supuestos iniciales que consideramos para modelar la situación de las perso
   6. Las parejas pueden tener, a lo más, 2 bebés. 
 
 ```{r}
-n<-6 #población total inicial
-t<-c(1:10) #años transcurridos 
-sexo<-c("M","M","M","H","H","H") 
-edad<-c(20,20,20,20,20,20)
-pareja<-c("S","S","S","S","S","S")
-num_hijos<-c(0,0,0,NaN,NaN,NaN)
-tabla<-data.frame(sexo,edad,pareja,num_hijos)
-cols<-c("sexo","edad","pareja","num_hijos")
-tabla_nuevos<-data.frame()
+n <- 6 #población total inicial
+t <- c(1:10) #años transcurridos
+sexo <- c("M", "M", "M", "H", "H", "H")
+edad <- c(20, 20, 20, 20, 20, 20)
+pareja <- c("S", "S", "S", "S", "S", "S")
+num_hijos <- c(0, 0, 0, NaN, NaN, NaN)
+tabla <- data.frame(sexo, edad, pareja, num_hijos)
+cols <- c("sexo", "edad", "pareja", "num_hijos")
+tabla_nuevos <- data.frame()
 
-for (tiempo in t){
-  for (persona in 1:6){
-semilla_embarazo<-rbinom(1,1,0.6)
-semilla_sexo<-rbinom(1,1,0.6)
-semilla_muerte<-rbinom(1,1,0.3)
-if (tabla[persona,3]=="S" && tabla[persona,1]=="M" && tabla[persona,4]<2){
-  if (semilla_embarazo==1){
-    if(semilla_sexo==1){
-      dato_nuevo<-c("M",0,"N",0)
-      n<-n+1}
-    else{dato_nuevo<-c("H",0,"N",NaN)
-           
-         n<-n+1}
-    if(semilla_muerte==1){
-      dato_nuevo<-NaN
-      n<-n-1}
-    else{tabla[persona,4]=tabla[persona,4]+1
-    tabla_nuevos<-rbind(tabla_nuevos,dato_nuevo)}
+for (tiempo in t) {
+  for (persona in 1:6) {
+    semilla_embarazo <- rbinom(1, 1, 0.6)
+    semilla_sexo <- rbinom(1, 1, 0.6)
+    semilla_muerte <- rbinom(1, 1, 0.3)
+    if (tabla[persona, 3] == "S" &&
+        tabla[persona, 1] == "M" && tabla[persona, 4] < 2) {
+      if (semilla_embarazo == 1) {
+        if (semilla_sexo == 1) {
+          dato_nuevo <- c("M", 0, "N", 0)
+          n <- n + 1
+        }
+        else{
+          dato_nuevo <- c("H", 0, "N", NaN)
+          
+          n <- n + 1
+        }
+        if (semilla_muerte == 1) {
+          dato_nuevo <- NaN
+          n <- n - 1
+        }
+        else{
+          tabla[persona, 4] = tabla[persona, 4] + 1
+          tabla_nuevos <- rbind(tabla_nuevos, dato_nuevo)
+        }
+      }
+    }
+  }
+  if (n > 11) {
+    #print(tiempo)
+    colnames(tabla_nuevos) <- c("sexo", "edad", "pareja", "num_hijos")
+    break
   }
 }
-}
-if (n>11){
-  #print(tiempo)
-  colnames(tabla_nuevos)<-c("sexo","edad","pareja","num_hijos")
-  break} 
-}
-
 ```
 
 En las siguientes tablas (tabla de población original y tabla de bebés recié nacidos), podemos observar el comportamiento de la población tomando en cuenta los supuestos previamente mencionados. Al ejecutar el código anterior un total de 10 veces, obtuvimos que el tiempo (t) en que la población de duplica es de 3,6,7,3,8,4,5,5,7 y 4 años, promediando un total de 5.2 años. 
@@ -172,11 +200,14 @@ print(tabla)
 print(tabla_nuevos)
 ```
 
-Otros supuestos que se pueden tomar, a largo plazo, que nos parecieron adecuados para un problema de este estilo son: 
-- A qué edad los bebés pueden emparejarse y comenzar a reproducirse 
-- Cambios de parejas entre las personas. 
-- Número límite de bebés
-- Edad a la que las mujeres dejan de tener bebés 
+Otros supuestos que se pueden tomar, a largo plazo, que nos parecieron adecuados para un problema de este estilo son:
+
+* A qué edad los bebés pueden emparejarse y comenzar a reproducirse.
+* Cambios de parejas entre las personas. 
+* Número límite de bebés.
+* Edad a la que las mujeres dejan de tener bebés. 
+
+\newpage
 
 # Problema 4
 
@@ -207,12 +238,11 @@ arrival.time <- cumsum(arrival)
 departure <- arrival.time + duration
 
 # Clientes en espera cada 5 horas
-queue.1 <- as.data.frame(table(cut(departure, breaks = seq(0, N * 5, by = 5))))
-queue.2 <- as.data.frame(spline(queue.1$Var1, queue.1$Freq))
+queue <- as.data.frame(table(cut(departure, breaks = seq(0, N * 5, by = 5))))
 ```
 
 ```{r fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
-ggplot(queue.1, aes(x = Var1, y = Freq, group = 1)) +
+ggplot(queue, aes(x = Var1, y = Freq, group = 1)) +
     geom_point() +
     geom_line() +
     labs(title = 'Clientes en espera cada 5 horas',
@@ -224,66 +254,106 @@ ggplot(queue.1, aes(x = Var1, y = Freq, group = 1)) +
           axis.text.x=element_blank())
 ```
 
+\newpage
+
 # Problema 7
 
 Si dos dados están cargados de tal manera que en un dado, el valor 1 aparecerá exactamente el doble de veces que los otros valores, y el otro dato está igualmente cargado hacia el 6, calculen la probabilidad $p_{s}$ de que un total exactamente igual a $s$ aparecerá en la suma de los dados, para $2\leq s \leq 12$.
 
 Sea $D_{1}$ el dado cargado al valor 1 y $D_{6}$ el dado cargado al valor 6. En cada dado $D_{i}$, la probabilidad de obtener el valor $i$ es el doble de la probabilidad de obtener cualquier otro valor. Sea $q$ la probabilidad de obtener el valor $i$ en el dado $D_{i}$, y $q/2$ la probabilidad de obtener cualquier otro valor, por lo que: 
 
-$$\sum_{k=1}^{6}\mathbb{P}[D_{i} = k] =  q + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} = 1 \implies \frac{7q}{2} = 1 \implies q = \frac{2}{7}$$
+$$\sum_{k=1}^{6}P[D_{i} = k] =  q + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} = 1 \implies \frac{7q}{2} = 1 \implies q = \frac{2}{7}$$
 
-Entonces $\mathbb{P}[D_{i} = i] = \frac{2}{7}$ y $\mathbb{P}[D_{i} = j] = \frac{1}{7}$, para $i\neq j$. 
-
-\
+Entonces $P[D_{i} = i] = \frac{2}{7}$ y $P[D_{i} = j] = \frac{1}{7}$, para $i\neq j$.
 
 Sea $s$ la suma del valor de los dados $D_{1}$ y $D_{6}$. Suponiendo que $D_{1}$ y $D_{6}$ son independientes, entonces:
 
-$\mathbb{P}[s = 2] = \mathbb{P}[D_{1} = 1, D_{6} = 1] = \frac{2}{7}\cdot\frac{1}{7} = \frac{2}{49}$
+\begin{align*}
+P[s = 2]  &= P[D_{1} = 1, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{1}{7} \\
+          &= \frac{2}{49} \\
+P[s = 3]  &= P[D_{1} = 1, D_{6} = 2] + P[D_{1} = 2, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{3}{49} \\
+P[s = 4]  &= P[D_{1} = 1, D_{6} = 3] + P[D_{1} = 2, D_{6} = 2] \\ 
+          &+ P[D_{1} = 3, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{4}{49} \\
+P[s = 5]  &= P[D_{1} = 1, D_{6} = 4] + P[D_{1} = 2, D_{6} = 3] \\ 
+          &+ P[D_{1} = 3, D_{6} = 2] + P[D_{1} = 4, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{5}{49}
+\end{align*}
 
-$\mathbb{P}[s = 3] = \mathbb{P}[D_{1} = 1, D_{6} = 2] + \mathbb{P}[D_{1} = 2, D_{6} = 1] = \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7}= \frac{3}{49}$
+\newpage
 
-$\mathbb{P}[s = 4] = \mathbb{P}[D_{1} = 1, D_{6} = 3] + \mathbb{P}[D_{1} = 2, D_{6} = 2] + \mathbb{P}[D_{1} = 3, D_{6} = 1] = \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7}= \frac{4}{49}$
-
-$\mathbb{P}[s = 5] = \mathbb{P}[D_{1} = 1, D_{6} = 4] + \mathbb{P}[D_{1} = 2, D_{6} = 3] + \mathbb{P}[D_{1} = 3, D_{6} = 2] + \mathbb{P}[D_{1} = 4, D_{6} = 1] = \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} = \frac{5}{49}$
-
-$\mathbb{P}[s = 6] = \mathbb{P}[D_{1} = 1, D_{6} = 5] + \mathbb{P}[D_{1} = 2, D_{6} = 4] + \mathbb{P}[D_{1} = 3, D_{6} = 3] + \mathbb{P}[D_{1} = 4, D_{6} = 2] + \mathbb{P}[D_{1} = 5, D_{6} = 1] = \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} = \frac{6}{49}$
-
-$\mathbb{P}[s = 7] = \mathbb{P}[D_{1} = 1, D_{6} = 6] + \mathbb{P}[D_{1} = 2, D_{6} = 5] + \mathbb{P}[D_{1} = 3, D_{6} = 4] + \mathbb{P}[D_{1} = 4, D_{6} = 3] + \mathbb{P}[D_{1} = 5, D_{6} = 2] + \mathbb{P}[D_{1} = 6, D_{6} = 1] = \frac{2}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7}= \frac{9}{49}$
-
-$\mathbb{P}[s = 8] = \mathbb{P}[D_{1} = 2, D_{6} = 6] + \mathbb{P}[D_{1} = 3, D_{6} = 5] + \mathbb{P}[D_{1} = 4, D_{6} = 4] + \mathbb{P}[D_{1} = 5, D_{6} = 3] + \mathbb{P}[D_{1} = 6, D_{6} = 2] =  \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} = \frac{6}{49}$
-
-$\mathbb{P}[s = 9] = \mathbb{P}[D_{1} = 3, D_{6} = 6] + \mathbb{P}[D_{1} = 4, D_{6} = 5] + \mathbb{P}[D_{1} = 5, D_{6} = 4] + \mathbb{P}[D_{1} = 6, D_{6} = 3] = \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} = \frac{5}{49}$
-
-$\mathbb{P}[s = 10] = \mathbb{P}[D_{1} = 4, D_{6} = 6] + \mathbb{P}[D_{1} = 5, D_{6} = 5] + \mathbb{P}[D_{1} = 6, D_{6} = 4]  = \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7}= \frac{4}{49}$
-
-$\mathbb{P}[s = 11] = \mathbb{P}[D_{1} = 5, D_{6} = 6] + \mathbb{P}[D_{1} = 6, D_{6} = 5] = \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7}= \frac{3}{49}$
-
-$\mathbb{P}[s = 12] = \mathbb{P}[D_{1} = 6, D_{6} = 6] =\frac{1}{7}\cdot\frac{2}{7} = \frac{2}{49}$
-
-\
+\begin{align*}
+P[s = 6]  &= P[D_{1} = 1, D_{6} = 5] + P[D_{1} = 2, D_{6} = 4] \\ 
+          &+ P[D_{1} = 3, D_{6} = 3] + P[D_{1} = 4, D_{6} = 2] \\ 
+          &+ P[D_{1} = 5, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{6}{49} \\
+P[s = 7]  &= P[D_{1} = 1, D_{6} = 6] + P[D_{1} = 2, D_{6} = 5] \\
+          &+ P[D_{1} = 3, D_{6} = 4] + P[D_{1} = 4, D_{6} = 3] \\ 
+          &+ P[D_{1} = 5, D_{6} = 2] + P[D_{1} = 6, D_{6} = 1] \\
+          &= \frac{2}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{9}{49} \\
+P[s = 8]  &= P[D_{1} = 2, D_{6} = 6] + P[D_{1} = 3, D_{6} = 5] \\ 
+          &+ P[D_{1} = 4, D_{6} = 4] + P[D_{1} = 5, D_{6} = 3] \\ 
+          &+ P[D_{1} = 6, D_{6} = 2] \\
+          &=  \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{6}{49} \\
+P[s = 9]  &= P[D_{1} = 3, D_{6} = 6] + P[D_{1} = 4, D_{6} = 5] \\ 
+          &+ P[D_{1} = 5, D_{6} = 4] + P[D_{1} = 6, D_{6} = 3] \\
+          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{5}{49} \\
+P[s = 10] &= P[D_{1} = 4, D_{6} = 6] + P[D_{1} = 5, D_{6} = 5] \\ 
+          &+ P[D_{1} = 6, D_{6} = 4] \\
+          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{4}{49} \\
+P[s = 11] &= P[D_{1} = 5, D_{6} = 6] + P[D_{1} = 6, D_{6} = 5] \\
+          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+          &= \frac{3}{49} \\
+P[s = 12] &= P[D_{1} = 6, D_{6} = 6] \\
+          &= \frac{1}{7}\cdot\frac{2}{7} \\
+          &= \frac{2}{49}
+\end{align*}
 
 Entonces, las probabilidades para $2 \leq s \leq 12$:
 
 ```{r prob_sum_dices_table, echo = FALSE}
 # Creamos vectores con cada valor de s y con las probabilidades de cada valor de s
 s <- c(2:12)
-p <- c("2/49","3/49","4/49","5/49","6/49","9/49","6/49","5/49","4/49","3/49","2/49")
+p <-
+  c("2/49",
+    "3/49",
+    "4/49",
+    "5/49",
+    "6/49",
+    "9/49",
+    "6/49",
+    "5/49",
+    "4/49",
+    "3/49",
+    "2/49")
 
 # Creamos dataframe con las probabilidades de cada valor de s
 probs <- data.frame(s, p)
 
 # Trasponemos el dataframe
 probs <- data.frame(t(probs))
-rownames(probs) <- c("$s$", "$\\mathbb{P}$")
+rownames(probs) <- c("$s$", "$P$")
 
 # Creamos tabla con las probabilidades
 probs %>%
-  kbl(align = "c", booktabs = T, format = "latex", escape = F,
-      col.names = NULL) %>%
+  kbl(
+    align = "c",
+    booktabs = T,
+    format = "latex",
+    escape = F,
+    col.names = NULL
+  ) %>%
   kable_styling(latex_options = "striped")
 ```
 
-
-```{r bib, include=FALSE}
-knitr::write_bib(c('base', 'rmarkdown'), file = 'skeleton.bib')
-```
+\bibliography{}
