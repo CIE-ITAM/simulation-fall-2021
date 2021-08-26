@@ -253,6 +253,180 @@ ggplot(queue, aes(x = Var1, y = Freq, group = 1)) +
           panel.grid.minor = element_blank(),
           axis.text.x=element_blank())
 ```
+\newpage 
+
+# Problema 5
+
+Probar que la parte fraccionaria de la suma de uniforemes $[0,1]$ $U_1 + \cdots + U_k$ es también uniforme en el intervalo [0,1]. (\textit{hint:} usar inducción matemática)
+
+\vspace{3mm}
+
+\textit{\textbf{Demostración:}}
+
+\vspace{3mm}
+
+Denotemos con $\{U\} := U - [U]$ la función fraccional.
+
+\vspace{3mm}
+
+Base de inducción: por demostrar $\{U_1 + U_2\} \thicksim \mathcal{U}[0,1]$
+
+\vspace{3mm}
+
+Se trata de una transformación de variables aleatoria por tanto definamos las siguientes variables aleatorias. 
+
+\vspace{3mm}
+
+
+\begin{align*}
+    U_1 = Z -U_2 \\
+    U_2=W
+\end{align*}
+
+\vspace{3mm}
+
+Obtenemos el Jacobiano de nuestro sistema de variables aleatorias para obtener la función de distribución conjunta de la transformación.
+
+\vspace{3mm}
+
+\[J(z,w) = \begin{vmatrix}
+1 & -1 \\ 
+0 & 1  \notag
+\end{vmatrix} = 1\]
+
+\vspace{3mm}
+
+Por ende, 
+
+\[K(z,w)= \mathbb{I}\{0 \leq z - w \leq 1 \}(z) \mathbb{I}\{0 \leq w \leq 1 \}(w) \Rightarrow\]
+
+\[K(z,w)= \mathbb{I}\{w \leq z  \leq 1 + w \}(z) \mathbb{I}\{0 \leq w \leq 1 \}(w)  \]
+
+\vspace{3mm}
+
+Para obtener $f_{{U_1 + U_2}}(u)$ obtenemos la distribución marginal $K_Z(z)$
+
+\vspace{3mm}
+
+\[f_{\{U_1 + U_2\}}(u) = K_Z(z) = \int_{\mathcal{R}}K(z,w)dw= \begin{cases*} 
+\int \mathbb{I}\{w \leq z  \leq 1 \}(z) \mathbb{I}\{0 \leq w \leq z \}(w) dw \\
+\int \mathbb{I}\{w \leq z  \leq 2 \}(z) \mathbb{I}\{z-1 \leq w \leq 1 \}(w) dw
+
+\end{cases*}
+\]
+
+\vspace{3mm}
+
+Son dos casos para la integral pues la región de integración no es simple. 
+
+\[K_Z(z)=\begin{cases*} 
+\int_0^z \mathbb{I}\{w \leq z  \leq 1 \}(z) dw \\
+\int_{z-1}^1 \mathbb{I}\{w \leq z  \leq 2 \}(z) dw 
+\end{cases*} = \begin{cases*}
+z & , $0\leq z \leq 1$ \\
+2-z & , $1 \leq z \leq 2$
+\end{cases*} \]
+
+Así pues, 
+
+\vspace{3mm}
+
+\begin{equation*}
+    \begin{aligned}
+        F_{\{U_1+U_2\}}(u)= \mathbb{P}[\{U_1 + U_2\} \leq u] &= \int_{0}^u f_{\{1+2\}}(v)dv + \int_{1}^{1+v} f_{\{1+2\}}(v)dv \\
+        &= \frac{v^2}{2}\Bigg]^u_{0} + 2v\Bigg]^{1+u}_1-\frac{v^2}{2}\Bigg]^{1+u}_{1}=u
+    \end{aligned}
+\end{equation*}
+
+\vspace{3mm}
+
+Por tanto, $\{U_1 + U_2\} \sim \mathcal{U}[0,1]$.
+
+\vspace{3mm}
+
+Hipótesis de inducción: Supongamos que $\{U_1 + \cdots + U_n\}\sim \mathcal{U}[0,1]$. Por demostrar que $\{U_1 + \cdots + U_{n+1}\}\sim \mathcal{U}[0,1]$.
+
+\vspace{3mm}
+
+\[\{U_1 + \cdots + U_{n+1} \} = \{\underbrace{\{U_1 + \cdots + U_n\}}_{\text{se distribuye $\mathcal{U}[0,1]$ por H.I.} }+ \,\, U_{n+1}\} \sim \mathcal{U}[0,1] \,\, (\text{paso inductivo cuando} n=2) \,\,\,\,\, \blacksquare\]
+
+
+\newpage
+
+# Problema 6
+
+Mostremos la función de cuadrado medio que calcula Zn a partir de Zn-1 y que imprime la lista del periodo de la semilla. 
+
+```{r}
+library(stringi)
+
+cuadradoMedio <- function(semilla){
+  
+  condicion=0
+  
+  #definimos vector donde irá lista de periodo de generación de numeros
+  cMLista <- NULL
+  
+  #condicion de paro
+  while (condicion==0){
+
+  #checamos si la semilla tiene número de carácteres pares o impares
+  semilla2 <- semilla^2
+  semilla2 <- as.character(semilla2)
+  
+  if (nchar(semilla)%%2==0) { #si semilla tiene #car par
+    numDigRmv <- nchar(semilla2)/4
+    medio<-substr(semilla2, numDigRmv+1, nchar(semilla2)-numDigRmv)
+    medioNum <- as.numeric(medio)
+  }
+  
+  #si la semilla es impar
+  if (nchar(semilla)%%2!=0){
+    
+    if (nchar(semilla2)==1){
+      medio = 0
+      medioNum <- as.numeric(medio)
+    }
+    if (nchar(semilla2)>1){
+      #llenamos con ceros hasta que sea el doble del tamaño de digitos de la semilla
+      semilla2 <- stri_pad_left(semilla2, 2*nchar(semilla), 0)
+      numDigRmv <- ceiling(nchar(semilla2)/4)
+      medio<-substr(semilla2, numDigRmv, nchar(semilla2)-numDigRmv)
+      medioNum <- as.numeric(medio)
+    }
+  }
+  
+  if (medio %in% cMLista == TRUE){
+    condicion=1
+  }
+  
+  if (medio %in% cMLista == FALSE){
+    cMLista <- rbind(cMLista, medio)
+    
+    semilla <- medioNum 
+  }
+  }
+  return(t(cMLista))
+}
+
+```
+\newpage
+
+Lista de ciclos cuando la semilla pertence al conjunto {1,...,99}
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('periodos cm 1-99.jpg')
+```
+
+\newpage
+
+El método del cuadrado medio es de baja calidad para la generación de números aleatorios ya que puede degenerar fácilmente en cero resultando en una lista de números aleatorios corta. Además, este método no pasa pruebas estándares de independecia y aleatoriedad por lo que no se recomienda su uso más que para fines didácticos. 
+
+Diagrama de flujo de algorítmo de cuadrado medio 
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('diagrama de flujo cuadradomedio.jpg')
+```
 
 \newpage
 
