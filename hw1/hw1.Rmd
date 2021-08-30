@@ -1,8 +1,10 @@
 ---
-title: "EST--24107: Tarea 1"
-runningheader: "Tarea 1 -- Equipo C"
-author: "Carlos Lezama, Marco Medina, Emiliano Ramírez y Santiago Villarreal"
-date: "Jueves, 26 de agosto de 2021"
+title: 'EST--24107: Tarea 1'
+runningheader: 'Tarea 1'
+author: |
+  Carlos Lezama, Marco Medina, \
+  Emiliano Ramírez y Santiago Villarreal
+date: 'Jueves, 26 de agosto de 2021'
 output:
     tufte::tufte_handout:
     citation_package: natbib
@@ -82,12 +84,12 @@ P(X > t + s \mid X > t) &= \frac{P\left(X > t + s, X > t \right)}{P(X > t)}\\
 
 ```{r}
 lanzamientos <- rbinom(500, 1, 0.5)
-lanzamientos[lanzamientos == 0] <- "A"
-lanzamientos[lanzamientos == 1] <- "S"
+lanzamientos[lanzamientos == 0] <- 'A'
+lanzamientos[lanzamientos == 1] <- 'S'
 y <- c()
 cont <- 0
 for (i in 1:500) {
-  if (lanzamientos[i] == "S") {
+  if (lanzamientos[i] == 'S') {
     cont = cont + 1
     y[i] = cont
   } else{
@@ -106,10 +108,10 @@ y1 <- y / x
 plot(
   x,
   y1,
-  xlab = "n",
-  ylab = "r/n",
-  main = "Número de soles/n por cada n lanzamientos",
-  type = "l",
+  xlab = 'n',
+  ylab = 'r/n',
+  main = 'Número de soles/n por cada n lanzamientos',
+  type = 'l',
   ylim = c(0, 0.9)
 )
 ```
@@ -123,10 +125,10 @@ y2 <- 2 * y - x
 plot(
   x,
   y2,
-  xlab = "n",
-  ylab = "2r-n",
-  main = "Diferencia entre soles y águilas por cada n lanzamientos",
-  type = "l"
+  xlab = 'n',
+  ylab = '2r-n',
+  main = 'Diferencia entre soles y águilas por cada n lanzamientos',
+  type = 'l'
 )
 ```
 
@@ -150,12 +152,12 @@ Los supuestos iniciales que consideramos para modelar la situación de las perso
 ```{r}
 n <- 6 #población total inicial
 t <- c(1:10) #años transcurridos
-sexo <- c("M", "M", "M", "H", "H", "H")
+sexo <- c('M', 'M', 'M', 'H', 'H', 'H')
 edad <- c(20, 20, 20, 20, 20, 20)
-pareja <- c("S", "S", "S", "S", "S", "S")
+pareja <- c('S', 'S', 'S', 'S', 'S', 'S')
 num_hijos <- c(0, 0, 0, NaN, NaN, NaN)
 tabla <- data.frame(sexo, edad, pareja, num_hijos)
-cols <- c("sexo", "edad", "pareja", "num_hijos")
+cols <- c('sexo', 'edad', 'pareja', 'num_hijos')
 tabla_nuevos <- data.frame()
 
 for (tiempo in t) {
@@ -163,15 +165,15 @@ for (tiempo in t) {
     semilla_embarazo <- rbinom(1, 1, 0.6)
     semilla_sexo <- rbinom(1, 1, 0.6)
     semilla_muerte <- rbinom(1, 1, 0.3)
-    if (tabla[persona, 3] == "S" &&
-        tabla[persona, 1] == "M" && tabla[persona, 4] < 2) {
+    if (tabla[persona, 3] == 'S' &&
+        tabla[persona, 1] == 'M' && tabla[persona, 4] < 2) {
       if (semilla_embarazo == 1) {
         if (semilla_sexo == 1) {
-          dato_nuevo <- c("M", 0, "N", 0)
+          dato_nuevo <- c('M', 0, 'N', 0)
           n <- n + 1
         }
         else{
-          dato_nuevo <- c("H", 0, "N", NaN)
+          dato_nuevo <- c('H', 0, 'N', NaN)
           
           n <- n + 1
         }
@@ -188,7 +190,7 @@ for (tiempo in t) {
   }
   if (n > 11) {
     #print(tiempo)
-    colnames(tabla_nuevos) <- c("sexo", "edad", "pareja", "num_hijos")
+    colnames(tabla_nuevos) <- c('sexo', 'edad', 'pareja', 'num_hijos')
     break
   }
 }
@@ -495,35 +497,35 @@ Entonces, las probabilidades para $2 \leq s \leq 12$:
 # Creamos vectores con cada valor de s y con las probabilidades de cada valor de s
 s <- c(2:12)
 p <-
-  c("2/49",
-    "3/49",
-    "4/49",
-    "5/49",
-    "6/49",
-    "9/49",
-    "6/49",
-    "5/49",
-    "4/49",
-    "3/49",
-    "2/49")
+  c('2/49',
+    '3/49',
+    '4/49',
+    '5/49',
+    '6/49',
+    '9/49',
+    '6/49',
+    '5/49',
+    '4/49',
+    '3/49',
+    '2/49')
 
 # Creamos dataframe con las probabilidades de cada valor de s
 probs <- data.frame(s, p)
 
 # Trasponemos el dataframe
 probs <- data.frame(t(probs))
-rownames(probs) <- c("$s$", "$P$")
+rownames(probs) <- c('$s$', '$P$')
 
 # Creamos tabla con las probabilidades
 probs %>%
   kbl(
-    align = "c",
+    align = 'c',
     booktabs = T,
-    format = "latex",
+    format = 'latex',
     escape = F,
     col.names = NULL
   ) %>%
-  kable_styling(latex_options = "striped")
+  kable_styling(latex_options = 'striped')
 ```
 
 \bibliography{}
