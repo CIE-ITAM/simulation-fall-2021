@@ -15,6 +15,9 @@ link-citations: yes
 ```{r setup, include=FALSE}
 library(tufte)
 library(tidyverse)
+library(mvtnorm)
+library(GGally)
+library(tictoc)
 
 knitr::opts_chunk$set(cache.extra = packageVersion('tufte'), cache = TRUE)
 options(htmltools.dir.version = FALSE)
@@ -38,6 +41,10 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 5
 
+Tenemos $V_i \sim \mathcal{U} (-1, 1)$, $\forall i \in \{1, 2\}$, tal que *no* generamos nuevas uniformes si caemos dentro del círculo unitario --- nuestra zona de aceptación --- cuya área es $(0.5)^2 \pi = \pi / 4 \approx$ `r pi / 4`.
+
+Basta ver que $X \sim \text{Geo}(\pi / 4)$ para concer el número de rechazos antes de aceptar. Por lo tanto, $\mathbb{E}[X] = 1 / (\pi / 4) = 4 / \pi \approx$ `r 4 / pi`.
+
 \newpage
 
 # Problema 6
@@ -50,9 +57,99 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 8
 
+```{r}
+set.seed(1234)
+
+mezcla <- function(n, p, mu1, mu2, s1, s2) {
+    p * rmvnorm(n, mean = mu1, sigma = s1) + (1 - p) * rmvnorm(n, mean = mu2, sigma = s2)
+}
+
+n <- 1000 # observaciones
+p <- 0.5  # mezcla al 50%
+
+mu1 <- c(0, 0, 0, 0)
+mu2 <- c(2, 3, 4, 5)
+
+s1 <- s2 <- diag(4)
+
+z <- as.data.frame(mezcla(n, p, mu1, mu2, s1, s2))
+```
+
+```{r echo=FALSE}
+plt <- c()
+
+for (i in 1:4) {
+    plt[[i]] <- ggplot(z, aes_string(x = names(z)[i])) +
+        geom_histogram(bins = 100,
+                       fill = "#2d6c5f",
+                       alpha = 0.8) +
+        theme_minimal()
+}
+```
+
+```{r fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
+plt[[1]]
+plt[[2]]
+plt[[3]]
+plt[[4]]
+```
+
+```{r fig.width = 10, fig.height = 10, cache=TRUE, echo=FALSE}
+ggpairs(z) + theme_minimal()
+```
+
 \newpage
 
 # Problema 9
+
+## Primer método
+
+```{r}
+wishart1 <- function(k, n, mean, sigma) {
+    require(mvtnorm)
+    W <- list(NULL)
+    for (i in 1:k) {
+        X <- rmvnorm(n, mean = mean, sigma = sigma)
+        W[[i]] <- t(X) %*% X
+    }
+    return(W)
+}
+```
+
+## Método de Bartlett
+
+```{r}
+wishart2 <- function(k, n, mean, sigma) {
+    W <- list(NULL)
+    d <- length(mean)
+    A <- matrix(0, nrow = d, ncol = d)
+    for (i in 1:k) {
+        A[lower.tri(matrix(0, nrow = d, ncol = d))] <-
+            rnorm(d * (d + 1) / 2 - d)
+        diag(A) <- sqrt(rchisq(d, n - (1:d) + 1))
+        L <- chol(sigma)
+        W[[i]] <- L %*% A %*% t(A) %*% t(L)
+    }
+    return(W)
+}
+```
+
+## Comparación
+
+```{r}
+k <- 10000; n <- 10
+mean <- c(0, 0, 0, 0, 0)
+sigma <- diag(5)
+
+tic('First method')
+test1 <- wishart1(k, n, mean, sigma)
+toc()
+
+tic('Bartlett decomposition')
+test2 <- wishart2(k, n, mean, sigma)
+toc()
+```
+
 
 \newpage
 

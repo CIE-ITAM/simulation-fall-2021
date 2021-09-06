@@ -1,22 +1,39 @@
 library(tidyverse)
-library(berryFunctions)
+library(mvtnorm)
 
-exponential_memoryless <- function(N, lambda) {
-    t <- sample(1:10, N, replace = TRUE) # t
-    s <- sample(1:10, N, replace = TRUE) # s
-    
-    # P(X > t + s | X > t)
-    prob.1 <- (1 - pexp(t + s, lambda)) / (1 - pexp(t, lambda))
-    
-    # P(X > s)
-    prob.2 <- 1 - pexp(s, lambda)
-    
-    return(tibble(prob.1, prob.2, almost.equal(prob.1, prob.2)))
+wishart1 <- function(k, n, mean, sigma) {
+    require(mvtnorm)
+    W <- list(NULL)
+    for (i in 1:k) {
+        X <- rmvnorm(n, mean = mean, sigma = sigma)
+        W[[i]] <- t(X) %*% X
+    }
+    return(W)
 }
 
-lambda <- 1 / 3 # Parámetro
-r.1 <- exponential_memoryless(100, lambda) # 100 simulaciones
-r.2 <- exponential_memoryless(1000000, lambda) # 1 000 000 simulaciones
+wishart2 <- function(k, n, mean, sigma) {
+    W <- list(NULL)
+    d <- length(mean)
+    A <- matrix(0, nrow = d, ncol = d)
+    for (i in 1:k) {
+        A[lower.tri(matrix(0, nrow = d, ncol = d))] <-
+            rnorm(d * (d + 1) / 2 - d)
+        diag(A) <- sqrt(rchisq(d, n - (1:d) + 1))
+        L <- chol(sigma)
+        W[[i]] <- L %*% A %*% t(A) %*% t(L)
+    }
+    return(W)
+}
 
-r.1[r.1[,3] == FALSE,]
-r.2[r.2[,3] == FALSE,]
+k <- 5
+n <- 5
+mean <- c(0, 0, 0, 0)
+sigma <- diag(4)
+
+set.seed(1234)
+
+test1 <- wishart1(k, n, mean, sigma)
+test2 <- wishart2(k, n, mean, sigma)
+
+test1
+test2
