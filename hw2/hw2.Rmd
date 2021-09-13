@@ -299,6 +299,83 @@ Notemos gráficamente como el estimador de Chapman nos proporciona mejores resul
 
 # Problema 4
 
+## Inciso (a) 
+
+Usamos primero el método de transformación con distribución inversa:
+```{r}
+f1<-function(x){return(3/2*x^2)}
+raiz<-function(x){
+  sign(x)*abs(x)^(1/3)
+}
+
+n<-10000
+x1<-numeric(n)
+
+for (i in 1:n){x1[i]=(raiz(2*runif(1)-1))} 
+```
+
+```{r,echo=FALSE}
+hist(x1,prob=T,breaks=20)
+curve(expr=f1,from=-1,to=1,ylab="f(x)",add=T)
+```
+
+También, logramos emplear el método de aceptación/rechazo para aproximar la densidad:
+```{r}
+n<-10000
+u1<-runif(n)
+u2<-runif(n)
+y1<-raiz(2*u2-1)
+aceptados<- u1<=f1(y1)/(0.1+2*y1^2)
+pts<-y1[aceptados]
+```
+
+```{r,echo=FALSE}
+curve(expr=(0.1+2*x^2),from=-1,to=1,ylab="g(x) y f(x)",col="green") 
+curve(expr=f1,from=-1,to=1,ylab="f(x)",add=T,col="blue")
+points(pts,u1[aceptados]*(0.1+2*pts^2),pch=16,ce=.2)
+```
+
+## Inciso (b)
+
+Para este inciso, utilizamos únicamente el método de transformación, que presentaba más dificultades al momento de calcular la solución de la distribución inversa.
+
+```{r}
+f2<-function(w,a){
+  if (w>=0 && w<=a){return(w*(1/(a*(1-a))))}
+  else{if(w>=a && w<=1-a){return(1/(1-a))}
+        else{if(w>=1-a && w<=1){return((1-w)/(a*(1-a)))}
+            else {return(0)}}}
+}
+a=0.2
+len=200
+x2 <- seq(-0.01,1.01,length=len)
+y2<-numeric(len)
+for (i in 1:len){
+  y2[i]<-f2(x2[i],a)
+}
+plot(x2,y2,type="l",ylim=c(0,2),xlab="x",ylab="f(x)")  
+
+
+indicadora<-function(x,k1,k2){
+  ifelse(x>=k1 & x<=k2,1,0)
+}
+fx<-function(x,r){
+  indicadora(x,0,r)*sqrt(2*r*(1-r)*runif(1))+
+  indicadora(x,r,1-r)*(runif(1)*(1-r)+r/2)+
+  indicadora(x,1-r,1)*(1-sqrt(1-(runif(1)-(2+2*r-5*r^2)/(2*r*(1-r)))*2*r*(1-r)))
+}
+x<-seq(-0.0001,1.0001,length=10000)
+y<-numeric(length(x))
+for(i in 1:length(x)){
+  y[i]<-fx(x[i],0.2)
+}
+```
+
+```{r,echo=FALSE}
+plot(x2,y2,type="l",ylim=c(0,2),xlab="x",ylab="f(x)")  
+hist(y,prob=T,xlim=c(0,1),ylim=c(0,1.5),breaks=50,add=T)
+```
+
 \newpage
 
 # Problema 5
@@ -367,6 +444,40 @@ knitr::include_graphics('problem6 hist.png')
 \newpage
 
 # Problema 7
+
+```{r}
+n<-100000
+p<-0.4
+blli<-function(x,p){p^x*(1-p)^(1-x)}
+tam<-100
+muestra<-sample(1:tam,n,replace=T)
+binomial1<-numeric(n)
+for(i in 1:n){
+  numexitos<-c(rep(1,muestra[i]),rep(0,tam-muestra[i]))
+  binomial1[i]<-prod(blli(numexitos,p))*factorial(tam)/(factorial(muestra[i])*factorial(tam-muestra[i]))
+}
+
+binomial2<-dbinom(muestra,tam,p)
+```
+
+Como podemos ver, las entradas de ambos vectores (uno simulado y otro calculado con la función) son iguales sobre la muestra que extraímos:
+```{r}
+binomial1[1:5]
+binomial2[1:5]
+
+```
+
+Al evaluar el tiempo de respuesta del programa para simular una binomial mediante convolución, o mediante la función "rnorm", obtuvimos que es más rápido simular la distribución con la función instalada en R.
+
+```{r}
+system.time(
+for(i in 1:n){
+  numexitos<-c(rep(1,muestra[i]),rep(0,tam-muestra[i]))
+  binomial1[i]<-prod(blli(numexitos,p))*factorial(tam)/(factorial(muestra[i])*factorial(tam-muestra[i]))
+})
+
+system.time(binomial2<-dbinom(muestra,tam,p))
+```
 
 \newpage
 
@@ -470,6 +581,28 @@ toc()
 
 # Problema 10
 
+Después de generar las 500 observaciones de la distribución normal bivariada con su respectiva matriz de covaroanza, se tomó el exponencial de la matriz. Al exponenciar una variable aleatoria distribuida normal, obtenemos una  distribución lognormal. Lo que podemos observar en la gráfica, es que existen correlaciones que no pueden darse en una distribución lognormal, que terminan siendo muy cercanas a 0. 
+
+```{r}
+library(mvtnorm)
+SIG2<-seq(from=0.1,to=20,length.out = 100)
+RHO<-seq(from=-1,to=1,length.out=21)
+matriz<-matrix(numeric(),ncol=2)
+pts<-data.frame()
+for (i in 1:length(SIG2)){
+  for(j in 1:length(RHO)){
+  cvz<-matrix(c(1,sqrt(SIG2[i])*RHO[j],sqrt(SIG2[i])*RHO[j],SIG2[i]),ncol=2)
+  z<-rmvnorm(500,mean=c(0,0),sigma=cvz) 
+  expz<-exp(z)
+  p<-cor(expz[,1],expz[,2])
+  matriz<-rbind(matriz,c(SIG2[i],p)) 
+  }
+}
+```
+
+```{r,echo=FALSE}
+plot(matriz[,1],matriz[,2],xlab="Sigma^2",ylab="Correlación")
+```
 \newpage
 
 \bibliography{}
