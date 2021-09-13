@@ -81,8 +81,9 @@ A continuacion se presentará el código en \texttt{R} que calcula con una funci
 ###### PROBLEMA UNO #######
 
 
-# Esta primera función usa el estimador de la varianza de Sekar y Deming y el estimador de N que se obtiene 
-# del método de máxima verosimilitud. El problema del estimador de máxima verosimilitud y de la varianza es 
+# Esta primera función usa el estimador de la varianza de Sekar y Deming y
+# el estimador de N que se obtiene del método de máxima verosimilitud.
+# El problema del estimador de máxima verosimilitud y de la varianza es
 # Esta primera función usa el estimador de la varianza de Sekar y Deming y
 # el estimador de N que se obtiene del método de máxima verosimilitud.
 # El problema de el estimador de maxima verosimilitud y de la varianza es
@@ -101,10 +102,11 @@ captura_recaptura <- function(N, n1, S) {
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1 - alfa / 2) #cuantil normal
   
-  #obtenemos una simulación de hipergeométrica para simular cuántos peces marcados obtenemos de la segunda muestra
-  y <- rhyper(S, n1, N-n1, n2)
+  # obtenemos una simulación de hipergeométrica para simular cuántos
+  # peces marcados obtenemos de la segunda muestra
+  y <- rhyper(S, n1, N - n1, n2)
   #usamos nuestro estimador de máxima verosimilitud
-  Nhat <- ceiling((n1*n2)/y) #vector de estimaciones 
+  Nhat <- ceiling((n1 * n2) / y) #vector de estimaciones
   # obtenemos una simulación de hipergeométrica para simular cuantos
   # peces marcados obtenemos de la segunda muestra
   y <- rhyper(S, n1, N - n1, n2)
@@ -152,10 +154,10 @@ knitr::include_graphics('Nhist_MV.png')
 # Este estimador no se indefine y es asintoticamente insesgado así como
 # su estimacion de varianza también es asintoticamente insesgada.
 
-#la siguiente función usa el estimador de N propuesto por Chapman en 1982. Este estimador no se indefine y 
-# es asintóticamente insesgado así como su estimador de la varianza también es asintóticamente insesgado.
+#la siguiente función usa el estimador de N propuesto por Chapman en 1982.
+# Este estimador no se indefine y es asintóticamente insesgado así como
+# su estimador de la varianza también es asintóticamente insesgado.
 
-captura_recaptura2 <- function(N, n1, S){
 captura_recaptura2 <- function(N, n1, S) {
   # N <- tamaño población de peces en el estanque
   # n1 <- peces marcados y devueltos de la primera muestra
@@ -168,20 +170,22 @@ captura_recaptura2 <- function(N, n1, S) {
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1 - alfa / 2) #cuantil normal
   
-  #obtenemos una simulación de hipergeométrica para simular cuántos peces marcados obtenemos de la segunda muestra
-  y <- rhyper(S, n1, N-n1, n2)
+  # obtenemos una simulación de hipergeométrica para simular cuántos
+  # peces marcados obtenemos de la segunda muestra
+  y <- rhyper(S, n1, N - n1, n2)
   #usamos nuestro estimador de máxima verosimilitud
-  Nhat <- ceiling(((n1+1)*(n2+1))/(y+1) -1) #vector de estimaciones 
+  Nhat <- ceiling(((n1 + 1) * (n2 + 1)) / (y + 1) - 1) #vector de estimaciones
   # obtenemos una simulación de hipergeométrica para simular cuantos
   # peces marcados obtenemos de la segunda muestra
   y <- rhyper(S, n1, N - n1, n2)
   # usamos nuestro estimador de máxima verosimilitud
-  Nhat <- ceiling(((n1 + 1) * (n2 + 1)) / (y + 1) - 1) #vector de estimaciones
+  Nhat <-
+    ceiling(((n1 + 1) * (n2 + 1)) / (y + 1) - 1) #vector de estimaciones
   
   # calculamos la varianza muestral de nuestro estimador
-  varNhat <- ((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^ 2 *
-                                                             (y + 2))
-  
+  varNhat <-
+    ((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^ 2 *
+                                                    (y + 2))
   # calculamos los intervalos de confianza para nuestro estimador
   limInf <- Nhat - z * sqrt(varNhat)
   limSup <- Nhat + z * sqrt(varNhat)
@@ -204,7 +208,6 @@ captura_recaptura2 <- function(N, n1, S) {
   
   return(grafica, h)
 }
-
 ```
 
 ```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
@@ -218,22 +221,22 @@ knitr::include_graphics('Nhist_Chapman.png')
 Notemos gráficamente como el estimador de Chapman nos proporciona mejores resultados para el intervalo de confianza y para la estimamción de $N$.
 
 ```{r}
-
-#para calcular el tamanio de n2 para garantizar una buena aproximacion usaremos el estimador de Chapman. 
-#La siguiente función obtiene el tamaño de n2 usando la desigualdad de Chebyshev
-# para calcular el tamanio de n2 para garantizar una buena aproximacion
-# usaremos el estimador de Chapman.
+# para calcular el tamanio de n2 para garantizar una buena aproximacion usaremos
+# el estimador de Chapman. La siguiente función obtiene el tamaño de n2 usando
+# la desigualdad de Chebyshev para calcular el tamanio de n2 para garantizar
+# una buena aproximacion usaremos el estimador de Chapman.
 
 tamanio_n2 <- function(N, n1, y) {
   # ¿de qué tamanio debe ser n2 (segunda muestra) para alcanzar
   # una buena aproximacion de N (poblacion)?
-  
-  # ¿de qué tamaño debe ser n2 (segunda muestra) para alcanzar una buena aproximacion de N (población)?
-  
-  #Dada la población N, los peces marcados n1 y el número de peces marcados obtenidos de la segunda muestra aleatoria (variable) y
+  # ¿de qué tamaño debe ser n2 (segunda muestra) para alcanzar
+  # una buena aproximacion de N (población)?
+  #Dada la población N, los peces marcados n1 y el número de peces marcados
+  # obtenidos de la segunda muestra aleatoria (variable) y
   # respondemos a la pregunta formulada arriba.
   
-  #Para caluclar el tamaño de n2, usaremos la desigualdad de Chebyshev para alcanzar una buena aproximación a N 
+  # Para caluclar el tamaño de n2, usaremos la desigualdad de Chebyshev
+  # para alcanzar una buena aproximación a N
   # tomando un nivel de significancia de alfa =0.05
   # Dada la población N, los peces marcados n1 y el número de peces marcados
   # obtenidos de la segunda muestra aleatoria y
@@ -247,8 +250,9 @@ tamanio_n2 <- function(N, n1, y) {
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1 - alfa / 2) #cuantil normal
   
-  #vector de números consecutivos de 1 hasta la población, pues n2 puede ser una muestra aleatoria de 1 o N elementos
-  n2<-c(1:N)
+  #vector de números consecutivos de 1 hasta la población,
+  # pues n2 puede ser una muestra aleatoria de 1 o N elementos
+  n2 <- c(1:N)
   # vector de numeros consecutivos de 1 hasta la población pues n2
   # puede ser una muestra aleatoria de 1 o N elementos
   n2 <- c(1:N)
@@ -256,12 +260,15 @@ tamanio_n2 <- function(N, n1, y) {
   # calculamos constante de chebysev
   c <- z * (1 - alfa)
   
-  #calculemos el error estándar de nuestro estimador (usamos la estimación de la desviación estandar de Chapman)
-  sdNhat <- sqrt(((y+1)*(n2+1)*(n1-y)*(n2-y))/((y+1)^2*(y+2)))
-  # calculemos el error estandar de nuestro estimador
-  # usamos la estimacion de la desviacion estandar de Chapman
+  # calculemos el error estándar de nuestro estimador
+  # (usamos la estimación de la desviación estandar de Chapman)
   sdNhat <- sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^
                                                                  2 * (y + 2)))
+  # calculemos el error estandar de nuestro estimador
+  # usamos la estimacion de la desviacion estandar de Chapman
+  sdNhat <-
+    sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^
+                                                         2 * (y + 2)))
   
   N2 <- ifelse(c <= sdNhat, 0, 1)
   
@@ -269,7 +276,6 @@ tamanio_n2 <- function(N, n1, y) {
   
   #nos regresa el tamaño de n2 para alcanzar una buena aproximación de N
   return(n2_size)
-  
 }
 ```
 
@@ -329,33 +335,34 @@ Usaremos una forma recursiva de la función acumulada de probabilidad de la dist
 Nuestro algoritmo consiste en almacenar una tabla para los valores de $F$ y buscar el valor de $u$ entre esos valores para así producir la muestra de la distribución dada.
 
 ```{r}
-
-dproblema6 <- function(k, n){
-  k<-100
-  n<-1000
+dproblema6 <- function(k, n) {
+  k <- 100
+  n <- 1000
   # crear una tabla
   f <- Fn <- numeric(k)
   # generamos constante particular de la distribución
-  const <- 2/(k*(k+1))
+  const <- 2 / (k * (k + 1))
   f[1] <- const
   Fn[1] <- f[1]
-  for (i in 2:k){ # hasta k pues el dominio de la distribución llega hasta k 
-    f[i] <- i*const
-    Fn[i] <- Fn[i-1]+f[i]
+  for (i in 2:k) {
+    # hasta k pues el dominio de la distribución llega hasta k
+    f[i] <- i * const
+    Fn[i] <- Fn[i - 1] + f[i]
   }
   # generamos la muestra de la distribución
   u <- runif(n)
   x <- NULL
-  for(i in 1:n-1) x <- append(x, sum(Fn < u[i+1]))
+  for (i in 1:n - 1)
+    x <- append(x, sum(Fn < u[i + 1]))
   return(x)
 }
 
 
 z <- dproblema6(100, 1000)
 
-hist(z, prob=T)
-
+hist(z, prob = T)
 ```
+
 ```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
 knitr::include_graphics('problem6 hist.png')
 ```
