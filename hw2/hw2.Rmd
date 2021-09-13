@@ -37,7 +37,7 @@ Para este problema se impondrán los siguientes supuestos:
 
 \vspace{3mm}
 
-Usaremos dos estimadores para el número total de la población de peces $N$. El primero corresponde al estimador conseguido por el método de Máxima Verosimilitud. El segundo corresponde al estimador propuesto por Chapman. El motivo del uso de los dos estimadores es que el estimador de MV puede indefinirse si en la segunda muestra aleatoria no se captura ningún pez marcado y que además no es insesgado ni tiene un estimador de varianza insesgado. 
+Usaremos dos estimadores para el número total de la población de peces $N$. El primero corresponde al estimador conseguido por el método de Máxima Verosimilitud. El segundo corresponde al estimador propuesto por Chapman. El motivo del uso de los dos estimadores es que el estimador de MV puede indefinirse si en la segunda muestra aleatoria no se captura ningún pez marcado y que además no es insesgado ni asintóticamente insesgado así como su estimador de varianza. 
 
 \vspace{3mm}
 
@@ -51,9 +51,9 @@ Notemos que el problema puede modelarse con una distribución hipergeométrica, 
 
 \vspace{3mm}
 
-Por otro lado, el estimador de Chapman, denotado con $\title{N}$ tiene la siguiente expresión,
+Por otro lado, el estimador de Chapman, denotado con $\tilde{N}$ tiene la siguiente expresión,
 
-\[\title{N}= ceil\left(\frac{(n_1 +1)(n_2+ 1)}{y+1} - 1.\right)\]
+\[\tilde{N}= ceil\left(\frac{(n_1 +1)(n_2+ 1)}{y+1} - 1.\right)\]
 
 \vspace{3mm}
 
@@ -61,11 +61,11 @@ Por tanto con los datos del problema tenemos que la estimación puntual de $N$ e
 
 \[\hat{N}= ceil\left( \frac{250*174}{50}\right)=870 \]
 
-\[\title{N}= ceil\left(\frac{(250 +1)(174+ 1)}{50+1} - 1 = 861.\right)\] 
+\[\tilde{N}= ceil\left(\frac{(250 +1)(174+ 1)}{50+1} - 1 = 861.\right)\] 
 
 \vspace{3mm}
 
-Ahora, para determinar el tamaño de $n_2$ para conseguir una buena aproximación de $N$ usaremos un nivel $\alpha = 0.05$ de significancia, la desigualdad de Chebyshev y como parámetros dados a $y$ y $n_1$. Para obtener el tamaño usaremos el estimador de Chapman y el estimador de la varianza de Chapman que tiene la siguiente expresión 
+Ahora, para determinar el tamaño de $n_2$ y conseguir una buena aproximación de $N$ usaremos un nivel $\alpha = 0.05$ de significancia, la desigualdad de Chebyshev y como parámetros dados a $y$ y $n_1$. Para obtener el tamaño usaremos el estimador de Chapman y el estimador de la varianza de Chapman que tiene la siguiente expresión 
 
 \[\text{Desigualdad de Chebyshev: }\, \mathbb{P}\left(|\tilde{N} - \mu| \geq z_{1-\frac{\alpha}{2}} * \sqrt{var(\tilde{N})} \right) < \frac{var(\tilde{N})}{z_{1-\frac{\alpha}{2}} * \sqrt{var(\tilde{N})}}=0.95 \]
 
@@ -75,15 +75,15 @@ Donde,
 
 \vspace{3mm}
 
-A continuacion se presentará el código en \texttt{R} que calcula con una función la estimación de $N$ con simulación usando un intervalo de confianza al 95\% tanto con el estimador de máxima verosimilitud como con el de CHapman. Y también una función que calcula el tamaño de $n_2$ para el tamañoñ de población marcada $n_1$ y el número de población marcada que se obtuvo en el segundo muestreo $y$ dados.  
+A continuacion se presentará el código en \texttt{R} que calcula con una función la estimación de $N$ con simulación usando un intervalo de confianza al 95\% tanto con el estimador de máxima verosimilitud como con el de Chapman. Y también una función que calcula el tamaño de $n_2$ para el tamaño de población marcada $n_1$ y el número de población marcada que se obtuvo en el segundo muestreo $y$ dados.  
 
 ```{r}
 
 ###### PROBLEMA UNO #######
 
 
-# esta primera función usa el estimador de la varianza de Sekar y Deming y el estimador de N que se obtiene 
-# del método de máxima verosimilitud. El problema de el estimador de maxima verosimilitud y de la varianza es 
+# Esta primera función usa el estimador de la varianza de Sekar y Deming y el estimador de N que se obtiene 
+# del método de máxima verosimilitud. El problema del estimador de máxima verosimilitud y de la varianza es 
 # que se indefine cuando el número de peces capturados marcados es cero.
 
 
@@ -91,7 +91,7 @@ captura_recaptura <- function(N, n1, S){
   # N <- tamaño población de peces en el estanque
   # n1 <- peces marcados y devueltos de la primera muestra
   # n2 <- tamaño de la muestra después de regresar al estanque
-  # S <- numero de simulaciones
+  # S <- número de simulaciones
   
   #simulamos la muestra aleatoria del segundo muestreo
   n2 <- sample(0:N, 1)
@@ -99,7 +99,7 @@ captura_recaptura <- function(N, n1, S){
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1-alfa/2) #cuantil normal 
   
-  #obtenemos una simulación de hipergeométrica para simular cuantos peces marcados obtenemos de la segunda muestra
+  #obtenemos una simulación de hipergeométrica para simular cuántos peces marcados obtenemos de la segunda muestra
   y <- rhyper(S, n1, N-n1, n2)
   #usamos nuestro estimador de máxima verosimilitud
   Nhat <- ceiling((n1*n2)/y) #vector de estimaciones 
@@ -138,14 +138,14 @@ knitr::include_graphics('Nhist_MV.png')
 
 ```{r} 
 
-#la siguiente funcion usa el estimador de N propuesto por Chapman en 1982. Este estimador no se indefine y 
-# es asintoticamente insesgado así como su estimacion de varianza también es asintoticamente insesgada.
+#la siguiente función usa el estimador de N propuesto por Chapman en 1982. Este estimador no se indefine y 
+# es asintóticamente insesgado así como su estimador de la varianza también es asintóticamente insesgado.
 
 captura_recaptura2 <- function(N, n1, S){
   # N <- tamaño población de peces en el estanque
   # n1 <- peces marcados y devueltos de la primera muestra
   # n2 <- tamaño de la muestra después de regresar al estanque
-  # S <- numero de simulaciones
+  # S <- número de simulaciones
   
   #simulamos la muestra aleatoria del segundo muestreo
   n2 <- sample(0:N, 1)
@@ -153,7 +153,7 @@ captura_recaptura2 <- function(N, n1, S){
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1-alfa/2) #cuantil normal 
   
-  #obtenemos una simulación de hipergeométrica para simular cuantos peces marcados obtenemos de la segunda muestra
+  #obtenemos una simulación de hipergeométrica para simular cuántos peces marcados obtenemos de la segunda muestra
   y <- rhyper(S, n1, N-n1, n2)
   #usamos nuestro estimador de máxima verosimilitud
   Nhat <- ceiling(((n1+1)*(n2+1))/(y+1) -1) #vector de estimaciones 
@@ -179,39 +179,6 @@ captura_recaptura2 <- function(N, n1, S){
   return(grafica, h)
 }
 
-#para calcular el tamanio de n2 para garantizar una buena aproximacion usaremos el estimador de Chapman.
-
-tamanio_n2 <- function(N, n1, y){
-  
-  # ¿de qué tamanio debe ser n2 (segunda muestra) para alcanzar una buena aproximacion de N (poblacion)?
-  
-  #Dada la población N, los peces marcados n1 y el número de peces marcados obtenidos de la segunda muestra aleatoria y
-  # respondemos a la pregunta formulada arriba.
-  
-  #Para caluclar el tamanio de n2, usaremos la desigualdad de Chebyshev para alcanzar una buena aproximacion a N 
-  # tomando un nivel de significacnia de alfa =0.05
-  
- 
-  alfa <- 0.05 #nivel de significancia
-  z <- qnorm(1-alfa/2) #cuantil normal 
-  
-  #vector de numeros consecutivos de 1 hasta la población pues n2 puede ser una muestra aleatoria de 1 o N elementos
-  n2<-c(1:N)
-  
-  #calculamos constante de chebysev 
-  c <- z*(1-alfa)
-  
-  #calculemos el error estandar de nuestro estimador (usamos la estimacion de la desviacion estandar de Chapman)
-  sdNhat <- sqrt(((y+1)*(n2+1)*(n1-y)*(n2-y))/((y+1)^2*(y+2)))
-  
-  N2 <- ifelse(c <= sdNhat,0,1)
-  
-  n2_size <- sum(N2)
-  
-  return(n2_size)
-  
-}
-
 ```
 
 ```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
@@ -223,6 +190,45 @@ knitr::include_graphics('Nhist_Chapman.png')
 ```
 
 Notemos gráficamente como el estimador de Chapman nos proporciona mejores resultados para el intervalo de confianza y para la estimamción de $N$.
+
+```{r}
+
+#para calcular el tamanio de n2 para garantizar una buena aproximacion usaremos el estimador de Chapman. 
+#La siguiente función obtiene el tamaño de n2 usando la desigualdad de Chebyshev
+
+tamanio_n2 <- function(N, n1, y){
+  
+  # ¿de qué tamaño debe ser n2 (segunda muestra) para alcanzar una buena aproximacion de N (población)?
+  
+  #Dada la población N, los peces marcados n1 y el número de peces marcados obtenidos de la segunda muestra aleatoria (variable) y
+  # respondemos a la pregunta formulada arriba.
+  
+  #Para caluclar el tamaño de n2, usaremos la desigualdad de Chebyshev para alcanzar una buena aproximación a N 
+  # tomando un nivel de significancia de alfa =0.05
+  
+ 
+  alfa <- 0.05 #nivel de significancia
+  z <- qnorm(1-alfa/2) #cuantil normal 
+  
+  #vector de números consecutivos de 1 hasta la población, pues n2 puede ser una muestra aleatoria de 1 o N elementos
+  n2<-c(1:N)
+  
+  #calculamos constante de chebysev 
+  c <- z*(1-alfa)
+  
+  #calculemos el error estándar de nuestro estimador (usamos la estimación de la desviación estandar de Chapman)
+  sdNhat <- sqrt(((y+1)*(n2+1)*(n1-y)*(n2-y))/((y+1)^2*(y+2)))
+  
+  N2 <- ifelse(c <= sdNhat,0,1)
+  
+  n2_size <- sum(N2)
+  
+  #nos regresa el tamaño de n2 para alcanzar una buena aproximación de N
+  return(n2_size)
+  
+}
+
+```
 
 
 \newpage
