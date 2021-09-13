@@ -19,7 +19,12 @@ library(mvtnorm)
 library(GGally)
 library(tictoc)
 
-knitr::opts_chunk$set(cache.extra = packageVersion('tufte'), cache = TRUE)
+knitr::opts_chunk$set(
+  cache.extra = packageVersion('tufte'),
+  cache = TRUE,
+  fig.pos = '!h',
+  out.extra = ''
+)
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -123,16 +128,16 @@ captura_recaptura <- function(N, n1, S) {
   grafica <- plot(
     1:S,
     Nhat,
-    type = "l",
+    type = 'l',
     ylim = c(-100, 3 * N),
-    main = paste("Cálculo de pob. de peces con sim=", S),
-    xlab = "Número de simulaciones",
-    ylab = "N hat MV - estimacion poblacion"
+    main = paste('Cálculo de pob. de peces con sim=', S),
+    xlab = 'Número de simulaciones',
+    ylab = 'N hat MV - estimacion poblacion'
   )
   
-  lines(1:S, limInf, lty = 2, col = "red")
-  lines(1:S, limSup, lty = 2, col = "red")
-  abline(h = N, col = "blue")
+  lines(1:S, limInf, lty = 2, col = 'red')
+  lines(1:S, limSup, lty = 2, col = 'red')
+  abline(h = N, col = 'blue')
   
   h <- hist(Nhat, prob = T)
   
@@ -147,7 +152,6 @@ knitr::include_graphics('captura_N_MV.png')
 ```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
 knitr::include_graphics('Nhist_MV.png')
 ```
-
 
 ```{r} 
 # La siguiente funcion usa el estimador de N propuesto por Chapman en 1982.
@@ -193,22 +197,24 @@ captura_recaptura2 <- function(N, n1, S) {
   grafica <- plot(
     1:S,
     Nhat,
-    type = "l",
+    type = 'l',
     ylim = c(0, 2 * N),
-    main = paste("Cálculo de pob. de peces con sim=", S),
-    xlab = "Número de simulaciones",
-    ylab = "N hat Chapman - estimacion poblacion"
+    main = paste('Cálculo de pob. de peces con sim=', S),
+    xlab = 'Número de simulaciones',
+    ylab = 'N hat Chapman - estimacion poblacion'
   )
   
-  lines(1:S, limInf, lty = 2, col = "red")
-  lines(1:S, limSup, lty = 2, col = "red")
-  abline(h = N, col = "blue")
+  lines(1:S, limInf, lty = 2, col = 'red')
+  lines(1:S, limSup, lty = 2, col = 'red')
+  abline(h = N, col = 'blue')
   
   h <- hist(Nhat, prob = T)
   
   return(grafica, h)
 }
 ```
+
+\newpage
 
 ```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
 knitr::include_graphics('captura_N_Chapman.png')
@@ -279,14 +285,6 @@ tamanio_n2 <- function(N, n1, y) {
 }
 ```
 
-```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
-knitr::include_graphics('captura_N_Chapman.png')
-```
-
-```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
-knitr::include_graphics('Nhist_Chapman.png')
-```
-
 Notemos gráficamente como el estimador de Chapman nos proporciona mejores resultados para el intervalo de confianza y para la estimamción de $N$.
 
 \newpage
@@ -334,6 +332,8 @@ Usaremos una forma recursiva de la función acumulada de probabilidad de la dist
 
 Nuestro algoritmo consiste en almacenar una tabla para los valores de $F$ y buscar el valor de $u$ entre esos valores para así producir la muestra de la distribución dada.
 
+\newpage
+
 ```{r}
 dproblema6 <- function(k, n) {
   k <- 100
@@ -357,16 +357,12 @@ dproblema6 <- function(k, n) {
   return(x)
 }
 
-
 z <- dproblema6(100, 1000)
-
-hist(z, prob = T)
 ```
 
-```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
+```{r out.width='50%', fig.fullwidth = TRUE, echo=FALSE}
 knitr::include_graphics('problem6 hist.png')
 ```
-
 
 \newpage
 
@@ -400,7 +396,7 @@ plt <- c()
 for (i in 1:4) {
     plt[[i]] <- ggplot(z, aes_string(x = names(z)[i])) +
         geom_histogram(bins = 100,
-                       fill = "#2d6c5f",
+                       fill = '#2d6c5f',
                        alpha = 0.8) +
         theme_minimal()
 }
