@@ -18,6 +18,7 @@ library(tidyverse)
 library(mvtnorm)
 library(GGally)
 library(tictoc)
+library(EnvStats)
 
 knitr::opts_chunk$set(
   cache.extra = packageVersion('tufte'),
@@ -291,7 +292,7 @@ Notemos gráficamente como el estimador de Chapman nos proporciona mejores resul
 
 # Problema 2
 
-a) Calcular la función de distribución $F_{X}$ , $\mathbb{E}[X]$, y $Var[X]$. Obtengan por simulación una muestra de X y su función de distribución, y comparen su estimado con la verdadera.
+a) Calcular la función de distribución $F_{X}$, $\mathbb{E}[X]$, y $Var[X]$. Obtengan por simulación una muestra de X y su función de distribución, y comparen su estimado con la verdadera.
 
 Como $X$ sigue una distribución Pareto, la función de distribución teórica de sería $F_{X} = 1 - (\frac{\beta}{x+\beta})^{\alpha}$, mientras que la esperanza es $\mathbb{E}[X] = \frac{\alpha \beta}{\alpha - 1}$ (para $\alpha > 1$), y la varianza es $Var[X] = \frac{\alpha \beta^{2}}{(\alpha-1)^{2}(\alpha-2)}$ (para $\alpha > 2$). En nuestro caso, $\mathbb{E}[X] = 156,250$ y $Var[X] = 1,627,604,166.66$.
 
@@ -456,7 +457,7 @@ activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
 ```
 
 
-Calculamos la probabilidad de bancarrota para cada valor de p con el nuevo esquema de toma de ganancias, el valor esperado de los activos y las ganancias para cada período $T = 5, 10, 15, 20$.
+Calculamos la probabilidad de bancarrota para cada valor de $p$ con el nuevo esquema de toma de ganancias, el valor esperado de los activos y las ganancias para cada período $T = 5, 10, 15, 20$.
 
 ```{r simul_ganancias, include = FALSE}
 # Creamos la semilla para la simulación
@@ -537,7 +538,7 @@ ggplot(data_simul, aes(x = periodos, y = expected_ganancias/10000000, color = fa
   theme(plot.title = element_text(hjust = 0.5, size = 12)) # Centramos el título
 ```
 
-Como podemos observar en la gráficas, se mantiene que la probabilidad de bancarrota crece rápidamente para $p = 0.2$, mientras que es cero para $p = 0.1$ y $p = 0.01$ y ligeramente positiva para $p = 0.15$. Asimismo, en los activos esperados, podemos ver que hay una clara tendencia decreciente para los activos cuando $p = 0.2$, mientras que las demás no siguen una tendencia fija. Si añadieramos más puntos (periodos), las líneas que veríamos para $p = 0.1 y 0.01$ serían ruido alrededor de un cierto nivel $\bar{M}$. Por último, para las ganancias esperadas, es claro que la tendencia de las ganancias es mayor conforme la probabilidad de reclamo es menor.
+Como podemos observar en la gráficas, se mantiene que la probabilidad de bancarrota crece rápidamente para $p = 0.2$, mientras que es cero para $p = 0.1$ y $p = 0.01$, y ligeramente positiva para $p = 0.15$. Asimismo, en la gráfica de los activos esperados, podemos ver que hay una clara tendencia decreciente para los activos cuando $p = 0.2$, que refleja la eventual alta probabilidad de bancarrota, mientras que los demás valor de $p$ no siguen una tendencia fija. Si añadieramos más puntos (períodos), las líneas que veríamos para $p = 0.1 y 0.01$ serían ruido alrededor de un cierto nivel $\bar{M}$. Por último, para las ganancias esperadas es claro que la tendencia de las ganancias es creciente, y es mayor conforme la probabilidad de reclamo es menor.
 
 \newpage
 
