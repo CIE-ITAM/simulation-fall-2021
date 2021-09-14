@@ -291,9 +291,419 @@ Notemos gráficamente como el estimador de Chapman nos proporciona mejores resul
 
 # Problema 2
 
+a) Calcular la función de distribución $F_{X}$ , $\mathbb{E}[X]$, y $Var[X]$. Obtengan por simulación una muestra de X y su función de distribución, y comparen su estimado con la verdadera.
+
+Como $X$ sigue una distribución Pareto, la función de distribución teórica de sería $F_{X} = 1 - (\frac{\beta}{x+\beta})^{\alpha}$, mientras que la esperanza es $\mathbb{E}[X] = \frac{\alpha \beta}{\alpha - 1}$ (para $\alpha > 1$), y la varianza es $Var[X] = \frac{\alpha \beta^{2}}{(\alpha-1)^{2}(\alpha-2)}$ (para $\alpha > 2$). En nuestro caso, $\mathbb{E}[X] = 156,250$ y $Var[X] = 1,627,604,166.66$.
+
+Simulamos una muestra para $X$ y comparamos la función de distribución con la verdadera.
+
+\
+
+```{r dist_pareto, fig.height = 4, fig.fullweight = TRUE, echo = FALSE}
+# Creamos la semilla para la simulación
+set.seed(5693899)
+
+# OJO: necesitamos hacer un cambio de variable para que X vaya de 0 a inf si utilizamos dpareto y rpareto
+
+# Obtenemos la función de distribución teorica
+x_real <- seq(0, 700000)
+fx_real <- dpareto(seq(0, 700000) + 125000, location = 125000, shape = 5)
+
+# Obtenemos una muestra de 5000 observaciones de la distribución pareto
+y <- rpareto(5000, location = 125000, shape = 5)
+x <- y - 125000
+
+# Graficamos nuestras observaciones simuladas y la distribución teórica
+hist(x, breaks = 50, prob = TRUE, main = "Distribución del monto de los reclamos",
+     xlab = "Monto")
+lines(x_real, fx_real, col = "red")
+```
+
+\
+
+b) Escriban una función para simular los activos de la compañía en el horizonte de tiempo $T$ y estimen: (1) la probabilidad de que la compañía se vaya a bancarrota, y (2) Los activos esperados al final de cinco años.
+
+```{r activos, include = FALSE}
+activos <- function(periodos, p, clientes = 1000, prima = 5500){
+  Z <- 10000000
+  for (i in 1:periodos){
+    # Calculamos las primas que recibimos al inicio de cada año
+    primas <- clientes*prima
+
+    # Calculamos el número de reclamos que ocurren con probabilidad p
+    num_reclamos <- sum(sample(c(0,1), size = clientes, replace = T, prob = c(1-p, p)))
+    if (num_reclamos != 0){
+      reclamos <- sum(rpareto(num_reclamos, location = 125000, shape = 5) - 125000)
+    } else{
+      reclamos <- 0
+    }
+
+    # Calculamos los activos al terminar el período
+    Z <- Z + primas - reclamos
+
+    # Si incurrimos en pérdidas, la empresa cierra
+    if (Z < 0){
+      Z <- 0
+      break
+    }
+  }
+  return(Z)
+}
+```
+
+Primero simulamos la probabilidad de bancarrota en el período $T$ para cada uno de los valores de $p \in \{0.01, 0.1, 0.15, 0.2 \}$.
+
+\
+
+```{r bancarrota, fig.height=3, echo = FALSE}
+# Creamos la semilla para la simulación
+set.seed(2419231)
+
+# Simulamos la probabilidad de bancarrota en cada T = 5, 10, 15, 20 sobre p = 0.01, 0.1, 0.15, 0.2
+probs <- c(0.01, 0.1, 0.15, 0.2)
+periodos <- c(5, 10, 15, 20)
+
+for (prob in probs){
+  # Inicializamos el vector de probabilidades
+  prob_bancarrota <- c()
+  for (per in periodos){
+    # Inicializamos el vector de activos simulados
+    activos_simulados <- c()
+    # Simulamos 500 veces los activos acumulados en el período T
+    for (i in 1:500){
+      activos_simulados <- c(activos_simulados, activos(per, prob))
+    }
+  # Obtenemos la probabilidad de bancarrota
+  prob_bancarrota <- c(prob_bancarrota,
+                       sum(activos_simulados == 0)/length(activos_simulados))
+  }
+  # Graficamos la probabilidad de bancarrota para cada período T con probabilidad p
+  par(pty="s")
+  plot(periodos, prob_bancarrota, type = "l",
+       main = str_c("Probabilidad Bancarrota con p = ", prob),
+       xlab = "Período (T)", ylab = "", ylim = c(0,1), cex = 0.5)
+}
+```
+
+
+Tal como podemos observar en las gráficas, la probabilidad de bancarrota es prácticamente cero en todo período de $T=1$ a $T = 20$ cuando $p \in \{0.01, 0.1, 0.15\}$, pero aumenta rápidamente cuando $p = 0.2$, tal que la probabilidad de bancarrota es mayor que $0.95$ en $T = 20$.
+
+Ahora calculamos el valor esperado de los activos en $T = 5$ para cada uno de los valores de $p \in \{0.01, 0.1, 0.15, 0.2 \}$.
+
+```{r expected_activos, fig.height=3, echo=FALSE}
+# Creamos la semilla para la simulación
+set.seed(945821)
+
+# Simulamos los activos esperados en T = 5 sobre p = 0.01, 0.1, 0.15, 0.2
+probs <- c(0.01, 0.1, 0.15, 0.2)
+
+# Inicializamos el vector de activos esperados
+expected_activos <- c()
+for (prob in probs){
+  activos_simulados <- c()
+  # Simulamos 500 veces los activos acumulados en el período T = 5
+  for (i in 1:500){
+    activos_simulados <- c(activos_simulados, activos(5, prob))
+  }
+  # Obtenemos el valor esperado
+  expected_activos <- c(expected_activos, mean(activos_simulados))
+}
+
+# Graficamos la probabilidad de bancarrota para cada período T con probabilidad p
+par(pty="s")
+plot(probs, expected_activos/1000000, xlim = c(0, 0.2), ylim = c(0, 40),
+     xlab = "Probabilidad de Reclamo", ylab = "Monto en millones",
+     main = "Activos Esperados en T = 5")
+```
+
+Como podemos observar en la gráfica, en $T = 5$, los activos esperados con las probabilidades $p \in \{0.01, 0.1, 0.15\}$ son mayores que el capital inicial de 10 millones, mientras que en el caso $p = 0.2$, los activos esperados son menores que el capital inicial, lo cuál refleja la eventual bancarrota que ocurre en este caso.
+
+c) Toma de ganancias. Supongan ahora que la compañía toma ganancias al final de cada año. Usando este nuevo esquema, estimar: (1) la probabilidad de irse a la quiebra, (2) los activos esperados después de T años, y (3) Las ganancias totales esperadas después de T años.
+
+```{r activos_ganancias, include = FALSE}
+activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
+  Z <- 10000000
+  G <- 0
+  for (i in 1:periodos){
+    # Calculamos las primas que recibimos al inicio de cada año
+    primas <- clientes*prima
+
+    # Calculamos el número de reclamos que ocurren con probabilidad p
+    num_reclamos <- sum(sample(c(0,1), size = clientes, replace = T, prob = c(1-p, p)))
+    if (num_reclamos != 0){
+      reclamos <- sum(rpareto(num_reclamos, location = 125000, shape = 5) - 125000)
+    } else{
+      reclamos <- 0
+    }
+
+    # Calculamos los activos al terminar el período
+    Z <- Z + primas - reclamos
+
+    # Si incurrimos en pérdidas, la empresa cierra
+    if (Z < 0){
+      Z <- 0
+      break
+    }
+
+    # Calculamos las ganancias si existen
+    if(Z > 10000000){
+      G <- G + Z - 10000000
+      Z <- 1000000
+    }
+  }
+  return(c(Z, G))
+}
+```
+
+
+Calculamos la probabilidad de bancarrota para cada valor de p con el nuevo esquema de toma de ganancias, el valor esperado de los activos y las ganancias para cada período $T = 5, 10, 15, 20$.
+
+```{r simul_ganancias, include = FALSE}
+# Creamos la semilla para la simulación
+set.seed(4296531)
+
+# Simulamos la probabilidad de bancarrota en cada T = 5, 10, 15, 20 sobre p = 0.01, 0.1, 0.15, 0.2
+probs <- c(0.01, 0.1, 0.15, 0.2)
+periodos <- c(5, 10, 15, 20)
+
+# Inicializamos un dataframe
+data_simul <- data.frame()
+
+for (prob in probs){
+  # Inicializamos el vector de probabilidades, y valos esperados
+  prob_bancarrota <- c()
+  expected_activos <- c()
+  expected_ganancias <- c()
+  for (per in periodos){
+    # Inicializamos el vector de activos y ganancias simuladas
+    activos_simulados <- c()
+    ganancias_simuladas <- c()
+    # Simulamos 500 veces los activos y ganancias acumulados en el período T
+    for (i in 1:500){
+      simulacion <- activos_ganancias(per, prob)
+      activos_simulados <- c(activos_simulados, simulacion[1])
+      ganancias_simuladas <- c(ganancias_simuladas, simulacion[2])
+    }
+  # Obtenemos la probabilidad de bancarrota
+  prob_bancarrota <- c(prob_bancarrota,
+                       sum(activos_simulados == 0)/length(activos_simulados))
+  # Obtenemos los promedios de los activos y ganancias
+  expected_activos <- c(expected_activos, mean(activos_simulados))
+  expected_ganancias <- c(expected_ganancias, mean(ganancias_simuladas))
+  }
+
+  # Creamos la observación en el dataframe
+  simul <- data.frame(p = prob, periodos = periodos,
+                      prob_bancarrota = prob_bancarrota,
+                      expected_activos = expected_activos,
+                      expected_ganancias = expected_ganancias)
+
+  # Unimos la observación del dataframe
+  data_simul <- rbind(data_simul, simul)
+}
+```
+
+```{r graphs_ganancia_1, fig.height = 2.3, echo = FALSE}
+# Graficamos las probabilidades de bancarrota
+ggplot(data_simul, aes(x = periodos, y = prob_bancarrota, color = factor(p))) +
+  geom_line() +
+  theme_classic() +
+  labs(title = "Probabilidad de Bancarrota", x = "Períodos (T)",y = "",
+       color = "Probabilidad Reclamo") +
+  theme(plot.title = element_text(hjust = 0.5, size = 12)) # Centramos el título
+```
+
+\
+
+```{r graphs_ganancia_2, fig.height = 2.3, echo = FALSE}
+# Graficamos los activos esperados
+ggplot(data_simul, aes(x = periodos, y = expected_activos/10000000, color = factor(p))) +
+  geom_line() +
+  theme_classic() +
+  labs(title = "Activos Esperados", x = "Períodos (T)", y = "Monto en millones",
+       color = "Probabilidad Reclamo") +
+  theme(plot.title = element_text(hjust = 0.5, size = 12)) # Centramos el título
+```
+
+\
+
+```{r graphs_ganancia_3, fig.height = 2.3, echo = FALSE}
+# Graficamos los activos esperados
+ggplot(data_simul, aes(x = periodos, y = expected_ganancias/10000000, color = factor(p))) +
+  geom_line() +
+  theme_classic() +
+  labs(title = "Ganancias Esperadas", x = "Períodos (T)", y = "Monto en millones",
+       color = "Probabilidad Reclamo") +
+  theme(plot.title = element_text(hjust = 0.5, size = 12)) # Centramos el título
+```
+
+Como podemos observar en la gráficas, se mantiene que la probabilidad de bancarrota crece rápidamente para $p = 0.2$, mientras que es cero para $p = 0.1$ y $p = 0.01$ y ligeramente positiva para $p = 0.15$. Asimismo, en los activos esperados, podemos ver que hay una clara tendencia decreciente para los activos cuando $p = 0.2$, mientras que las demás no siguen una tendencia fija. Si añadieramos más puntos (periodos), las líneas que veríamos para $p = 0.1 y 0.01$ serían ruido alrededor de un cierto nivel $\bar{M}$. Por último, para las ganancias esperadas, es claro que la tendencia de las ganancias es mayor conforme la probabilidad de reclamo es menor.
+
 \newpage
 
 # Problema 3
+
+## Cauchy
+
+Para simular la distribución Cauchy con función de densidad $f(x) = \frac{1}{\pi\beta[1 + (\frac{x-\gamma}{\beta}^{2})]}$, usamos el hecho que su función de distribución $F(x) = \frac{1}{\pi}\arctan{(\frac{x-\gamma}{\beta})}+\frac{1}{2}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \beta \tan{(\pi(U-\frac{1}{2}))}+\gamma$ sigue una distribución Cauchy con parámetro de escala $\beta > 0$ y de locación $\gamma$.
+
+```{r rcauchy}
+rcauchy <- function(n, param_gamma = 0, param_beta = 1){
+  unif <- runif(n)
+  cauchy <- param_beta*tan(pi*(unif-0.5))+param_gamma
+  return(cauchy)
+}
+```
+
+Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}(n) = \sum_{i = 1}^{n}X_{i}/n$ para $n = 50, 100, 150, ..., 5000$.
+
+\
+
+```{r rcauchy_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+# Creamos la semilla para la simulación
+set.seed(332442)
+
+# Tomamos 5000 observaciones
+n <- 5000
+cauchy <- rcauchy(n)
+
+# Calculamos X(n)
+xn_cauchy <- cumsum(cauchy)/1:n
+
+# Graficamos X(n)
+plot(1:n, xn_cauchy, type = "l", lwd = 2, bty="l",
+     main = "X(n) - Cauchy", xlab = "n", ylab = "X(n)")
+```
+
+\
+
+Podemos notar de la gráfica que $\bar{X}(n)$ no converge a ningún valor, hecho consistente con que la distribución Cauchy no tiene media definida para ningún valor de sus parámetros.
+
+## Gumbel
+
+Para simular la distribución Gumbel con función de densidad $f(x) = \frac{1}{\beta}\exp(-e^{-(x-\gamma)/\beta}-\frac{x-\gamma}{\beta})$, usamos el hecho que su función de distribución $F(x) = \exp(-e^{(x-\gamma)/\beta})$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(-\ln{(U)})}+\gamma$ sigue una distribución Gumbel con parámetro de escala $\beta > 0$ y de locación $\gamma$.
+
+```{r rgumbel}
+rgumbel <- function(n, param_gamma = 0, param_beta = 1){
+  unif <- runif(n)
+  gumbel <- -param_beta*log(-log(unif)) + param_gamma
+  return(gumbel)
+}
+```
+
+Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}(n) = \sum_{i = 1}^{n}X_{i}/n$ para $n = 50, 100, 150, ..., 5000$.
+
+\
+
+```{r rgumbel_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+# Creamos la semilla para la simulación
+set.seed(346342)
+
+# Tomamos 5000 observaciones
+n <- 5000
+gumbel <- rgumbel(n)
+
+# Calculamos X(n)
+xn_gumbel <- cumsum(gumbel)/1:n
+
+# Graficamos X(n)
+plot(1:n, xn_gumbel, type = "l", lwd = 2, bty="l",
+     main = "X(n) - Gumbel", xlab = "n", ylab = "X(n)")
+abline(h = -digamma(1), col = "red", lty = 2)
+```
+
+\
+
+La media de la distribución Gumbel con $\gamma = 0$ y $\beta = 1$ es la constante de Euler-Mascheroni, que vale aproximadamente $0.5772157$. Podemos ver en la gráfica que conforme aumenta $n$, $\bar{X}(n)$ converge al valor de la constante.
+
+\newpage
+
+## Logística
+Para simular la distribución Logística con función de densidad $f(x) = \frac{(1/\beta)e^{-(x-\gamma)/\beta}}{(1+e^{-(x-\gamma)/\beta})^2}$, usamos el hecho que su función de distribución $F(x) =  \frac{1}{(1+e^{-(x-\gamma)/\beta}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(\frac{1-y}{y})}+\gamma$ sigue una distribución Logística con parámetro de escala $\beta > 0$ y de locación $\gamma$.
+
+```{r rlogistic}
+rlogistic <- function(n, param_gamma = 0, param_beta = 1){
+  unif <- runif(n)
+  logistic <- -param_beta*log((1-unif)/unif) + param_gamma
+  return(logistic)
+}
+```
+
+Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}(n) = \sum_{i = 1}^{n}X_{i}/n$ para $n = 50, 100, 150, ..., 5000$.
+
+\
+
+```{r rlogistic_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+# Creamos la semilla para la simulación
+set.seed(2353462)
+
+# Tomamos 5000 observaciones
+n <- 5000
+logistic <- rlogistic(n)
+
+# Calculamos X(n)
+xn_logistic <- cumsum(logistic)/1:n
+
+# Graficamos X(n)
+plot(1:n, xn_logistic, type = "l", lwd = 2, bty="l",
+     main = "X(n) - Logística", xlab = "n", ylab = "X(n)")
+abline(h = 0, col = "red", lty = 2)
+```
+
+\
+
+La media de la distribución Logística es $\gamma = 0$. Podemos ver en la gráfica que conforme aumenta $n$, $\bar{X}(n)$ converge precisamente a cero.
+
+\newpage
+
+## Pareto
+
+Para simular la distribución Pareto con función de densidad $f(x) = \frac{\alpha_{2}c^{\alpha_{2}}}{x^{\alpha_{2}+1}}$, usamos el hecho que su función de distribución $F(x) = 1- (\frac{c}{x})^{\alpha_{2}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \frac{c}{(1-U)^{1/\alpha_{2}}}$ o $X = \frac{c}{(U)^{1/\alpha_{2}}}$ sigue una distribución Pareto con parámetro de escala $c > 0$ y de forma $\alpha_{2} > 0$.
+
+```{r rpareto}
+rparet <- function(n, param_c = 1, param_alpha = 2){
+  unif <- runif(n)
+  pareto <- param_c/(unif)^(1/param_alpha)
+  return(pareto)
+}
+```
+
+Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}(n) = \sum_{i = 1}^{n}X_{i}/n$ para $n = 50, 100, 150, ..., 5000$.
+
+\
+
+```{r rpareto_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+# Creamos la semilla para la simulación
+set.seed(942062)
+
+# Tomamos 5000 observaciones
+n <- 5000
+pareto <- rparet(n)
+
+# Calculamos X(n)
+xn_pareto <- cumsum(pareto)/1:n
+
+# Graficamos X(n)
+plot(1:n, xn_pareto, type = "l", lwd = 2, bty="l",
+     main = "X(n) - Pareto", xlab = "n", ylab = "X(n)")
+abline(h = 2, col = "red", lty = 2)
+```
+
+\
+
+La media de la distribución Pareto es $\frac{\alpha_{2}c}{\alpha_{2}-1} = 2$. Podemos ver en la gráfica que conforme aumenta $n$, $\bar{X}(n)$ converge a $2$.
+
+## Vasicek
+
+Para simular la distribución Vasicek con función de densidad $f(x) =\sqrt{\frac{1-\rho}{\rho}} \exp{\left(\frac{1}{2} \{ \Phi^{-1}(x)^{2} - \left(\frac{\sqrt{1-\rho}\Phi^{-1}(p)}{\sqrt{\rho}} \right)^{2} \}  \right)}$, usamos el hecho que $X = \Phi\left( \frac{\Phi^{-1}(p)-\sqrt{\rho}Z}{\sqrt{1-\rho}} \right)$ sigue una distribución Vasicek con parámetros $p$ y $\rho$, donde $Z$ sigue una distribución normal estándar y $\Phi$ es su función de distribución.
+
+```{r rvasicek}
+rvasicek <- function(n, param_rho, param_p){
+  normal <- rnorm(n)
+  vasicek <- pnorm((qnorm(p)-sqrt(rho)*normal)/sqrt(1-param_rho))
+  return(vasicek)
+}
+```
 
 \newpage
 
