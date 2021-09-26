@@ -1,0 +1,64 @@
+---
+title: 'EST--24107: Tarea 3'
+runningheader: 'Tarea 3'
+author: |
+  Carlos Lezama, Marco Medina, \
+  Emiliano Ramírez y Santiago Villarreal
+date: 'Viernes, 1 de octubre de 2021'
+output:
+    tufte::tufte_handout:
+    citation_package: natbib
+latex_engine: xelatex
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  cache.extra = packageVersion('tufte'),
+  cache = TRUE,
+  fig.pos = '!h',
+  out.extra = ''
+)
+options(htmltools.dir.version = FALSE)
+```
+
+# Problema 1
+
+\newpage
+
+# Problema 2
+
+\newpage
+
+# Problema 3
+
+\newpage
+
+# Problema 4
+
+\newpage
+
+# Problema 5
+
+\newpage
+
+# Problema 6
+
+\newpage
+
+# Problema 7
+
+\newpage
+
+# Problema 8
+
+\newpage
+
+# Problema 9
+
+\newpage
+
+\bibliography{}
