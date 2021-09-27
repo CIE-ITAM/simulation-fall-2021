@@ -15,6 +15,7 @@ link-citations: yes
 ```{r setup, include=FALSE}
 library(tufte)
 library(tidyverse)
+library(copula)
 
 knitr::opts_chunk$set(
   cache.extra = packageVersion('tufte'),
@@ -51,9 +52,50 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 7
 
+1. Cópula normal (o cualquier elíptica): $\displaystyle \rho = \sin \left( \frac{\pi}{2}  \tau \right) =$ `r sin(pi * 0.2 / 2)`.
+2. Cópula de Gumbel: $\displaystyle \alpha = \frac{1}{1 - \tau} =$ `r 1 / (1 - 0.2)`.
+3. Cópula de Clayton: $\displaystyle \alpha = \frac{2 \tau}{1 - \tau} =$ `r (2 * 0.2) / (1 - 0.2)`.
+
 \newpage
 
 # Problema 8
+
+Generación de cópulas:
+
+```{r message=FALSE}
+normCopula0.9 <- normalCopula(param = 0.9, dim = 2)
+normCopula0.2 <- normalCopula(param = 0.2, dim = 2)
+```
+
+```{r out.width="75%", fig.width = 8, fig.height = 8, cache=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+contour(normCopula0.9,
+        pCopula,
+        main = "CDF contour 0.9")
+persp(normCopula0.9,
+      pCopula,
+      main = "CDF 0.9")
+contour(normCopula0.9,
+        dCopula,
+        main = "Density contour 0.9")
+persp(normCopula0.9,
+      dCopula,
+      main = "Density 0.9")
+
+contour(normCopula0.2,
+        pCopula,
+        main = "CDF contour 0.2")
+persp(normCopula0.2,
+      pCopula,
+      main = "CDF 0.2")
+contour(normCopula0.2,
+        dCopula,
+        main = "Density contour 0.2")
+persp(normCopula0.2,
+      dCopula,
+      main = "Density 0.2")
+```
+
+Nótese que con mayor coeficiente de relación, más nos aproximamos a una relación lineal --- fácil de observar en las curvas de nivel de la función de probabilidad acumulada. Así pues, la dependencia lineal en la cópula gaussiana está directamente relacionada con su parámetro.
 
 \newpage
 

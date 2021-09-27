@@ -1,39 +1,34 @@
 library(tidyverse)
-library(mvtnorm)
+library(copula)
 
-wishart1 <- function(k, n, mean, sigma) {
-    require(mvtnorm)
-    W <- list(NULL)
-    for (i in 1:k) {
-        X <- rmvnorm(n, mean = mean, sigma = sigma)
-        W[[i]] <- t(X) %*% X
-    }
-    return(W)
-}
+# Generación de cópulas
+normCopula0.9 <- normalCopula(param = 0.9, dim = 2)
+normCopula0.2 <- normalCopula(param = 0.2, dim = 2)
 
-wishart2 <- function(k, n, mean, sigma) {
-    W <- list(NULL)
-    d <- length(mean)
-    A <- matrix(0, nrow = d, ncol = d)
-    for (i in 1:k) {
-        A[lower.tri(matrix(0, nrow = d, ncol = d))] <-
-            rnorm(d * (d + 1) / 2 - d)
-        diag(A) <- sqrt(rchisq(d, n - (1:d) + 1))
-        L <- chol(sigma)
-        W[[i]] <- L %*% A %*% t(A) %*% t(L)
-    }
-    return(W)
-}
+# Plots
 
-k <- 5
-n <- 5
-mean <- c(0, 0, 0, 0)
-sigma <- diag(4)
+contour(normCopula0.9,
+        pCopula,
+        main = "CDF contour 0.9")
+persp(normCopula0.9,
+      pCopula,
+      main = "CDF 0.9")
+contour(normCopula0.9,
+        dCopula,
+        main = "Density contour 0.9")
+persp(normCopula0.9,
+      dCopula,
+      main = "Density 0.9")
 
-set.seed(1234)
-
-test1 <- wishart1(k, n, mean, sigma)
-test2 <- wishart2(k, n, mean, sigma)
-
-test1
-test2
+contour(normCopula0.2,
+        pCopula,
+        main = "CDF contour 0.2")
+persp(normCopula0.2,
+      pCopula,
+      main = "CDF 0.2")
+contour(normCopula0.2,
+        dCopula,
+        main = "Density contour 0.2")
+persp(normCopula0.2,
+      dCopula,
+      main = "Density 0.2")
