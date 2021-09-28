@@ -4,7 +4,7 @@ runningheader: 'Tarea 3'
 author: |
   Carlos Lezama, Marco Medina, \
   Emiliano Ramírez y Santiago Villarreal
-date: 'Viernes, 1 de octubre de 2021'
+date: 'Lunes, 4 de octubre de 2021'
 output:
     tufte::tufte_handout:
     citation_package: natbib
@@ -52,6 +52,8 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 7
 
+Sabemos $\tau = 0.2$.
+
 1. Cópula normal (o cualquier elíptica): $\displaystyle \rho = \sin \left( \frac{\pi}{2}  \tau \right) =$ `r sin(pi * 0.2 / 2)`.
 2. Cópula de Gumbel: $\displaystyle \alpha = \frac{1}{1 - \tau} =$ `r 1 / (1 - 0.2)`.
 3. Cópula de Clayton: $\displaystyle \alpha = \frac{2 \tau}{1 - \tau} =$ `r (2 * 0.2) / (1 - 0.2)`.
@@ -66,6 +68,8 @@ Generación de cópulas:
 normCopula0.9 <- normalCopula(param = 0.9, dim = 2)
 normCopula0.2 <- normalCopula(param = 0.2, dim = 2)
 ```
+
+Visualización:
 
 ```{r out.width="75%", fig.width = 8, fig.height = 8, cache=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
 contour(normCopula0.9,
@@ -95,7 +99,7 @@ persp(normCopula0.2,
       main = "Density 0.2")
 ```
 
-Nótese que con mayor coeficiente de relación, más nos aproximamos a una relación lineal --- fácil de observar en las curvas de nivel de la función de probabilidad acumulada. Así pues, la dependencia lineal en la cópula gaussiana está directamente relacionada con su parámetro.
+Nótese que con mayor coeficiente de correlación, más nos aproximamos a una relación lineal --- fácil de observar en las curvas de nivel de la función de probabilidad acumulada. Así pues, la dependencia lineal en la cópula gaussiana está directamente relacionada con su parámetro.
 
 \newpage
 
