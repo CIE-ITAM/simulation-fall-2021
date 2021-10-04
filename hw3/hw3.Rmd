@@ -136,8 +136,6 @@ cor(X, method = "spearman")
 # sin embargo se acerca mucho.
 ```
 
-Observamos los histogramas de las distribuciones marginales para corroborar que tienen las distribuciones consideradas.
-
 \newpage
 
 # Problema 2
@@ -150,7 +148,7 @@ Observamos los histogramas de las distribuciones marginales para corroborar que 
 
 \vspace{3mm}
 
-Primero, supongamos que $u_2>u_1$ Sabemos que la cópula de Frank tiene la siguiente forma analítica para el caso bivariado: 
+Primero, supongamos que $u_2>u_1$. Sabemos que la cópula de Frank tiene la siguiente forma analítica para el caso bivariado: 
 
 $$
 \begin{aligned}
