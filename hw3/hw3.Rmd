@@ -28,6 +28,97 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 1
 
+```{r}
+library(copula)
+library(Rlab)
+
+#nuestra copula será una gaussiana, como vimos en clase, para poder otrogarle la estructura de dependencia que queremos.
+
+copula_normal_4 <- normalCopula(c(0, 2*(sin((-0.7*pi)/6)), 2*(sin((0.5*pi)/6)), 2*(sin((0.2*pi)/6)), 2*(sin((0.4*pi)/6)), 0),
+                                dim=4, dispstr="un")
+
+set.seed(170309)
+
+U <- rCopula(5000, copula_normal_4)
+                                
+pairs(U, pch=16, cex=0.5)
+
+#mostramos nuestra matriz de dependecia
+
+round(cor(U, method = "spearman"), 2)
+
+#Ahora generamos el vector X=(X1, X2, X3, X4) que se nos pide y hacemos los histogramas para ver si tienen el comportamiento deseado 
+
+X <- cbind(qnorm(U[,1], mean=4, sd=3), 
+           qbern(U[,2], prob=0.6),
+           qbeta(U[,3], 2, 3),
+           qgamma(U[,4],3,2))
+
+#echamos un vistazo a como quedaron los datos de X
+head(X)
+
+#visualizaos nuestros datos
+pairs(X, pch = 16, cex = 0.5)
+
+#Grafica los histogramas y agrega densidades con las distribuciones deseadas para ver
+#la aproximación
+par(mfrow = c(1,1))
+hist(X[,1], prob = T,breaks=50,
+     main = "Histograma distr. Normal(4,9)",
+     xlab = "Primera entrada vector X",
+     ylab ="Densidad"); 
+points(sort(X[,1]),dnorm(sort(X[,1]),4,3),type="l",col="blue")
+
+
+hist(X[,2], prob = T,breaks=50,
+     main = "Histograma distr. Bernoulli(0.6)",
+     xlab = "Segunda entrada vector X",
+     ylab ="Densidad"); 
+points(sort(X[,2]),dbern(sort(X[,2]),prob=0.6),type="l",col="blue")
+
+
+hist(X[,3], prob = T,
+     main = "Histograma distr. Beta(2,3)",
+     xlab = "Tercera entrada vector X",
+     ylab ="Densidad"); 
+points(sort(X[,3]),dbeta(sort(X[,3]),2,3),type="l",col="blue")
+
+
+hist(X[,4], prob = T, 
+     main = "Histograma distr. Gamma(3,2)",
+     xlab = "Cuarta entrada vector X",
+     ylab ="Densidad",
+     ylim=c(0,0.6));
+points(sort(X[,4]),dgamma(sort(X[,4]),3,2),type="l",col="blue")
+
+#revisemos si nuestro vector cumple con la estructura de dependencia que queríamos imponer
+cor(X, method="spearman")
+
+#no es exactamente igual a la estructura ideal que queremos, sin embargo se acerca mucho. 
+
+             [,1]        [,2]        [,3]       [,4]
+[1,]  1.000000000 0.007917661 -0.68478800 0.49383317
+[2,]  0.007917661 1.000000000  0.17071203 0.34176481
+[3,] -0.684788000 0.170712034  1.00000000 0.02937377
+[4,]  0.493833167 0.341764813  0.02937377 1.00000000
+
+```
+Veamos a continuación los histogramas de las distribuciones marginales para corroborar que tienen la distribución considerada.
+
+```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
+knitr::include_graphics('normal_copula_4.png')
+```
+
+```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
+knitr::include_graphics('bernoulli_copula_4.png')
+
+```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
+knitr::include_graphics('beta_copula_4.png')
+```
+
+```{r out.width='60%', fig.fullwidth = TRUE, echo=FALSE}
+knitr::include_graphics('gamma_copula_4.png')
+
 \newpage
 
 # Problema 2
@@ -35,6 +126,33 @@ options(htmltools.dir.version = FALSE)
 \newpage
 
 # Problema 3
+
+1. Mostrar que cuando $\theta \rightarrow \infty$, $C^{Fr}(u_1, u_2) \rightarrow min\{u_1, u_2\}$, donde $C^{Fr}$ es la cópula de Frank. 
+
+\vspace{3mm}
+
+Primero, supongamos que $u_2>u_1$ Sabemos que la cópula de Frank tiene la siguiente forma analítica para el caso bivariado: 
+
+\begin{equation*}
+    \begin{aligned}
+ C^{F r}\left(u_{1}, u_{2}\right)&=-\frac{1}{\theta} \log \left(1+\frac{\left(e^{-\theta u_{1}}-1\right)\left(e^{-\theta u_{2}}-1\right)}{e^{-\theta}-1}\right) \\
+ &=-\frac{1}{\theta} \log \left(1+\frac{e^{-\theta u_1 - \theta u_2} -e^{\theta u1} -e^{\theta u_2} + 1}{e^{-\theta}-1}\right) \\
+ \text{Cuando $\theta \rightarrow \infty$ entonces $e^{-\theta}-1 \approx -1$, por lo que } \\
+ &\approx -\frac{1}{\theta} \log \left(1- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2} - 1\right) \\
+ &\approx -\frac{1}{\theta} \log \left(- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2}\right) \\
+ &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta u_2}e^{\theta u1})\right) \\
+ &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)})\right) \\
+ \text{ya que $u_2 > u_1$, $-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)} \rightarrow 1$ cuando $\theta \rightarrow \infty$  } \\
+ &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1} \right) \\
+ &\approx u_1 = min\{u_1,u_2\}
+ 
+ 
+ \end{aligned}
+\end{equation*}
+
+\vspace{3mm}
+
+Por tanto, cuando $\theta \rightarrow \infty$, $C^{Fr}(u_1, u_2) \rightarrow min\{u_1, u_2\}$ \blacksquare
 
 \newpage
 
