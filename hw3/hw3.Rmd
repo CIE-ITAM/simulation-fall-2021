@@ -21,15 +21,21 @@ library(Rlab)
 knitr::opts_chunk$set(
   cache.extra = packageVersion('tufte'),
   cache = TRUE,
+  fig.height = 8,
   fig.pos = '!h',
-  out.extra = ''
+  fig.width = 8,
+  message=FALSE,
+  out.extra = '',
+  out.width='75%',
+  warning=FALSE
 )
+
 options(htmltools.dir.version = FALSE)
 ```
 
 # Problema 1
 
-```{r out.width="75%", fig.width = 8, fig.height = 8}
+```{r}
 # Nuestra copula será una gaussiana, como vimos en clase,
 # para poder otrogarle la estructura de dependencia que queremos.
 
@@ -293,7 +299,7 @@ normCopula0.2 <- normalCopula(param = 0.2, dim = 2)
 
 Visualización:
 
-```{r out.width="75%", fig.width = 8, fig.height = 8, cache=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+```{r echo=FALSE}
 contour(normCopula0.9,
         pCopula,
         main = "CDF contour 0.9")
@@ -329,7 +335,7 @@ Nótese que con mayor coeficiente de correlación, más nos aproximamos a una re
 
 Simulamos 500 puntos cuya distribución son las cópulas del ejercicio 8 anterior.
 
-```{r rcop09, out.width="75%", fig.width = 6, fig.height = 6, echo  = FALSE}
+```{r echo=FALSE}
 normCopula0_9 <- normalCopula(param = 0.9, dim = 2)
 rcop09<- rCopula(500, normCopula0_9)
 pairs(rcop09, main = "Parámetro 0.9")
@@ -337,14 +343,13 @@ pairs(rcop09, main = "Parámetro 0.9")
 
 \
 
-```{r rcop02, out.width="75%", fig.width = 6, fig.height = 6, echo = FALSE}
+```{r echo=FALSE}
 normCopula0_2 <- normalCopula(param = 0.2, dim = 2)
 rcop02<- rCopula(500, normCopula0_2)
 pairs(rcop02, main = "Parámetro 0.2")
 ```
 
 Como podemos observar, existe una mayor dependencia entre las marginales cuando el parámetro de normalCopula es 0.9 que cuando es 0.2.
-
 
 \newpage
 

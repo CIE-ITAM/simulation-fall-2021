@@ -23,9 +23,15 @@ library(EnvStats)
 knitr::opts_chunk$set(
   cache.extra = packageVersion('tufte'),
   cache = TRUE,
+  fig.height = 8,
   fig.pos = '!h',
-  out.extra = ''
+  fig.width = 8,
+  message=FALSE,
+  out.extra = '',
+  out.width='75%',
+  warning=FALSE
 )
+
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -300,7 +306,7 @@ Simulamos una muestra para $X$ y comparamos la función de distribución con la 
 
 \
 
-```{r dist_pareto, fig.height = 4, fig.fullweight = TRUE, echo = FALSE}
+```{r echo = FALSE}
 # Creamos la semilla para la simulación
 set.seed(5693899)
 
@@ -324,7 +330,7 @@ lines(x_real, fx_real, col = "red")
 
 b) Escriban una función para simular los activos de la compañía en el horizonte de tiempo $T$ y estimen: (1) la probabilidad de que la compañía se vaya a bancarrota, y (2) Los activos esperados al final de cinco años.
 
-```{r activos, include = FALSE}
+```{r include = FALSE}
 activos <- function(periodos, p, clientes = 1000, prima = 5500){
   Z <- 10000000
   for (i in 1:periodos){
@@ -356,7 +362,7 @@ Primero simulamos la probabilidad de bancarrota en el período $T$ para cada uno
 
 \
 
-```{r bancarrota, fig.height=3, echo = FALSE}
+```{r echo = FALSE}
 # Creamos la semilla para la simulación
 set.seed(2419231)
 
@@ -391,7 +397,7 @@ Tal como podemos observar en las gráficas, la probabilidad de bancarrota es pr�
 
 Ahora calculamos el valor esperado de los activos en $T = 5$ para cada uno de los valores de $p \in \{0.01, 0.1, 0.15, 0.2 \}$.
 
-```{r expected_activos, fig.height=3, echo=FALSE}
+```{r echo=FALSE}
 # Creamos la semilla para la simulación
 set.seed(945821)
 
@@ -421,7 +427,7 @@ Como podemos observar en la gráfica, en $T = 5$, los activos esperados con las 
 
 c) Toma de ganancias. Supongan ahora que la compañía toma ganancias al final de cada año. Usando este nuevo esquema, estimar: (1) la probabilidad de irse a la quiebra, (2) los activos esperados después de T años, y (3) Las ganancias totales esperadas después de T años.
 
-```{r activos_ganancias, include = FALSE}
+```{r include = FALSE}
 activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
   Z <- 10000000
   G <- 0
@@ -459,7 +465,7 @@ activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
 
 Calculamos la probabilidad de bancarrota para cada valor de $p$ con el nuevo esquema de toma de ganancias, el valor esperado de los activos y las ganancias para cada período $T = 5, 10, 15, 20$.
 
-```{r simul_ganancias, include = FALSE}
+```{r include = FALSE}
 # Creamos la semilla para la simulación
 set.seed(4296531)
 
@@ -504,7 +510,7 @@ for (prob in probs){
 }
 ```
 
-```{r graphs_ganancia_1, fig.height = 2.3, echo = FALSE}
+```{r echo = FALSE}
 # Graficamos las probabilidades de bancarrota
 ggplot(data_simul, aes(x = periodos, y = prob_bancarrota, color = factor(p))) +
   geom_line() +
@@ -516,7 +522,7 @@ ggplot(data_simul, aes(x = periodos, y = prob_bancarrota, color = factor(p))) +
 
 \
 
-```{r graphs_ganancia_2, fig.height = 2.3, echo = FALSE}
+```{r echo = FALSE}
 # Graficamos los activos esperados
 ggplot(data_simul, aes(x = periodos, y = expected_activos/10000000, color = factor(p))) +
   geom_line() +
@@ -528,7 +534,7 @@ ggplot(data_simul, aes(x = periodos, y = expected_activos/10000000, color = fact
 
 \
 
-```{r graphs_ganancia_3, fig.height = 2.3, echo = FALSE}
+```{r echo = FALSE}
 # Graficamos los activos esperados
 ggplot(data_simul, aes(x = periodos, y = expected_ganancias/10000000, color = factor(p))) +
   geom_line() +
@@ -548,7 +554,7 @@ Como podemos observar en la gráficas, se mantiene que la probabilidad de bancar
 
 Para simular la distribución Cauchy con función de densidad $f(x) = \frac{1}{\pi\beta[1 + (\frac{x-\gamma}{\beta}^{2})]}$, usamos el hecho que su función de distribución $F(x) = \frac{1}{\pi}\arctan{(\frac{x-\gamma}{\beta})}+\frac{1}{2}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \beta \tan{(\pi(U-\frac{1}{2}))}+\gamma$ sigue una distribución Cauchy con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
-```{r rcauchy}
+```{r}
 rcauchy <- function(n, param_gamma = 0, param_beta = 1){
   unif <- runif(n)
   cauchy <- param_beta*tan(pi*(unif-0.5))+param_gamma
@@ -560,7 +566,7 @@ Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}
 
 \
 
-```{r rcauchy_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+```{r echo=FALSE}
 # Creamos la semilla para la simulación
 set.seed(332442)
 
@@ -584,7 +590,7 @@ Podemos notar de la gráfica que $\bar{X}(n)$ no converge a ningún valor, hecho
 
 Para simular la distribución Gumbel con función de densidad $f(x) = \frac{1}{\beta}\exp(-e^{-(x-\gamma)/\beta}-\frac{x-\gamma}{\beta})$, usamos el hecho que su función de distribución $F(x) = \exp(-e^{(x-\gamma)/\beta})$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(-\ln{(U)})}+\gamma$ sigue una distribución Gumbel con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
-```{r rgumbel}
+```{r}
 rgumbel <- function(n, param_gamma = 0, param_beta = 1){
   unif <- runif(n)
   gumbel <- -param_beta*log(-log(unif)) + param_gamma
@@ -596,7 +602,7 @@ Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}
 
 \
 
-```{r rgumbel_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+```{r echo=FALSE}
 # Creamos la semilla para la simulación
 set.seed(346342)
 
@@ -622,7 +628,7 @@ La media de la distribución Gumbel con $\gamma = 0$ y $\beta = 1$ es la constan
 ## Logística
 Para simular la distribución Logística con función de densidad $f(x) = \frac{(1/\beta)e^{-(x-\gamma)/\beta}}{(1+e^{-(x-\gamma)/\beta})^2}$, usamos el hecho que su función de distribución $F(x) =  \frac{1}{(1+e^{-(x-\gamma)/\beta}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(\frac{1-y}{y})}+\gamma$ sigue una distribución Logística con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
-```{r rlogistic}
+```{r}
 rlogistic <- function(n, param_gamma = 0, param_beta = 1){
   unif <- runif(n)
   logistic <- -param_beta*log((1-unif)/unif) + param_gamma
@@ -634,7 +640,7 @@ Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}
 
 \
 
-```{r rlogistic_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+```{r echo=FALSE}
 # Creamos la semilla para la simulación
 set.seed(2353462)
 
@@ -661,7 +667,7 @@ La media de la distribución Logística es $\gamma = 0$. Podemos ver en la gráf
 
 Para simular la distribución Pareto con función de densidad $f(x) = \frac{\alpha_{2}c^{\alpha_{2}}}{x^{\alpha_{2}+1}}$, usamos el hecho que su función de distribución $F(x) = 1- (\frac{c}{x})^{\alpha_{2}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \frac{c}{(1-U)^{1/\alpha_{2}}}$ o $X = \frac{c}{(U)^{1/\alpha_{2}}}$ sigue una distribución Pareto con parámetro de escala $c > 0$ y de forma $\alpha_{2} > 0$.
 
-```{r rpareto}
+```{r}
 rparet <- function(n, param_c = 1, param_alpha = 2){
   unif <- runif(n)
   pareto <- param_c/(unif)^(1/param_alpha)
@@ -673,7 +679,7 @@ Ahora, tomamos una muestra aleatoria de 5000 observaciones y calculamos $\bar{X}
 
 \
 
-```{r rpareto_simul, fig.height=3.5, fig.fullweight = TRUE, echo=FALSE}
+```{r echo=FALSE}
 # Creamos la semilla para la simulación
 set.seed(942062)
 
@@ -698,7 +704,7 @@ La media de la distribución Pareto es $\frac{\alpha_{2}c}{\alpha_{2}-1} = 2$. P
 
 Para simular la distribución Vasicek con función de densidad $f(x) =\sqrt{\frac{1-\rho}{\rho}} \exp{\left(\frac{1}{2} \{ \Phi^{-1}(x)^{2} - \left(\frac{\sqrt{1-\rho}\Phi^{-1}(p)}{\sqrt{\rho}} \right)^{2} \}  \right)}$, usamos el hecho que $X = \Phi\left( \frac{\Phi^{-1}(p)-\sqrt{\rho}Z}{\sqrt{1-\rho}} \right)$ sigue una distribución Vasicek con parámetros $p$ y $\rho$, donde $Z$ sigue una distribución normal estándar y $\Phi$ es su función de distribución.
 
-```{r rvasicek}
+```{r}
 rvasicek <- function(n, param_rho, param_p){
   normal <- rnorm(n)
   vasicek <- pnorm((qnorm(p)-sqrt(rho)*normal)/sqrt(1-param_rho))
@@ -848,7 +854,7 @@ dproblema6 <- function(k, n) {
 z <- dproblema6(100, 1000)
 ```
 
-```{r out.width='50%', fig.fullwidth = TRUE, echo=FALSE}
+```{r echo=FALSE}
 knitr::include_graphics('problem6 hist.png')
 ```
 
@@ -924,14 +930,14 @@ for (i in 1:4) {
 }
 ```
 
-```{r fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
+```{r fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, echo=FALSE}
 plt[[1]]
 plt[[2]]
 plt[[3]]
 plt[[4]]
 ```
 
-```{r fig.width = 10, fig.height = 10, cache=TRUE, echo=FALSE}
+```{r fig.width = 10, fig.height = 10, echo=FALSE}
 ggpairs(z) + theme_minimal()
 ```
 

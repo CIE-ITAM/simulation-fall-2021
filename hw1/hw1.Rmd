@@ -19,7 +19,18 @@ library(berryFunctions)
 library(kableExtra)
 library(stringi)
 
-knitr::opts_chunk$set(cache.extra = packageVersion('tufte'), cache = TRUE)
+knitr::opts_chunk$set(
+  cache.extra = packageVersion('tufte'),
+  cache = TRUE,
+  fig.height = 8,
+  fig.pos = '!h',
+  fig.width = 8,
+  message=FALSE,
+  out.extra = '',
+  out.width='75%',
+  warning=FALSE
+)
+
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -104,6 +115,7 @@ for (i in 1:500) {
 x <- c(1:500)
 y1 <- y / x
 ```
+
 ```{r,fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
 plot(
   x,
@@ -121,6 +133,7 @@ plot(
 ```{r}
 y2 <- 2 * y - x
 ```
+
 ```{r,fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
 plot(
   x,
