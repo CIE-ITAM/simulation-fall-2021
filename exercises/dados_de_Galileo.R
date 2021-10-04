@@ -1,5 +1,4 @@
-library(ggplot2)
-library(tidyr)
+library(tidyverse)
 
 set.seed(1234)
 
@@ -44,21 +43,27 @@ p.2 <- ggplot(df.2, aes(x = sim, y = prob, colour = number)) +
     geom_line() +
     scale_color_manual(values = c('tomato2', 'black'),
                        labels = c('9', '10')) +
-    labs(title = 'Dados de Galileo \nSimulaci?n',
-         x = 'N?mero de simulaciones',
-         y = 'Probabilidad',
-         colour = 'N?mero') +
+    labs(
+        title = 'Dados de Galileo \nSimulaci?n',
+        x = 'N?mero de simulaciones',
+        y = 'Probabilidad',
+        colour = 'N?mero'
+    ) +
     ylim(0, 1) +
     theme_minimal()
 
-ggsave(path = 'simulation2021/exercises/',
-       filename = 'dados_de_Galileo_1.svg',
-       plot = p.1,
-       width = 15,
-       height = 10)
+ggsave(
+    path = 'simulation2021/exercises/',
+    filename = 'dados_de_Galileo_1.svg',
+    plot = p.1,
+    width = 15,
+    height = 10
+)
 
-ggsave(path = 'simulation2021/exercises/',
-       filename = 'dados_de_Galileo_2.svg',
-       plot = p.2,
-       width = 15,
-       height = 10)
+ggsave(
+    path = 'simulation2021/exercises/',
+    filename = 'dados_de_Galileo_2.svg',
+    plot = p.2,
+    width = 15,
+    height = 10
+)

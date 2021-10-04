@@ -1,5 +1,5 @@
+library(tidyverse)
 # Estima la probabilidad de que una aguja cruce una l?nea en un piso de duela
-library(ggplot2)
 
 set.seed(1234)
 
@@ -7,7 +7,8 @@ set.seed(1234)
 N     <- 2000                 # N?mero de simulaciones
 alpha <- 0.05                 # Nivel de significancia
 z     <- qnorm(1 - alpha / 2) # Cuantil de la distribuci?n normal
-NI    <- rep(1, N)            # Agujas que tocan el l?mite de la duela
+NI    <-
+    rep(1, N)            # Agujas que tocan el l?mite de la duela
 r     <- 10                   # Longitud de la aguja
 d     <- 15                   # Ancho de la duela
 
@@ -32,8 +33,10 @@ p <- ggplot(df, aes(x = sim, y = prob)) +
     ylim(0, 1) +
     theme_minimal()
 
-ggsave(path = 'simulation2021/exercises/',
-       filename = 'aguja_de_Buffon.svg',
-       plot = p,
-       width = 15,
-       height = 10)
+ggsave(
+    path = 'simulation2021/exercises/',
+    filename = 'aguja_de_Buffon.svg',
+    plot = p,
+    width = 15,
+    height = 10
+)
