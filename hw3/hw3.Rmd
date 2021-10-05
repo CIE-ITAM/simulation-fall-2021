@@ -140,6 +140,8 @@ cor(X, method = "spearman")
 
 # Problema 2
 
+Como la Tau de Kendall entre X e Y es ed 0.55 y la función 1/X es monótona decreciente en todo el dominio de la v.a X (ya que X>0 por hipótesis), tenemos que la Tau de Kendall para (1/X,Y) es de -0.55. Ahora, aplicando el mismo resultado que ahora, tenemos que la v.a Y es positiva en todo su soporte y por lo tanto, la transformación 1/Y es monótona decreciente en todo el dominio de Y. Por lo tanto, la Tau de Kendall para la pareja (1/X,1/Y) es de -(-0.55)=0.55.
+
 \newpage
 
 # Problema 3
@@ -204,6 +206,25 @@ Por lo tanto, la cópula de Clayton converge a la cópula de comonoticidad cuand
 \newpage
 
 # Problema 5
+
+La función de la cópula empírica, que toma como entrada dos valores (u,v) que se encuentran entre 0 y 1, y dos vectores de observacioens /(x_1,...x_n) e /(y_1,...,y_n), cuya longitud es igual y son no vacíos, está dada por:
+```{r}
+empCopula<-function(u,v,xvec,yvec){
+  rango_x=numeric()
+  rango_y=numeric()
+  vect_res=numeric()
+  for (i in 1:length(xvec)){
+    rango_x[i]=length(xvec[xvec<=xvec[i]])
+    rango_y[i]=length(yvec[yvec<=yvec[i]])
+    if(rango_x[i]/(length(xvec)+1)<=u & rango_y[i]/(length(xvec)+1)<=v){
+      vect_res[i]=1
+    }else{vect_res[i]=0}
+  }
+  empcop=sum(vect_res)/length(xvec) 
+  print(empcop)
+}
+
+```
 
 \newpage
 
