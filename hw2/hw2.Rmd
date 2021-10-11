@@ -7,8 +7,7 @@ author: |
 date: 'Lunes, 13 de septiembre de 2021'
 output:
     tufte::tufte_handout:
-    citation_package: natbib
-latex_engine: xelatex
+      citation_package: natbib
 link-citations: yes
 ---
 
