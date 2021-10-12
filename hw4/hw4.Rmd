@@ -1,0 +1,65 @@
+---
+title: 'EST--24107: Tarea 4'
+runningheader: 'Tarea 4'
+author: |
+  Carlos Lezama, Marco Medina, \
+  Emiliano Ramírez y Santiago Villarreal
+date: 'Lunes, 25 de octubre de 2021'
+output:
+    tufte::tufte_handout:
+      citation_package: natbib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  cache.extra = packageVersion('tufte'),
+  cache = TRUE,
+  fig.height = 8,
+  fig.pos = '!h',
+  fig.width = 8,
+  message=FALSE,
+  out.extra = '',
+  out.width='75%',
+  warning=FALSE
+)
+
+options(htmltools.dir.version = FALSE)
+```
+
+# Problema 1
+
+\newpage
+
+# Problema 2
+
+\newpage
+
+# Problema 3
+
+\newpage
+
+# Problema 4
+
+\newpage
+
+# Problema 5
+
+\newpage
+
+# Problema 6
+
+\newpage
+
+# Problema 7
+
+\newpage
+
+# Problema 8
+
+\newpage
+
+\bibliography{}
