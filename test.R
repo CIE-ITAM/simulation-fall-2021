@@ -1,34 +1,49 @@
 library(tidyverse)
-library(copula)
 
-# Generación de cópulas
-normCopula0.9 <- normalCopula(param = 0.9, dim = 2)
-normCopula0.2 <- normalCopula(param = 0.2, dim = 2)
+lambda.t <- function(t, n) {
+  x <- paste('', '{', 0, '< t & t <=', 1, '}',
+             sep = '')
+  for (i in seq(2, n, 2)) {
+    x <- paste(x,
+               paste('', '{', i, '< t & t <=', i + 1, '}',
+                     sep = ''),
+               sep = '|')
+  }
+  return(ifelse(eval(parse(text = x)), 3, 5))
+}
 
-# Plots
+inhomogeneousPoisson <- function(n) {
+  s <- cumsum(rexp(n, 5))
+  u <- runif(n)
+  points <- s[u <= lambda.t(s, n) / 5]
+  count <- 1:length(points)
+  df <- data.frame(points, count)
+  return(df)
+}
 
-contour(normCopula0.9,
-        pCopula,
-        main = "CDF contour 0.9")
-persp(normCopula0.9,
-      pCopula,
-      main = "CDF 0.9")
-contour(normCopula0.9,
-        dCopula,
-        main = "Density contour 0.9")
-persp(normCopula0.9,
-      dCopula,
-      main = "Density 0.9")
+inhomogeneousPoisson(500) %>%
+  ggplot(aes(x = points, y = count)) +
+  geom_step() +
+  labs(title = 'Simulación de un proceso Poisson no homogéneo',
+       x = 'Puntos (s)',
+       y = 'N(t)') +
+  theme_minimal()
 
-contour(normCopula0.2,
-        pCopula,
-        main = "CDF contour 0.2")
-persp(normCopula0.2,
-      pCopula,
-      main = "CDF 0.2")
-contour(normCopula0.2,
-        dCopula,
-        main = "Density contour 0.2")
-persp(normCopula0.2,
-      dCopula,
-      main = "Density 0.2")
+inhomogeneousPoisson(140) %>%
+  ggplot(aes(x = points, y = count)) +
+  geom_step() +
+  labs(title = 'Simulación de un proceso Poisson no homogéneo',
+       x = 'Puntos (s)',
+       y = 'N(t)') +
+  theme_minimal()
+
+fr <- NULL
+N <- 10000
+
+for (i in 1:N) {
+  x <- inhomogeneousPoisson(10)
+  
+  fr <- c(fr, ifelse(sum(x$points[x$count > 2] > 1.25 &
+                           x$points[x$count > 2] <= 3) > 0, 1, 0))
+}
+sum(fr) / N

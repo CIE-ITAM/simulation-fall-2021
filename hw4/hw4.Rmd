@@ -36,6 +36,68 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 2
 
+```{r}
+lambda.t <- function(t, n) {
+  x <- paste('', '{', 0, '< t & t <=', 1, '}',
+             sep = '')
+  for (i in seq(2, n, 2)) {
+    x <- paste(x,
+               paste('', '{', i, '< t & t <=', i + 1, '}',
+                     sep = ''),
+               sep = '|')
+  }
+  return(ifelse(eval(parse(text = x)), 3, 5))
+}
+
+inhomogeneousPoisson <- function(n) {
+  s <- cumsum(rexp(n, 5))
+  u <- runif(n)
+  points <- s[u <= lambda.t(s, n) / 5]
+  count <- 1:length(points)
+  df <- data.frame(points, count)
+  return(df)
+}
+```
+
+## a)
+
+```{r, echo=FALSE}
+inhomogeneousPoisson(500) %>%
+  ggplot(aes(x = points, y = count)) +
+  geom_step() +
+  labs(title = 'Simulación de un proceso Poisson no homogéneo',
+       x = 'Puntos (s)',
+       y = 'N(t)') +
+  theme_minimal()
+```
+
+## b)
+
+```{r, echo=FALSE}
+inhomogeneousPoisson(150) %>%
+  ggplot(aes(x = points, y = count)) +
+  geom_step() +
+  labs(title = 'Simulación de un proceso Poisson no homogéneo',
+       x = 'Puntos (s)',
+       y = 'N(t)') +
+  theme_minimal()
+```
+
+## c)
+
+```{r}
+fr <- NULL
+N <- 10000
+
+for (i in 1:N) {
+  x <- inhomogeneousPoisson(10)
+  
+  fr <- c(fr, ifelse(sum(x$points[x$count > 2] > 1.25 &
+                           x$points[x$count > 2] <= 3) > 0, 1, 0))
+}
+sum(fr) / N
+```
+
 \newpage
 
 # Problema 3
@@ -43,6 +105,30 @@ options(htmltools.dir.version = FALSE)
 \newpage
 
 # Problema 4
+
+Sabemos que tasas de $3$ y $4$ por día implican tasas de $1/8$ y $1/6$ por hora, respectivamente.
+
+Así pues, definimos $\displaystyle N^{(1)}_t \sim \mathcal{P}(1/8)$, $\displaystyle N^{(2)}_t \sim \mathcal{P}(1/6)$ y $\displaystyle N_t = N^{(1)}_t + N^{(2)}_t$ tal que $\displaystyle N_t \sim \mathcal{P}(7/24)$.
+
+Como $\mathbb{E}(N_t) = \text{Var}(N_t) = \lambda \cdot t$, para $t = 8$,
+
+$\mathbb{E}(N_8) = \text{Var}(N_8) = 7/3$.
+
+* $\displaystyle P(N_1 = 2) = \frac{\left(7/24\right)^2}{2!} e^{-7/24} = `r (((7/24)^2)/(factorial(2))) * exp(-7/24)`$.
+
+Sean $p_1 = 0.011$ y $p_2 = 0.005$ las respectivas probabilidades de fallo, podemos definir
+
+$$
+\displaystyle P(N_t^{(1)} = k) = \frac{e^{-\lambda_1 p_1 t} (\lambda_1 p_1 t)^k}{k!}, \quad \forall k = 0, 1, 2, \dots
+$$
+
+tal que $N^{(1)}_t \sim \mathcal{P} (\lambda_1 p_1)$. De forma análoga, $N^{(2)}_t \sim \mathcal{P} (\lambda_2 p_2)$.
+
+Así pues, $\left\{ N_t, t \geq 0 \right\}$ con $N_t = N^{(1)}_t + N^{(2)}_t$ es un proceso Poisson tal que $N_t \sim \mathcal{P} (\lambda_1 p_1 + \lambda_2 p_2) = \mathcal{P} (`r 53/24000`)$.
+
+O bien, al definir a partir de los éxitos,
+
+$N_t \sim \mathcal{P} (\lambda_1 (1 - p_1) + \lambda_2 (1 - p_2)) = \mathcal{P} (`r 6947/24000`)$.
 
 \newpage
 
