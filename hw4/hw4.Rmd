@@ -32,6 +32,86 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 1
 
+\vspace{3mm}
+
+
+Sea $\mathcal{S} =\{(0,0),(1,0),(0,1),(1,1)\} $ el espacio de estados del proceso donde $(0,0)$ denota que la maquina 1 y la máquina 2 están apagadas, $(1,0)$ denota que la máquina 1 está prendida y la máquina 2 está apagada, y así sucesivamente.
+
+\vspace{3mm}
+
+Suponemos que los estados son independientes. Creemos que este supuesto es razonable ya que también es razonable que las máquinas sean independientes, por ende, la eficiencia de cada máquina es independiente de la otra. 
+
+\vspace{3mm}
+
+Obtengamos las probabilidades de cada estado dado que la probabilidad de la máquina 1 de producir una pieza no defectuosa es 0.3 y para la máquina 2 es de 0.5.
+
+\begin{equation*}
+    \begin{aligned}
+     \mathbb{P}(0,0)&=0.3^2(0.5)^2=0.0225 \\
+     \mathbb{P}(1,0)&=(1-0.3^2)0.5^2=0.2275 \\
+     \mathbb{P}(0,1)&=0.3^2(1-0.5^2)=0.0675 \\
+     \mathbb{P}(1,1)&=(1-0.3^2)(1-0.5^2)=0.6825
+    \end{aligned}
+\end{equation*}
+
+Notemos que la probabilidad de que una máquina esté apagada (y por ende, su armario esté lleno) se traduce a la probabilidad de que la máquina produzca dos piezas consecutivas no defectuosas:
+
+\[\mathbb{P}(\text{producir 2 piezas no defectuosas})=a_i^2\]
+
+Mientras que la probabilidad de que la máquina esté prendida simplemente es su complemento probabilístico:
+
+\[\mathbb{P}(\text{producir al menos una pieza defectuosa})=1-\mathbb{P}(\text{producir 2 piezas no defectuosas})\]
+
+Así pues, sea $X_t$ nuestro proceso de Markov que es mapeado al espacio de estados $\mathcal{S}$. Para calcular las probabilidades de transición de nuestra matriz usamos el supuesto de independencia entre estados. Observemos que para cualquier par de eventos en $\mathcal{S}$, sin perdida de generalidad pasa lo siguiente:
+
+\[\mathbb{P}[X_t=(1,0)|X_{t-1}=(0,0)]=\frac{\mathbb{P}[X_t=(1,0)]\mathbb{P}[X_{t-1}=(0,0)]}{\mathbb{P}[X_{t-1}=(0,0)]}=\mathbb{P}[X_t=(1,0)]\]
+
+Por tanto, nuestra matriz de transición tiene la siguiente forma:
+
+\begin{equation*}
+    P=\left(\begin{array}{cccc}
+0.0225 & 0.2275 & 0.0675 & 0.6825 \\
+0.0225 & 0.2275 & 0.0675 & 0.6825 \\
+0.0225 & 0.2275 & 0.0675 & 0.6825 \\
+0.0225 & 0.2275 & 0.0675 & 0.6825
+\end{array}\right)
+\end{equation*}
+
+Donde cada renglón suma a uno y cada entrada es mayor o igual que cero mostrando que es una matriz de transición.
+
+\vspace{3mm}
+
+```{r}
+
+#matriz de transición
+P <- matrix(c(rep(c(0.0225, 0.2275 , 0.0675 , 0.6825),4)),
+            byrow=T, nrow=4)
+n <- 500 #numero de simulaciones del proceso.
+X <- NULL
+
+#escogemos el estado 1 (0,0) que denota a las dos máquinas apagadas
+#como condición inicial pues denota el inicio de la producción.
+X[1] <- 1 
+
+for(i in 2:n) X[i] <- sample(1:4, 1, prob=P[X[i-1],])
+
+#mostramos los 500 pasos de la cadena de Markov simumlada.
+X
+
+
+table(X)/n
+
+
+```
+
+Luego, la proporción del tiempo que pasa cada una de las máquinas apagadas es la siguiente:
+
+\vspace{3mm}
+
+Proporción de tiempo que pasa la máquina 2 apagada es del 23.6\%. 
+
+Proporción de tiempo que pasa la máquina 1 apagada es del 10.2\% .
+
 \newpage
 
 # Problema 2
@@ -141,6 +221,85 @@ $N_t \sim \mathcal{P} (\lambda_1 (1 - p_1) + \lambda_2 (1 - p_2)) = \mathcal{P} 
 \newpage
 
 # Problema 7
+
+\vspace{3mm}
+
+Sea $G=\text{log}(S)$, luego 
+
+\[\frac{\partial G}{\partial S}=\frac{1}{S}, \quad \frac{\partial^{2} G}{\partial S^{2}}=-\frac{1}{S^{2}}, \quad \frac{\partial G}{\partial t}=0\]
+
+y usando el Lema de Ito, 
+
+\[d G=\left(\frac{\partial G}{\partial S} \mu S+\frac{\partial G}{\partial t}+\frac{1}{2} \frac{\partial^{2} G}{\partial S^{2}} \sigma^{2} S^{2}\right) d t+\frac{\partial G}{\partial S} \sigma S d z\]
+
+tenemos que 
+
+\[d\text{log}(S)=\left(\frac{-11}{24}\right)dt + \frac{1}{2}dZ_t\].
+
+
+\vspace{3mm}
+
+Podemos concluir que $S_t \rightarrow 0$ para $t$ grande. Asimismo, para $\bar{S}_{100}$ podemos concluir que el corte \say{transversal} de la trayectoria en el tiempo t es prácticamente cero. 
+
+```{r}
+
+#creamos función que simula proceso de Wiener generalizado
+BG <- function(n, TT, a, b, S0 = 1){
+  #Función para generar un proceso Browniano Geométrico
+  #n es el número de puntos de partición del intervalo [0,TT]
+  #a es el drift y b la volatilidad
+  dt <- TT/n #incremento de los intervalos para cubrir [0,TT]
+  S <- S0 #valor inicial
+  for(i in 2:(n+1)){
+    S <- append(S, S[i-1]*exp((a-b^2/2)*dt + b*sqrt(dt)*rnorm(1)))
+  }
+  return(S)
+}
+
+#Ahora definimos una matriz en blanco para almacenar ahí nuestras 10 trayectorias de St 
+#con t=30.
+
+Simulaciones <- matrix(NA, nrow = 10, ncol =31)
+
+for(i in 1:10){
+  Simulaciones[i,]<-BG(30, 30, -1/3, 1/2, 1)
+}
+
+
+#graficamos las 10 simulaciones
+
+plot(Simulaciones[1,], type = "l", ylim = c(0,1.4),
+    main = "Diez trayectorias de St",
+     xlab = "tiempo", ylab = expression(S[t]))
+abline(h = 0)
+for(i in 2:10){
+  lines(Simulaciones[i,])
+}
+
+
+#Ahora evaluemos la especie de media muestral de las trayectorias 
+S_barra_gral=colSums(Simulaciones)
+S_barra_gral=(1/10)*S_barra_gral
+
+S_barra_30=S_barra_gral[31]
+S_barra_30
+
+#ahora simulamos 100 trayectorias independientes
+
+Simulaciones100 <- matrix(NA, nrow = 100, ncol =101)
+
+for(i in 1:100){
+  Simulaciones100[i,]<-BG(100, 100, -1/3, 1/2, 1)
+}
+
+
+#Ahora evaluemos la especie de media muestral de las trayectorias 
+S_barra_gral=colSums(Simulaciones100)
+S_barra_gral=(1/100)*S_barra_gral
+S_barra_100=S_barra_gral[101]
+S_barra_100
+
+```
 
 \newpage
 
