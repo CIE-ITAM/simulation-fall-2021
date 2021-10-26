@@ -35,7 +35,7 @@ options(htmltools.dir.version = FALSE)
 \vspace{3mm}
 
 
-Sea $\mathcal{S} =\{(0,0),(1,0),(0,1),(1,1)\} $ el espacio de estados del proceso donde $(0,0)$ denota que la maquina 1 y la máquina 2 están apagadas, $(1,0)$ denota que la máquina 1 está prendida y la máquina 2 está apagada, y así sucesivamente.
+Sea $S =\{(0,0),(1,0),(0,1),(1,1)\} $ el espacio de estados del proceso donde $(0,0)$ denota que la maquina 1 y la máquina 2 están apagadas, $(1,0)$ denota que la máquina 1 está prendida y la máquina 2 está apagada, y así sucesivamente.
 
 \vspace{3mm}
 
@@ -62,7 +62,7 @@ Mientras que la probabilidad de que la máquina esté prendida simplemente es su
 
 \[\mathbb{P}(\text{producir al menos una pieza defectuosa})=1-\mathbb{P}(\text{producir 2 piezas no defectuosas})\]
 
-Así pues, sea $X_t$ nuestro proceso de Markov que es mapeado al espacio de estados $\mathcal{S}$. Para calcular las probabilidades de transición de nuestra matriz usamos el supuesto de independencia entre estados. Observemos que para cualquier par de eventos en $\mathcal{S}$, sin perdida de generalidad pasa lo siguiente:
+Así pues, sea $X_t$ nuestro proceso de Markov que es mapeado al espacio de estados $\S$. Para calcular las probabilidades de transición de nuestra matriz usamos el supuesto de independencia entre estados. Observemos que para cualquier par de eventos en $\S$, sin perdida de generalidad pasa lo siguiente:
 
 \[\mathbb{P}[X_t=(1,0)|X_{t-1}=(0,0)]=\frac{\mathbb{P}[X_t=(1,0)]\mathbb{P}[X_{t-1}=(0,0)]}{\mathbb{P}[X_{t-1}=(0,0)]}=\mathbb{P}[X_t=(1,0)]\]
 
@@ -182,6 +182,28 @@ sum(fr) / N
 
 # Problema 3
 
+Simulamos un proceso Poisson no homógeno con parámetro de intensidad $\lambda(t) = |\sin(t)|$.
+
+```{r ppnh}
+lambdat <- function(t)(abs(sin(t)))
+
+poisson_nohomogeneo <- function(lambdat, n){
+  lambda <- 1
+  TT <- rexp(n, lambda)
+  s <- cumsum(TT)
+  u <- runif(n)
+  ss <- s[u <= lambdat(s)/lambda]
+  Ns <- 1:length(ss)
+  
+  plot(ss, Ns, type = "s", xlab = "épocas", ylab = "N(t)",
+       main = "Simulación Proceso Poisson no homogéneo")
+  
+  return(list(epocas = ss, cuenta = Ns))
+}
+
+x <- poisson_nohomogeneo(lambdat, 50)
+```
+
 \newpage
 
 # Problema 4
@@ -246,6 +268,54 @@ Por lo tanto, como la tasa de intensidad tiene que ser positiva, concluimos que 
 
 # Problema 6
 
+Tenemos un restaurante que abre a las 12:00pm, en el que los comensales llegan a una tasa de 5 clientes por minuto, y el tiempo de permanencia sigue una distribución exponencial con media de 40 minutos. 
+
+Sea $\lambda = 5$ la tasa de arribo al restaurante por minuto y $1/\mu = 40$ el tiempo de permanencia promedio en el restaurante. Sea $C(t)$ el número de clientes en el restaurante en al tiempo $t$, tal que $C(t)$ sigue un proceso Poisson con tasa:
+
+$$\delta(t) = \int_{0}^{t} \lambda S(s-t)ds = \int_{0}^{t} \lambda(1-F(s-t)) ds$$
+donde $S(\cdot)$ y $F(\cdot)$ son la función de supervivencia y la función de distribución asociadas al tiempo de permanencia, que en este caso sigue una distribución exponencial.
+
+La lógica es la siguiente: si $\lambda$ clientes llegan al restaurante al tiempo $s$, ellos seguirán en el restaurante a la hora $t$ si y solo su tiempo de permanencia ha sido mayor que $t-s$. De tal manera:
+
+$$\delta(t) = \int_{0}^{t} \lambda e^{-\mu(t-s)}ds = \lambda e^{-\mu t} \int_{0}^{t}  e^{\mu s}ds = \lambda e^{-\mu t} \left[\frac{1}{\mu}(e^{\mu t} - 1)\right] = \frac{\lambda}{\mu}(1-e^{\mu t})$$ 
+
+Como $C(t)$ sigue un proceso Poisson, la media y la varianza del proceso al tiempo $t$ son precisamente la tasa $\delta(t)$. Sea $t = 120$ (las 2:00pm):
+
+$$\delta(200) = 5\cdot40(1-e^{-\frac{1}{40}120}) \approx 190.04$$
+
+Ahora simulamos el restaurante para calcular la media y la varianza
+
+```{r restaurante, include  = FALSE}
+clientes_rest <- function(t){
+  # Creamos vector de tiempo
+  tiempo <- c(1:t)
+  # Obtenemos el número de clientes que arrivan en tiempo t hast tmax
+  clientes <- rpois(t, 5)
+  clientes_tiempo <- rep(tiempo, clientes)
+  # Obtenemos el tiempo de permanencia de cada cliente que arriba
+  permanencia <- rexp(length(clientes_tiempo), 1/40)
+  # Calculamos la hora de salida de los clientes
+  hora_salida <- clientes_tiempo + permanencia
+  # Contamos aquellos que siguen en el restaurante después de tmax
+  clientes_en_t <- sum(hora_salida > t)
+  return(clientes_en_t)
+}
+```
+
+```{r simul_rest}
+set.seed(1231573)
+# Simulamos el restaurante
+t <- 120
+reps <- 5000
+clientes <- rep(NA, reps)
+for (i in 1:reps){
+  clientes[i] <- clientes_rest(t)  
+}
+# Obtenemos la media y varianza muestral
+mean(clientes)
+var(clientes)
+```
+
 \newpage
 
 # Problema 7
@@ -267,7 +337,7 @@ tenemos que
 
 \vspace{3mm}
 
-Podemos concluir que $S_t \rightarrow 0$ para $t$ grande. Asimismo, para $\bar{S}_{100}$ podemos concluir que el corte \say{transversal} de la trayectoria en el tiempo t es prácticamente cero. 
+Podemos concluir que $S_t \rightarrow 0$ para $t$ grande. Asimismo, para $\bar{S}_{100}$ podemos concluir que el corte "transversal" de la trayectoria en el tiempo t es prácticamente cero. 
 
 ```{r}
 
