@@ -214,6 +214,34 @@ $N_t \sim \mathcal{P} (\lambda_1 (1 - p_1) + \lambda_2 (1 - p_2)) = \mathcal{P} 
 
 # Problema 5
 
+“Durante un año de ’El Niño’, la probabilidad de dos o más huracanes
+haciendo contacto con tierra en los estados Unidos es 0.28”
+
+Tomando en cuenta el enunciado anterior, odemos asumir que la medida de tiempo será en años, y por lo tanto t=1. Entonces, tenemos que el Proceso de Poisson que modela la llegada de huracanes de forma anual es de intensidad lambda*t con t=1. 
+
+Para encontrar la tasa lambda, sabemos que:
+
+P(N1>=2)=0.28 syss 1-P(X<2)=0.28 syss P(X=0)+P(X=1)=0.72
+syss (e^-lambda)+lambda*e^-lambda=0.72
+
+Ecuación que tiene la siguiente solución: 
+
+
+```{r,echo=FALSE}
+curve(exp(-x)+x*exp(-x)-0.72,from=0,to=2)
+abline(h=0,col='red')
+```
+
+```{r}
+for (i in seq(from=0,to=2,by=0.01)){
+   if (exp(-i)+i*exp(-i)-0.72<0){
+      print(i)
+     break}
+}
+```
+
+Por lo tanto, como la tasa de intensidad tiene que ser positiva, concluimos que la tasa del proceso es menor a 1.05 y mayor a 1.04. Evaluando con métodos numéricos, resulta que lambda es 1.043.
+
 \newpage
 
 # Problema 6
@@ -304,6 +332,47 @@ S_barra_100
 \newpage
 
 # Problema 8
+
+Primero se programó la función que simula un proceso de Weiner Geométtico de forma general. Después de programar la función, se hará la partición de 60,000 puntos (5000 años en términos de meses) ya que el cambio en t es de 1/12. También, sabemos que el drift del proceso es de 0.1 y la volatilidad (vol) es de 0.3
+
+```{r}
+geo_weiner<-function(n,int,drift,vol,init){
+ incremento<-int/n
+ s<-init
+ for (i in 2:(n+1)){
+   s<-append(s,s[i-1]*exp((drift-vol^2/2)*incremento+vol*sqrt(incremento)*rnorm(1)))
+ }
+ return(s)
+}
+```
+
+```{r}
+res<-geo_weiner(5000*12,5000,.1,.3,1)
+logres<-log(res)
+t<-seq(0,5000,1/12)
+res1<-logres/t
+res2<-(1/t)*(logres-0.055*t)^2
+```
+
+El valor teórico del límite L de la expresión (1/t)log(St) lo sabemos ya que al ser St un proceso de Weiner Geométrico, sabemos que log(St) se distribuye lognormal con media log(So)+(drift-0.5vol^2) y varianza t*vol^2. Por lo tanto, el límite L cuando t tiende a infinito es de 
+
+log(So)+(drift-0.5vol^2) = log(1)+0.1-(0.3^2)/2 = 0.055
+
+Como se puede ver en la gráfica y en las últimas entradas del vector de resultados, observamos que la simulación se acerca al límite cuando el t tiende a infinito.
+
+```{r, echo=FALSE}
+plot(t,res1,xlab='Años',ylab='(1/t)log(St)')
+```
+
+```{r}
+tail(res1)
+```
+Ahora, al evaluar (1/t)(log(St)-Lt)^2 y graficarlo como función de t, podemos ver lo siguiente:
+
+```{r, echo=FALSE}
+plot(t,res2,xlab='Años',ylab='(1/t)*(log(St)-L*t)^2')
+```
+Por lo tanto, la expresión tiende a un proceso de Weiner y no a un límite.
 
 \newpage
 
