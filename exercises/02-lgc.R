@@ -1,4 +1,4 @@
-source(paste(here(), "/exercises/plot-save.R", sep = ""))
+source(paste0(here(), "/exercises/plot-save.R"))
 title <- "02-lgc"
 
 # Linear congruential generator

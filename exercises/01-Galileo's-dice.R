@@ -1,7 +1,7 @@
 # How long does it take to observe that
 # 10 is more common than 9 with three dice?
 
-source(paste(here(), "/exercises/plot-save.R", sep = ""))
+source(paste0(here(), "/exercises/plot-save.R"))
 title <- "01-Galileo's-dice"
 set.seed(1234)
 

@@ -1,4 +1,4 @@
-source(paste(here(), "/exercises/plot-save.R", sep = ""))
+source(paste0(here(), "/exercises/plot-save.R"))
 title <- "05-acceptance-rejection-sampling"
 set.seed(1234)
 
@@ -38,7 +38,9 @@ p.1 <- ggplot(df.1) +
     # geom_line(aes(x = x, y = f.x.), colour = "#1e40ca") +
     geom_line(aes(x = x, y = g.x.), colour = "#00a2ed", alpha = 0.8) +
     geom_line(aes(x = x, y = c * g.x.), colour = "#00a2ed", alpha = 0.8) +
-    geom_point(data = df.2, colour = "#1e40ca", aes(x = w, y = u1.indicadora....c...g.w.), size = 0.05) +
+    geom_point(data = df.2, colour = "#1e40ca",
+               aes(x = w, y = u1.indicadora....c...g.w.),
+               size = 0.05) +
     theme_minimal() +
     labs(title = "Acceptance-Rejection Sampling",
          x = "x",

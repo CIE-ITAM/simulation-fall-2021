@@ -4,7 +4,7 @@
 # and we drop a needle onto the floor. What is the probability that the needle
 # will lie across a line between two strips?
 
-source(paste(here(), "/exercises/plot-save.R", sep = ""))
+source(paste0(here(), "/exercises/plot-save.R"))
 title <- "00-Buffon's-needle"
 set.seed(1234)
 

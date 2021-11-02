@@ -1,4 +1,4 @@
-source(paste(here(), "/exercises/plot-save.R", sep = ""))
+source(paste0(here(), "/exercises/plot-save.R"))
 title <- "04-inverse-transform-sampling"
 set.seed(1234)
 
