@@ -1,46 +1,107 @@
 library(tidyverse)
+library(viridis)
+library(MASS)
 
-x.0 <- seq(0, 12, 1)
+set.seed(1234)
 
-x.1 <- matrix(0, nrow = 13, ncol = 13)
+sample <- c(1.2, 2.4, 1.3, 1.3, 0, 1, 1.8, 0.8, 4.6, 1.4)
+sample.mean <- mean(sample)
+sample.sd <- sd(sample)
+n <- length(sample)
 
-for (i in 1:13) {
-    x.1[, i] <- (x.0 / 12) + i
+# a posteriori
+
+posterior <- function(f, a, b, c, d, rate.1, rate.2) {
+    aa <- seq(a, b, rate.1)
+    bb <- seq(c, d, rate.2)
+    
+    post <- outer(aa, bb, f)
+    rownames(post) = aa
+    colnames(post) = bb
+    
+    post <- as.data.frame(post) %>%
+        rownames_to_column(var = 'row') %>%
+        gather(col, value,-row) %>%
+        mutate(row = as.numeric(row),
+               col = as.numeric(col))
+    
+    post <- post[!is.infinite(rowSums(post)), ]
+    
+    post <- na.omit(post)
+    
+    p <- ggplot(post, aes(
+        x = row,
+        y = col,
+        z = value,
+        fill = value
+    )) +
+        geom_tile() +
+        geom_contour(color = 'black', size = 0.5) +
+        scale_fill_viridis(option = 'mako',
+                           direction = -1) +
+        theme_minimal() +
+        labs(x = expression(mu),
+             y = expression(sigma),
+             fill = NULL)
+    
+    p.mu <- ggplot(post, aes(x = row,
+                             y = value)) +
+        geom_point(size = 0.1) +
+        theme_minimal() +
+        labs(x = expression(mu),
+             y = NULL) +
+        theme(axis.text.y = element_blank())
+    
+    p.sigma <- ggplot(post, aes(x = col,
+                                y = value)) +
+        geom_point(size = 0.1) +
+        theme_minimal() +
+        labs(x = expression(sigma),
+             y = NULL) +
+        theme(axis.text.y = element_blank())
+    
+    return(list(p, p.mu, p.sigma, post))
 }
 
-x.1 <- data.frame(x.1)
+bayes.norm <- function(a, b) {
+    b ^ (-n - 1) *
+        exp(-1 / (2 * b ^ 2) *
+                (((n - 1) * (sample.sd ^ 2)) +
+                     (n * ((sample.mean - a) ^ 2
+                     ))))
+}
 
-x.1 <- x.1 - 1
+bayes.t.1 <- function(a, b) {
+    (sqrt(n) / (b * sample.sd)) *
+        (1 + ((((n - 1) * (sample.sd ^ 2)
+        ) +
+            (n * ((sample.mean - a) ^ 2
+            ))) /
+            (sample.sd ^ 2))) ^ (-1)
+}
 
-x.1
+bayes.t.3 <- function(a, b) {
+    (sqrt(n) / (b * sample.sd)) *
+        (1 + (((((n - 1) * (sample.sd ^ 2)
+        ) +
+            (
+                n * ((sample.mean - a) ^ 2)
+            )) /
+            (sample.sd ^ 2)) / 3)) ^ (-2)
+}
 
-ggplot(x.1) +
-    geom_line(aes(x = X1 * 12, y = X1)) +
-    geom_line(aes(x = X1 * 12, y = X2)) +
-    geom_line(aes(x = X1 * 12, y = X3)) +
-    geom_line(aes(x = X1 * 12, y = X4)) +
-    geom_line(aes(x = X1 * 12, y = X5)) +
-    geom_line(aes(x = X1 * 12, y = X6)) +
-    geom_line(aes(x = X1 * 12, y = X7)) +
-    geom_line(aes(x = X1 * 12, y = X8)) +
-    geom_line(aes(x = X1 * 12, y = X9)) +
-    geom_line(aes(x = X1 * 12, y = X10)) +
-    geom_line(aes(x = X1 * 12, y = X11)) +
-    geom_line(aes(x = X1 * 12, y = X12)) +
-    geom_line(aes(x = X1, y = X1 * 12)) +
-    geom_line(aes(x = X2, y = X1 * 12)) +
-    geom_line(aes(x = X3, y = X1 * 12)) +
-    geom_line(aes(x = X4, y = X1 * 12)) +
-    geom_line(aes(x = X5, y = X1 * 12)) +
-    geom_line(aes(x = X6, y = X1 * 12)) +
-    geom_line(aes(x = X7, y = X1 * 12)) +
-    geom_line(aes(x = X8, y = X1 * 12)) +
-    geom_line(aes(x = X9, y = X1 * 12)) +
-    geom_line(aes(x = X10, y = X1 * 12)) +
-    geom_line(aes(x = X11, y = X1 * 12)) +
-    geom_line(aes(x = X12, y = X1 * 12)) +
-    scale_x_continuous(breaks = seq(0, 12, 1)) +
-    scale_y_continuous(breaks = seq(0, 12, 1)) +
-    theme_minimal() +
-    labs(x = 'minutes',
-         y = 'hours')
+plot.norm <- posterior(bayes.norm, 0, 3, 0, 3, 0.01, 0.01)
+plot.t.1 <- posterior(bayes.t.1, -3, 6, 0, 1.5, 0.01, 0.1)
+plot.t.3 <- posterior(bayes.t.3, -0.5, 3.5, 0, 1.5, 0.01, 0.1)
+
+# plot.norm[[1]]
+# plot.norm[[2]]
+# plot.norm[[3]]
+#
+# plot.t.1[[1]]
+# plot.t.1[[2]]
+# plot.t.1[[3]]
+#
+# plot.t.3[[1]]
+# plot.t.3[[2]]
+# plot.t.3[[3]]
