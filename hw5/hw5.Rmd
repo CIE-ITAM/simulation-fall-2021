@@ -230,7 +230,7 @@ $$
 \sigma = \sqrt{(n - 1) s^2_y / u_1}
 $$
 
-tal que $u \sim \chi^2_{(n - 1)}$. De forma análoga,
+tal que $u_1 \sim \chi^2_{(n - 1)}$. De forma análoga,
 
 $$
 \mu = \bar{y} - \frac{u_2 \sigma}{\sqrt{n}}
