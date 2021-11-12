@@ -4,7 +4,7 @@
 
 ### Buffon's Needle
 
-![](exercises/00-Buffon's-needle-1.png)
+[![](exercises/00-Buffon's-needle-1.png)](https://github.com/celj/simulation-fall-2021/blob/main/exercises/00-Buffon's-needle.R)
 
 ### Galileo's Dice
 
