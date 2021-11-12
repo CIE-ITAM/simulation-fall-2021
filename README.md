@@ -70,5 +70,5 @@
 
 [![](exercises/07-Box-Muller-method-2.png)](https://github.com/celj/simulation-fall-2021/blob/main/exercises/06-CLT.R)
 
-[![](exercises/07-Box-Muller-method-3.png)](exercises/07-Box-Muller-method-3.R)
+[![](exercises/07-Box-Muller-method-3.png)](exercises/07-Box-Muller-method.R)
 
