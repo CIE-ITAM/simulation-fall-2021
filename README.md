@@ -4,5 +4,5 @@
 
 ### Aguja de Buffon
 
-![exercises/00-Buffon's-needle-1.png]()
+![](exercises/00-Buffon's-needle-1.png)
 
