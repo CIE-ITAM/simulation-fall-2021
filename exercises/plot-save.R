@@ -7,7 +7,8 @@ plot.save <- function(title, plots) {
             filename = paste(title, "-", i, ".png", sep = ""),
             plot = plots[[i]],
             width = 15,
-            height = 10
+            height = 10,
+            bg = 'white'
         )
     }
 }
