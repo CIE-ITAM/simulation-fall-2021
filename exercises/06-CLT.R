@@ -13,7 +13,7 @@ CLT <- function(n, k) {
     df <- data.frame(z)
     
     p.1 <- ggplot(df) +
-        stat_qq(aes(sample = z)) +
+        stat_qq(aes(sample = z), size = 0.1) +
         theme_minimal() +
         labs(title = "Central Limit Theorem",
              caption = paste("n =", n))
@@ -30,10 +30,13 @@ CLT <- function(n, k) {
     return(list(p.1, p.2))
 }
 
-p.1 <- CLT(1000, 12)
-p.2 <- CLT(100000, 12) # see this is much more slower
+p.1 <- CLT(100, 12)
+p.2 <- CLT(10000, 12)
+p.3 <- CLT(1000000, 12) # see this is much more slower
 
-plots <- list(p.1[[1]], p.1[[2]], p.2[[1]], p.2[[2]])
+plots <- list(p.1[[1]], p.1[[2]],
+              p.2[[1]], p.2[[2]],
+              p.3[[1]], p.3[[2]])
 
 plot.save(title = title,
           plots = plots)

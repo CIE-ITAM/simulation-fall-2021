@@ -1,3 +1,5 @@
+library(here)
+
 path <- paste0(here(), "/exercises/")
 source_files <- list.files(path, "*.R$")
 source_files <-
