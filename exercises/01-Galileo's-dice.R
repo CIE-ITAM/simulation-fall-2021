@@ -37,7 +37,7 @@ df.2 <- df.2 %>% gather(number, prob, nine, ten)
 
 p.1 <- ggplot(df.1, aes(x = number, y = probs)) +
     geom_bar(stat = "identity", fill = "black") +
-    labs(title = "Galileo's dice",
+    labs(title = "Galileo's Dice",
          x = "sum of the dice",
          y = "prob") +
     theme_minimal()
@@ -47,7 +47,7 @@ p.2 <- ggplot(df.2, aes(x = sim, y = prob, colour = number)) +
     scale_color_manual(values = c("#1e40ca", "black"),
                        labels = c("9", "10")) +
     labs(
-        title = "Galileo's dice \nSimulation",
+        title = "Galileo's Dice \nSimulation",
         x = "number of simulations",
         y = "prob",
         colour = "number"

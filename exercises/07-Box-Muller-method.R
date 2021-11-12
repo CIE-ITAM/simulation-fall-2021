@@ -25,7 +25,7 @@ p.1 <- ggplot(z, aes(x = X1)) +
                    bins = 20,
                    fill = "#00a2ed") +
     theme_minimal() +
-    labs(title = "Box-Muller method",
+    labs(title = "Box-Muller Method",
          x = expression(u[1]),
          caption = paste("n =", n))
 
@@ -34,7 +34,7 @@ p.2 <- ggplot(z, aes(x = X2)) +
                    bins = 20,
                    fill = "#00a2ed") +
     theme_minimal() +
-    labs(title = "Box-Muller method",
+    labs(title = "Box-Muller Method",
          x = expression(u[2]),
          caption = paste("n =", n))
 
@@ -42,7 +42,7 @@ p.3 <- ggplot(z) +
     geom_point(aes(x = X1, y = X2), size = 0.2) +
     theme_minimal() +
     labs(
-        title = "Box-Muller method",
+        title = "Box-Muller Method",
         x = expression(u[1]),
         y = expression(u[2]),
         caption = paste("n =", n)

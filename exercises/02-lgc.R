@@ -1,7 +1,7 @@
 source(paste0(here(), "/exercises/plot-save.R"))
 title <- "02-lgc"
 
-# Linear congruential generator
+# Linear Congruential Generator
 lgc <- function(m, a, c, z0) {
     z <- z0
     i <- 1
@@ -29,7 +29,7 @@ p.1 <- ggplot(df.1, aes(x = x, y = y)) +
     geom_point(size = 0.5) +
     theme_minimal() +
     labs(
-        title = "Linear congruential generator",
+        title = "Linear Congruential Generator",
         x = expression(u[i]),
         y = expression(u[i - 1]),
         caption = "m = 16, a = 5, c = 3"
@@ -39,7 +39,7 @@ p.2 <- ggplot(df.2, aes(x = x, y = y)) +
     geom_point(size = 0.5) +
     theme_minimal() +
     labs(
-        title = "Linear congruential generator",
+        title = "Linear Congruential Generator",
         x = expression(u[i]),
         y = expression(u[i - 1]),
         caption = "m = 128, a = 7, c = 3"
@@ -49,7 +49,7 @@ p.3 <- ggplot(df.3, aes(x = x, y = y)) +
     geom_point(size = 0.5) +
     theme_minimal() +
     labs(
-        title = "Linear congruential generator",
+        title = "Linear Congruential Generator",
         x = expression(u[i]),
         y = expression(u[i - 1]),
         caption = "m = 2048, a = 65, c = 1"

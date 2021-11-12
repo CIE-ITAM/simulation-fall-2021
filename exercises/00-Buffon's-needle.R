@@ -31,7 +31,7 @@ p.1 <- ggplot(df, aes(x = sim, y = prob)) +
     geom_line(colour = "black") +
     geom_ribbon(aes(ymin = lim.inf, ymax = lim.sup), alpha = 0.1) +
     geom_hline(yintercept = 2 * r / (pi * d)) +
-    labs(title = "Buffon's needle problem \nSimulation",
+    labs(title = "Buffon's Needle Problem \nSimulation",
          x = "number of simulations",
          y = "prob") +
     ylim(0, 1) +
