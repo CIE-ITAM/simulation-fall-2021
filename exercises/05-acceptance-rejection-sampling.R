@@ -36,9 +36,9 @@ df.2 <- data.frame(w, u1[indicadora] * c * g(w))
 
 p.1 <- ggplot(df.1) +
     # geom_line(aes(x = x, y = f.x.), colour = "#1e40ca") +
-    geom_line(aes(x = x, y = g.x.), colour = "#00a2ed", alpha = 0.8) +
-    geom_line(aes(x = x, y = c * g.x.), colour = "#00a2ed", alpha = 0.8) +
-    geom_point(data = df.2, colour = "#1e40ca",
+    geom_line(aes(x = x, y = g.x.), colour = "black", alpha = 0.8) +
+    geom_line(aes(x = x, y = c * g.x.), colour = "#1e40ca", alpha = 0.8) +
+    geom_point(data = df.2, colour = "#00a2ed",
                aes(x = w, y = u1.indicadora....c...g.w.),
                size = 0.05) +
     theme_minimal() +

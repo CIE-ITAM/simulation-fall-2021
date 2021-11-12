@@ -6,9 +6,9 @@ plot.save <- function(title, plots) {
             path = paste(here(), "/exercises", sep = ""),
             filename = paste(title, "-", i, ".png", sep = ""),
             plot = plots[[i]],
-            width = 15,
-            height = 10,
-            bg = 'white'
+            width = 12,
+            height = 8,
+            bg = "white"
         )
     }
 }

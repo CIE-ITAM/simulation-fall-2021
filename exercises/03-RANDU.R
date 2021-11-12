@@ -19,7 +19,7 @@ df <-
     data.frame(x = randu[2:length(randu)], y = randu[1:length(randu) - 1])
 
 p.1 <- ggplot(df, aes(x = x, y = y)) +
-    geom_point() +
+    geom_point(size = 0.5) +
     theme_minimal() +
     labs(title = "RANDU",
          x = expression(u[i]),

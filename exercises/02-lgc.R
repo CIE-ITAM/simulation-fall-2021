@@ -26,7 +26,7 @@ df.3 <-
     data.frame(x = z.3[2:length(z.3)], y = z.3[1:length(z.3) - 1])
 
 p.1 <- ggplot(df.1, aes(x = x, y = y)) +
-    geom_point() +
+    geom_point(size = 0.5) +
     theme_minimal() +
     labs(
         title = "Linear congruential generator",
@@ -36,7 +36,7 @@ p.1 <- ggplot(df.1, aes(x = x, y = y)) +
     )
 
 p.2 <- ggplot(df.2, aes(x = x, y = y)) +
-    geom_point() +
+    geom_point(size = 0.5) +
     theme_minimal() +
     labs(
         title = "Linear congruential generator",
@@ -46,7 +46,7 @@ p.2 <- ggplot(df.2, aes(x = x, y = y)) +
     )
 
 p.3 <- ggplot(df.3, aes(x = x, y = y)) +
-    geom_point() +
+    geom_point(size = 0.5) +
     theme_minimal() +
     labs(
         title = "Linear congruential generator",
