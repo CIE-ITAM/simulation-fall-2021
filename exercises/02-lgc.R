@@ -1,3 +1,4 @@
+library(here)
 source(paste0(here(), "/exercises/plot-save.R"))
 title <- "02-lgc"
 

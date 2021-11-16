@@ -72,3 +72,23 @@
 
 [![](exercises/07-Box-Muller-method-3.png)](exercises/07-Box-Muller-method.R)
 
+### Poisson Sampling
+
+[![](exercises/08-Poisson-sampling-1.png)](exercises/08-Poisson-sampling.R)
+
+[![](exercises/08-Poisson-sampling-2.png)](exercises/08-Poisson-sampling.R)
+
+### Multinomial sampling
+
+[![](exercises/09-multinomial-sampling-1.png)](exercises/09-multinomial-sampling.R)
+
+[![](exercises/09-multinomial-sampling-2.png)](exercises/09-multinomial-sampling.R)
+
+[![](exercises/09-multinomial-sampling-3.png)](exercises/09-multinomial-sampling.R)
+
+[![](exercises/09-multinomial-sampling-4.png)](exercises/09-multinomial-sampling.R)
+
+### Unit n-sphere
+
+[![](exercises/10-unit-n-sphere-1.png)](exercises/10-unit-n-sphere.R)
+

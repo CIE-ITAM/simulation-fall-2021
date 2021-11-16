@@ -1,3 +1,4 @@
+library(here)
 source(paste0(here(), "/exercises/plot-save.R"))
 title <- "06-CLT"
 set.seed(1234)
@@ -21,7 +22,8 @@ CLT <- function(n, k) {
     p.2 <- ggplot(df, aes(x = z)) +
         geom_histogram(aes(y = ..density..),
                        bins = 20,
-                       fill = "#00a2ed") +
+                       fill = "#00a2ed",
+                       alpha = 0.6) +
         geom_density(colour = "#1e40ca") +
         theme_minimal() +
         labs(title = "Central Limit Theorem",

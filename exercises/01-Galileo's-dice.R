@@ -1,6 +1,7 @@
 # How long does it take to observe that
 # 10 is more common than 9 with three dice?
 
+library(here)
 source(paste0(here(), "/exercises/plot-save.R"))
 title <- "01-Galileo's-dice"
 set.seed(1234)
@@ -36,7 +37,7 @@ df.2 <- df.2 %>% gather(number, prob, nine, ten)
 # Gr?ficas
 
 p.1 <- ggplot(df.1, aes(x = number, y = probs)) +
-    geom_bar(stat = "identity", fill = "black") +
+    geom_bar(stat = "identity", fill = "#1e40ca", alpha = 0.8) +
     labs(title = "Galileo's Dice",
          x = "sum of the dice",
          y = "prob") +

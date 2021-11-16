@@ -1,6 +1,9 @@
+library(here)
 source(paste0(here(), "/exercises/plot-save.R"))
 title <- "07-Box-Muller-method"
 set.seed(1234)
+
+# see polar method for more efficiency
 
 seed <- 10
 n <- 10000
@@ -15,7 +18,7 @@ BM <- function(u) {
 z <- matrix(0, nrow = n, ncol = 2)
 
 for (i in 1:n) {
-    z[i,] <- BM(c(runif(1), runif(1)))
+    z[i, ] <- BM(c(runif(1), runif(1)))
 }
 
 z <- data.frame(z)
@@ -23,7 +26,8 @@ z <- data.frame(z)
 p.1 <- ggplot(z, aes(x = X1)) +
     geom_histogram(aes(y = ..density..),
                    bins = 20,
-                   fill = "#00a2ed") +
+                   fill = "#00a2ed",
+                   alpha = 0.6) +
     theme_minimal() +
     labs(title = "Box-Muller Method",
          x = expression(u[1]),
@@ -32,7 +36,8 @@ p.1 <- ggplot(z, aes(x = X1)) +
 p.2 <- ggplot(z, aes(x = X2)) +
     geom_histogram(aes(y = ..density..),
                    bins = 20,
-                   fill = "#00a2ed") +
+                   fill = "#00a2ed",
+                   alpha = 0.6) +
     theme_minimal() +
     labs(title = "Box-Muller Method",
          x = expression(u[2]),
@@ -47,38 +52,6 @@ p.3 <- ggplot(z) +
         y = expression(u[2]),
         caption = paste("n =", n)
     )
-
-RANDU <- function() {
-    seed <<- (3 * seed + 1) %% (64)
-    seed / (64)
-}
-
-u <- NULL
-
-for (i in 1:n) {
-    u <- c(u, RANDU())
-}
-
-R <- sqrt(-2 * log(u[1:(n - 1)]))
-th <- u[2:n]
-z1 <- R * cos(2 * pi * th)
-z2 <- R * sin(2 * pi * th)
-
-par(
-    mfrow = c(2, 2),
-    oma = c(1, 1, 1, 1) + 0.1,
-    mar = c(1, 1, 1, 1) + 0.1
-)
-plot(u[1:(n - 1)], u[2:n], pch = 16, cex = 0.4)
-plot(z1, z2, pch = 16, cex = 0.2)
-v <- sample(u)
-R <- sqrt(-2 * log(v[1:(n - 1)]))
-th <- v[2:n]
-plot(v[1:(n - 1)], v[2:n], pch = 16, cex = 0.4)
-plot(R * cos(2 * pi * th),
-     R * sin(2 * pi * th),
-     pch = 16,
-     cex = 0.2)
 
 plots <- list(p.1, p.2, p.3)
 

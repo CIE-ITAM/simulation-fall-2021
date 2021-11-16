@@ -1,13 +1,10 @@
-library(here)
-
 path <- paste0(here(), "/exercises/")
+
 source_files <- list.files(path, "*.R$")
-source_files <-
-    source_files[source_files != c("plot-save.R", "save-all.R")]
-files <- paste0(path, source_files)
+source_files <- source_files[source_files != "save-all.R"]
+source_files <- source_files[source_files != "plot-save.R"]
 
-for (f in files) {
-    source(f)
+for (file in source_files) {
+    source(paste0(path, file))
+    print(file)
 }
-
-files
