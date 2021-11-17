@@ -205,9 +205,214 @@ p
 
 # Problema 7
 
+```{r}
+
+# Problema 7 
+
+#primero obtenemos un estimador crudo de Monte Carlo 
+
+
+#procedamos como vimos en clase. Definamos la función f (en este caso h) a la cuál se le palicará la estimación empirica 
+# o análogo muestral
+
+#funcion h definida por el problema 
+h_aux<-function(x) min(x[1]+x[4],x[1]+x[3]+x[5],x[2]+x[3]+x[4],x[2]+x[5])
+
+#valores que puede tomar el parámetro de la uniforme 
+a <- c(1,2,3,1,2)
+
+#Ahora notamos que x=aU donde U es una uniforme estándar, luego transformamos 
+h <- function(x) h_aux(a*x)
+
+#definimos vector de esperanzas para la estimacipon cruda de MC
+Esperanzas <- NULL
+#Número de observaciones simuladas
+n <- 10000
+
+#simulamos las 1000 observaciones de uniforme estándar y después aplicamos función h para después 
+#aplicar estimacion cruda de MC
+
+for(i in 1:n){
+  Esperanzas[i]<-h(runif(5))
+}
+
+#ahora obtenemos la estimacion MC 
+Estim_MC <- mean(Esperanzas)
+
+#obtenemos varianza muestral del estimador
+Var_MC <- var(Esperanzas)/n
+
+#Obtenemos desviación estaándar del estimador 
+Sd_MC <- sd(Esperanzas)/sqrt(n)
+
+Estim_MC
+Var_MC
+Sd_MC
+
+
+#obtenemos estimador por variables antitéticas 
+
+#ahora necesitaremos dos vectores de esperanzas para las varibles atitéticas que se generarán
+Esperanzas1 <- Esperanzas2 <- NULL
+for(i in 1:n/2){
+  u <- runif(5)
+  Esperanzas1[i] <- h(u)
+  Esperanzas2[i] <- h(1-u)
+}
+
+#revisamos si tienen covarianza negativa las variadas antitéticas 
+cov(Esperanzas1, Esperanzas2)
+
+#generamos el estimador de varaibles antitéticas 
+E_VA <- (Esperanzas1+Esperanzas2)/2
+
+#obtenemos estimación por variables antitéticas
+Estim_VA <- mean(E_VA)
+
+#obtenemos varianza muestral del estimador
+Var_VA <- var(E_VA)/n
+
+#Obtenemos desviación estaándar del estimador 
+Sd_VA <- sd(E_VA)/sqrt(n)
+
+Estim_VA
+Var_VA
+Sd_VA
+
+#calculamos la reducción de varianza obtenida 
+rvo_va <- (Var_MC - Var_VA)/Var_MC
+
+#obtenemos estimador por variable de control 
+
+# escogemos la función min{x[1]+x[4],x[2]+x[5]} pues lo más probable es que loss caminos más cortos
+# sean los de dos aristas
+
+y_aux <- function(x) min(x[1]+x[4],x[2]+x[5])
+y <- function(x) y_aux(a*x)
+
+#hacemos estudio piloto para obtener correlación entre y y x 
+
+#hacemos mil simulaciones de las distancias de los caminos
+u <- matrix(runif(n*5),nrow=n,ncol=5)
+#aplicamos nuestras funciones a los renglones
+Y <- apply(u,1,h)
+Y_control <- apply(u,1,y)
+aa <- cor(Y,Y_control)
+
+#ahora obtenemo la eseperanza de nuestra variable de control
+
+#obtenemos el estimador por variable de control
+YY <- Y-aa*(Y_control-15/16)
+
+E_VC <- mean(YY)
+
+#obtenemos varianza muestral del estimador
+Var_VC <- var(YY)/n
+
+#Obtenemos desviación estaándar del estimador 
+Sd_VC <- sd(YY)/sqrt(n)
+
+E_VC
+Var_VC
+Sd_VC
+
+
+#calculamos la reducción de varianza obtenida 
+rvo_vc <- (Var_MC - Var_VC)/Var_MC
+
+#obtenemos estimador por condicionamiento
+
+#para nuestro condicionamiento haremos lo siguiente:
+#definimos Z1=min{X4, X3 + X5} y Z2=min{X5,X3+X4}
+#escribimos el siguiente cambio de variable:
+#Y1 = X1 + Z1 y Y2 = X2 + Z2 
+#Reescribimos nuestra función h(x) como 
+# Y=min{Y1,Y2}
+#Notemos  que si condicionamos en Z1 = z1 y Z2= z2 
+#obtenemos que  Y1 es uniforme en [z1, z1 + 1] 
+#y Y2 es uniforme en [z2, z2 + 2] por lo que ya redujimos 
+#considerablemente la commplejidad del problema 
+
+#definimos nuestras funciones Z1 Y Z2 
+Z1_aux <- function(x) min(x[4], x[3] + x[5])
+Z2_aux <- function(x) min(x[5], x[3] + x[4])
+
+Z1 <- function(x) Z1_aux(a*x)
+Z2 <- function(x) Z2_aux(a*x)
+
+
+#ahora definimos las funciones para   Y1 y  Y2
+Y1 <- function(x) x[1] + Z1
+Y2 <- function(x) x[2] + Z2
+
+#definimos nuestra funcion h(x) que resulta del condicionamiento 
+Y_C <- function(x) min(Y1,Y2)
+
+#simulamos las observaciones que vienen de las uniformes Y1 y Y2 
+
+yc <- NULL
+for (i in 1:n){
+  u <- runif(5)
+  Z_1 <- Z1(u)
+  Z_2 <- Z2(u)
+  
+  #ahora definimos las funciones para   Y1 y  Y2
+  #Y_1 <- u[1] + Z_1
+  #Y_2 <- 2*u[2] + Z_2
+  
+  Y_1 <- runif(1,Z_1, Z_1 +1)
+  Y_2 <- runif(1,Z_2, Z_2 +2)
+  
+  #definimos nuestra funcion h(x) que resulta del condicionamiento 
+  yc[i] <- min(Y_1,Y_2)
+  
+}
+
+#obtenemos estimación por montecarlo crudo después del condicionamiento 
+
+E_cond <- mean(yc)
+Var_cond <- var(yc)/n
+Sd_cond <- sd(yc)/sqrt(n)
+
+#calculamos la reducción de varianza obtenida 
+rvo_cond <- (Var_MC - Var_cond)/Var_MC
+
+#imprimimos las reducciones en varianza obtenidas de los distintos métodos
+rvo_va
+rvo_vc
+rvo_cond
+
+#notamos que la mayor reducción obtenida fue con el método de variable de control. Por tanto, es el método para el problema.
+
+```
+
 \newpage
 
 # Problema 8
+
+Problema 8 
+
+\vspace{3mm}
+
+Notemos que un tiro de un dado honesto es una variable aleatoria con distribución uniforme discreta con soporte $\{1, 2, \ldots, 6 \}$, por lo que se obtiene un número del 1 al 6 con probabilidad de $1/6$. La esperanza de un tiro de dado honesto, $X_i$ está dada por $\mathbb{E}[X_i]=3.5$ y la varianza por $\mathbb{V}(X_i)=35/12$. Ahora bien, denotemos con $S_n$ la variable aleatoria de la suma de 100 tiros de dado honesto. Como los tiros se suponen independientes entonces $\mathbb{E}[S_{100}]=350$ y $\mathbb{V}(S_{100})=35/12 \times 100 \approx 292$.
+
+Recordemos la desigualdad de Tchebyshev
+
+\[P(|X-\mu| \geq \epsilon) \leq \frac{\sigma^{2}}{\epsilon^{2}}\]
+
+\vspace{3mm}
+
+Ahora sustituyamos los datos que obtuvimos arriba
+
+\[P(|S_{100}-350| \geq \epsilon) \leq \frac{292}{\epsilon^{2}}\]
+
+y manipulando la expresión obtenemos
+
+\[ P\left(S_{100}>380\right)=P\left(S_{100}-350 \geq 30\right)=P\left(\left|S_{100}-350\right| \geq 30\right) \leq \frac{292}{30^{2}} \approx 0.3244\]
+
+\vspace{3mm}
+
+Así pues, tenemos que $ P\left(S_{100}>380\right)\leq 0.3244.$
 
 \newpage
 
