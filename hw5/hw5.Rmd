@@ -134,6 +134,20 @@ EL
 \newpage
 
 # Problema 2
+Sean $X$ y $Y$ exponenciales independientes con medias 1 y 2 respectivamente. Queremos estimar $P(X + Y > 4)$. Utilizamos la ley de las esperanzas iteradas para obtener:
+
+$$P(X + Y > 4) = E(1_{X+Y>4}) = E(E(1_{X+Y>4}|X)) = \int_{-\infty}^{\infty} P(x+y>4|x)f_{x}(x)dx = \int_{0}^{4} P(y>4-x)f_{x}(x)dx$$$
+Por lo que:
+
+$$P(X + Y > 4) = E_{x}(1_{0<x<4)}(1-F_{x}(4-x))$$
+
+Esta última expresión la podemos estimar muestreando una exponencial de media 1, tal que:
+
+$$\hat{P}(X + Y > 4) = \frac{1}{n}\sum_{i=1}^{n}1_{0<x_{i}<4)}e^{-(4-x_{i})}$$
+De manera análoga, podemos estimar muestreando una exponencial de media 2 tal que:
+
+$$\hat{P}(X + Y > 4) = \frac{1}{n}\sum_{i=1}^{n}1_{0<y_{i}<4)}e^{-(4-y_{i})/2}$$
+Para decidir cuál de los dos estimadores usar, debemos tomar en cuenta cuál resultará en una menor varianza del estimador, que depende de la varianza condicional de la variable con la que condicionemos.
 
 \newpage
 
@@ -200,6 +214,15 @@ theta2(1000000)
 \newpage
 
 # Problema 4
+Podemos utilizar variables antitéticas de la siguiente manera:
+
+1) Primer simulamos $n$ pares de observaciones tomadas de $U_{1} \sim U(0,1)$ y $U_{2} \sim U(0,1)$.
+
+2) Para cada par, calculamos $\theta_{1} = e^{(u_{1}+u_{2})^{2}}$ y $\theta_{2} = e^{(1-u_{1}+1-u_{2})^{2}}$, tal que $\theta = \frac{\theta_{1} + \theta_{2}}{2}$.
+
+3) Estimamos $\hat{\theta} = \frac{1}{n} \sum_{i = 1}^{n} \theta_{i}$.
+
+Las variables antitéticas hacen el proceso más eficiente al solo necesitar un proceso de generación de datos, contra si nosotros generaramos nuevos pares de variables aleatorias para estimar la integral.
 
 \newpage
 
@@ -548,7 +571,7 @@ y manipulando la expresión obtenemos
 
 \vspace{3mm}
 
-Así pues, tenemos que $ P\left(S_{100}>380\right)\leq 0.3244.$
+Así pues, tenemos que $P\left(S_{100}>380\right)\leq 0.3244.$
 
 \newpage
 
