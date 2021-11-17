@@ -219,6 +219,18 @@
       "Repository": "CRAN",
       "Hash": "36b67b5adf57b292923f5659f5f0c853"
     },
+    "datasauRus": {
+      "Package": "datasauRus",
+      "Version": "0.1.4",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "datasauRus",
+      "RemoteUsername": "stephlocke",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "1db19330514767349e8645fd694bbe23bd4f9567",
+      "Hash": "4ea155de84c6a40223c0d758b76c3e06"
+    },
     "dbplyr": {
       "Package": "dbplyr",
       "Version": "2.1.1",

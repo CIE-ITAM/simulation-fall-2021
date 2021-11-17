@@ -92,3 +92,16 @@
 
 [![](exercises/10-unit-n-sphere-1.png)](exercises/10-unit-n-sphere.R)
 
+### NORTA (Normal to anything)
+
+[![](exercises/11-NORTA-1.png)](exercises/11-NORTA.R)
+
+[![](exercises/11-NORTA-2.png)](exercises/11-NORTA.R)
+
+[![](exercises/11-NORTA-3.png)](exercises/11-NORTA.R)
+
+## Copulas
+
+### Datasaurus
+
+[![](exercises/12-datasaurus-1.png)](exercises/12-datasaurus.R)
