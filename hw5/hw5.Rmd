@@ -35,6 +35,102 @@ options(htmltools.dir.version = FALSE)
 
 # Problema 1
 
+Inciso (A)
+
+```{r}
+pos<-c(1,2,3,4,5)
+probs<-c(1,2,3,4,5)/15
+n<-100
+test<-runif(1)
+registro<-pos
+L<-c()
+for(i in 1:n){
+   test<-runif(1)
+   if(test<=sum(probs[1:1])){
+      primero<-1}
+   if(sum(probs[1:1])<test & test<=sum(probs[1:2])){
+      primero<-2}
+   if(sum(probs[1:2])<test & test<=sum(probs[1:3])){
+      primero<-3}
+   if(sum(probs[1:3])<test & test<=sum(probs[1:4])){
+      primero<-4}
+   if(sum(probs[1:4])<test & test<=sum(probs[1:5])){
+      primero<-5}
+   L[i]<-match(primero,pos)
+   pos<-pos[pos!=primero]
+   pos<-c(primero,pos)
+   registro<-rbind(registro,pos)
+}
+L_gorro<-mean(L)
+L_gorro
+```
+ 
+Inciso (B)
+
+Sea $\mathbb{E}(N_i)=N*p_i$, es decir, el número de lanzamientos multiplicado por la probabilidad de que salga cada número de las posiciones. Por lo tanto, la esperanza de $N_i$ para toda i, es $N=100*(1/15,2/15,3/15,4/15,5/15)=(100/15,200/15,300/15,400/15,500/15)=(6.667,13.333,20,26.667,33.333)$ 
+ 
+Inciso (C)
+
+```{r}
+N<-Y<-c()
+for (i in 1:5){
+  N[i]=length(L[L==i])
+  Y[i]=i*N[i]
+}
+```
+La correlación entre L y Y es negativa, ya que Y/N equivale a la esperanza de que se del número a seleccionar. Esta esperanza aumenta conforme sea mayor la probabilidad de selección, por lo tanto, entre mayor sea L (la posición del número) significa que el número es poco seleccionado y por lo tanto la correlación es negativa. 
+
+Inciso (D) 
+
+```{r}
+
+L<-y<-l<-c()
+for(j in 1:100){
+  pos<-c(1,2,3,4,5)
+  probs<-c(1,2,3,4,5)/15
+  n<-100
+  test<-runif(1)
+  registro<-pos
+   for(i in 1:n){
+      test<-runif(1)
+      if(test<=sum(probs[1:1])){
+         primero<-1}
+      if(sum(probs[1:1])<test & test<=sum(probs[1:2])){
+         primero<-2}
+      if(sum(probs[1:2])<test & test<=sum(probs[1:3])){
+         primero<-3}
+      if(sum(probs[1:3])<test & test<=sum(probs[1:4])){
+         primero<-4}
+      if(sum(probs[1:4])<test & test<=sum(probs[1:5])){
+         primero<-5}
+      L[i]<-match(primero,pos)
+      pos<-pos[pos!=primero]
+      pos<-c(primero,pos)
+      registro<-rbind(registro,pos)
+   }
+   l[j]<-sum(L)
+   N<-Y<-c()
+   for (k in 1:5){
+      N[k]=length(registro[,1][registro[,1]==k])
+      Y[k]=k*N[k]
+   }
+   y[j]=sum(Y)
+}
+plot(y,l)
+```
+
+En la gráfica anterior podemos ver la relación negativa entre L y Y. Finalmente, para estimar L a través de Y como variable de control, podemos hacer una regresión lineal simple entre ambas variables: 
+
+```{r}
+mod<-lm(l~y)
+mod
+```
+Por lo tanto, $\mathbb{E}[L]= \beta_0 -\beta_1*\mathbb{E}[Y]$ donde $\mathbb{E}[Y]=\sum_{i=1}^{n}i\mathbb{E}[N_i]=1*6.667+2*13.3333+3*20+4*26.6667+5*33.333=366.6654$ por lo tanto 
+```{r}
+EL=summary(mod)$coefficients[1,1]+summary(mod)$coefficients[2,1]*366.6654
+EL
+```
+
 \newpage
 
 # Problema 2
@@ -108,6 +204,46 @@ theta2(1000000)
 \newpage
 
 # Problema 5
+
+Inciso (A)
+```{r}
+a<-3
+X <- rnorm(100,mean=1,sd=2) 
+cor(ifelse(X<a,1,0),X)
+
+a<-4
+Y <- rnorm(100,mean=-2,sd=5) 
+cor(ifelse(Y<a,1,0),Y)
+
+```
+
+Inciso (B)
+
+```{r}
+a<-0.5
+x<-runif(100)
+beta<--lm(ifelse(x<a,1,0)~x)$coefficients[2]
+x <- runif(1000)
+y <- ifelse(x<a,1,0)
+control_y <- y + beta*(x-mean(x))
+porcentaje_reduct<-(sd(control_y)-sd(y))/(sd(y))
+porcentaje_reduct
+```
+
+Inciso (C)
+
+```{r}
+a<-0.5
+x<-rexp(100,1)
+beta<--lm(ifelse(x<a,1,0)~x)$coefficients[2]
+x <- rexp(1000,1)
+y <- ifelse(x<a,1,0)
+control_y <- y + beta*(x-mean(x))
+porcentaje_reduct<-(sd(control_y)-sd(y))/(sd(y))
+porcentaje_reduct
+```
+
+En ambos casos anteriores, hubo una reducción de varianza tomando a $Y_c$ como variable de control.
 
 \newpage
 
@@ -417,6 +553,41 @@ Así pues, tenemos que $ P\left(S_{100}>380\right)\leq 0.3244.$
 \newpage
 
 # Problema 9
+
+Sea $Y|\theta \sim Gamma(1,\theta)$ y $\theta \sim InvGamma(\alpha,\beta)$. 
+Por lo tanto, la función de densidad a priori del parámetro está dada por:
+
+$f_\theta(\theta) = \frac{\beta^\alpha e^{-\beta/\theta}}{\Gamma(\alpha) \theta^{\alpha+1}} \propto \frac{e^{-\beta/\theta}}{\theta^{\alpha+1}}$ 
+
+Ahora, si tuviéramos una sucesión de v.a.i.i.d $Y_i|\theta$, la función de verosimilitud de la muestra está dada por: 
+
+$L(Y;\theta) = \prod_{i=1}^{n} f_{Y_i|\theta}(y_i) = \prod_{i=1}^{n}\frac{y_i^{1-1}e^{-y_i/\theta}}{\theta \Gamma(1)} = \theta^{-n}e^{\frac{-1}{\theta}\sum_{i=1}^{n}Yi}$
+
+Por lo tanto, por Teorema de Bayes podemos concluir lo siguiente sobre la distribución posterior de $\theta$:
+
+$f_{\theta|Y}(\theta) \propto L(Y;\theta) * f_\theta(\theta) = \frac{e^{-\frac{1}{\theta}\sum_{i=1}^{n}Yi} * e^{-\frac{\beta}{\theta}}}{\theta^{n}*\theta^{\alpha+1}} = \frac{e^{-\frac{1}{\theta}(\sum_{i=1}^{n}Yi+\beta)}}{\theta^{\alpha+1+n}}$
+
+y, completando constantes de proporcionalidad para que la densidad integre 1 sobre el dominio de $\theta$, resulta que $\theta|Y \sim InvGamma(\alpha+n,\beta+\sum_{i=1}^{n}Yi)$ 
+
+Por lo tanto, la esperanza, varianza y moda posterior del parámetro $\theta|Y$ están dadas por: 
+
+$\mathbb{E}[\theta|Y]=\frac{\beta+\sum_{i=1}^{n}Yi}{\alpha+n-1}$
+
+$\mathbb{Var}[\theta|Y]=\frac{(\beta+\sum_{i=1}^{n}Yi)^2}{(\alpha+n-1)^{2}(\alpha+n-2)}$
+
+$\mathbb{Moda}[\theta|Y]=\frac{\beta+\sum_{i=1}^{n}Yi}{\alpha+n+1}$
+
+Finalmente, para estimar el parámetro de credibilidad bayesiana con colas simétricas al 95%, habrá que resolver el siguiente sistema de ecuaciones integrales:
+
+$\int_{0}^{a} f_{\theta|Y}(\theta) \,d\theta = 0.025$
+
+$\int_{b}^{\infty} f_{\theta|Y}(\theta) \,d\theta = 0.025$
+
+Para obtener un intervalo de credibilidad máxima y además simétrico, habría que reoslver el siguiente sistema:
+
+$\int_{a}^{b} f_{\theta|Y}(\theta) \,d\theta = 0.95$
+
+$f_{\theta}(a|Y)=f_{\theta}(b|Y)$
 
 \newpage
 
