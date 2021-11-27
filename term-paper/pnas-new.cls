@@ -41,6 +41,8 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lettrine} % For dropped capitals
 
+\RequirePackage{lipsum}
+
 %% For the Significance Statement & footnote on the first page
 \RequirePackage{afterpage}
 \RequirePackage{ifpdf,ifxetex}
@@ -101,7 +103,7 @@
   \SetWatermarkAngle{45}
   \SetWatermarkColor{gray!20}
   \SetWatermarkFontSize{3cm}
-  \SetWatermarkText{{\fontfamily{bch}\bfseries DRAFT}}
+  \SetWatermarkText{{\fontfamily{bch}\bfseries}}
 }{}
 }
 
@@ -206,7 +208,7 @@
 
 \fancypagestyle{firststyle}{
    \fancyfoot[R]{\footerfont\textbf{\today}\hspace{7pt}|\hspace{7pt}\textbf{\thepage\textendash\pageref{LastPage}}}
-   \fancyfoot[L]{\footerfont\@ifundefined{@doi}{}{hola}}
+   \fancyfoot[L]{\footerfont\@ifundefined{@doi}{}{\url{https://github.com/celj/simulation-fall-2021/tree/main/term-paper}}}
 }
 
 
@@ -218,9 +220,9 @@
 \cfoot{}%
 \rfoot{}%
 
-\fancyfoot[LE]{\footerfont\textbf{\thepage}\hspace{7pt}|\hspace{7pt}\@ifundefined{@doi}{}{\@doi}}
-\fancyfoot[RO]{\footerfont PNAS\hspace{7pt}|\hspace{7pt}\textbf{\today}\hspace{7pt}|\hspace{7pt}vol. XXX\hspace{7pt}|\hspace{7pt}no. XX\hspace{7pt}|\hspace{7pt}\textbf{\thepage}}
-\fancyfoot[RE,LO]{\footerfont\@ifundefined{@leadauthor}{}{\@leadauthor}\ifnum \value{authors} > 1\hspace{5pt}\textit{et al.}\fi}
+\fancyfoot[LE]{\footerfont\textbf{\thepage}\hspace{7pt}|\hspace{7pt}\@ifundefined{@doi}{}{\url{https://github.com/celj/simulation-fall-2021/tree/main/term-paper}}}
+\fancyfoot[RO]{\footerfont\textbf{\today}\hspace{7pt}|\hspace{7pt}\textbf{\thepage\textendash\pageref{LastPage}}}
+\fancyfoot[RE,LO]{\footerfont\@ifundefined{@leadauthor}{}{\@leadauthor}\ifnum \value{authors} > 1\hspace{5pt}\textit{}\fi}
 
 \renewcommand{\headrulewidth}{0pt}% % No header rule
 \renewcommand{\footrulewidth}{0pt}% % No footer rule
@@ -328,7 +330,7 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
     \vskip10pt% 21pts between base of title and base of author line
     {\raggedright \@author\par}
     \vskip8pt% 16pts between base of affiliations and base of dates line 
-    {\raggedright \datesfont \@ifundefined{@dates}{}{\@dates}\par}
+    {\raggedright \datesfont \@ifundefined{@dates}{}{Este manuscrito fue compilado el \today}\par}
     \vskip12pt%
     }}
   {% else
@@ -399,9 +401,9 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 
 
 \newcommand{\showacknow}{% Display acknowledgments section
-\@ifundefined{@acknow}{}{
+\@ifundefined{}{}{
 \vskip 3.25ex plus 1ex minus .2ex
-\noindent{\sffamily\normalsize\bfseries ACKNOWLEDGMENTS.\hspace{1.5ex plus .2ex}}
+\noindent{\sffamily\normalsize\bfseries AGRADECIMIENTOS.\hspace{1.5ex plus .2ex}}
 \small\@acknow}
 }
 
