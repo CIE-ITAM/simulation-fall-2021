@@ -3,23 +3,23 @@ title: Título
 
 author:
   - name: Carlos Lezama
-    affiliation: 1,2,3
+    affiliation: a,1,2
   - name: Marco Medina
-    affiliation: 1,2,3
+    affiliation: a,1,2
   - name: Emiliano Ramírez
-    affiliation: 1,2,3
+    affiliation: a,1,2
   - name: Santiago Villarreal
-    affiliation: 1,2,3
+    affiliation: a,1,2
 address:
-  code: 1
+  code: a
   address: Instituto Tecnológico Autónomo de México
 
 equal_authors:
-  code: 2
+  code: 1
   text: "Todos los autores contribuyeron a este trabajo por igual."
 
 corresponding_author:
-  code: 3
+  code: 2
   text: "Trabajo presentado para el curso de **Simulación (EST-24107)** impartido por Jorge Francisco de la Vega Góngora. E-mail: jorge.delavegagongora@gmail.com"
 
 lead_author_surname: Lezama, Medina, Ramírez y Villarreal
