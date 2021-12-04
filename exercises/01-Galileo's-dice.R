@@ -7,9 +7,9 @@ title <- "01-Galileo's-dice"
 set.seed(1234)
 
 # Parameters
-N      <- 5000 # number of simulations
-count  <- rep(0, 18)
-probs  <- rep(0, 18)
+N <- 5000 # number of simulations
+count <- rep(0, 18)
+probs <- rep(0, 18)
 
 # Simulation
 die1 <- sample(1:6, N, replace = TRUE) # die 1
@@ -19,7 +19,7 @@ die3 <- sample(1:6, N, replace = TRUE) # die 3
 dieSum <- die1 + die2 + die3 # sum of three dice
 
 for (i in 1:18) {
-    count[i] <- sum(dieSum == i)
+  count[i] <- sum(dieSum == i)
 }
 
 probs <- count / N
@@ -37,24 +37,24 @@ df.2 <- df.2 %>% gather(number, prob, nine, ten)
 # Gr?ficas
 
 p.1 <- ggplot(df.1, aes(x = number, y = probs)) +
-    geom_bar(stat = "identity", fill = "#1e40ca", alpha = 0.8) +
-    labs(title = "Galileo's Dice",
-         x = "sum of the dice",
-         y = "prob") +
-    theme_minimal()
+  geom_bar(stat = "identity", fill = "#1e40ca", alpha = 0.8) +
+  labs(title = "Galileo's Dice",
+       x = "sum of the dice",
+       y = "prob") +
+  theme_minimal()
 
 p.2 <- ggplot(df.2, aes(x = sim, y = prob, colour = number)) +
-    geom_line() +
-    scale_color_manual(values = c("#1e40ca", "black"),
-                       labels = c("9", "10")) +
-    labs(
-        title = "Galileo's Dice \nSimulation",
-        x = "number of simulations",
-        y = "prob",
-        colour = "number"
-    ) +
-    ylim(0, 1) +
-    theme_minimal()
+  geom_line() +
+  scale_color_manual(values = c("#1e40ca", "black"),
+                     labels = c("9", "10")) +
+  labs(
+    title = "Galileo's Dice \nSimulation",
+    x = "number of simulations",
+    y = "prob",
+    colour = "number"
+  ) +
+  ylim(0, 1) +
+  theme_minimal()
 
 plots <- list(p.1, p.2)
 

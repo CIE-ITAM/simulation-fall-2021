@@ -9,19 +9,19 @@ alpha <- 4
 x <- seq(0, 25, 0.1)
 
 f <- function(x) {
-    dgamma(x, alpha, 1)
+  dgamma(x, alpha, 1)
 }
 
 g <- function(x) {
-    dexp(x, 1 / alpha)
+  dexp(x, 1 / alpha)
 }
 
 v <- optimize(
-    f = function(x) {
-        f(x) / g(x)
-    },
-    interval = c(0, 25),
-    maximum = T
+  f = function(x) {
+    f(x) / g(x)
+  },
+  interval = c(0, 25),
+  maximum = T
 )
 
 c <- v$objective
@@ -38,20 +38,20 @@ df.1 <- data.frame(x, f(x), g(x))
 df.2 <- data.frame(w, u1[indicadora] * c * g(w))
 
 p.1 <- ggplot(df.1) +
-    # geom_line(aes(x = x, y = f.x.), colour = "#1e40ca") +
-    geom_line(aes(x = x, y = g.x.), colour = "#1e40ca") +
-    geom_line(aes(x = x, y = c * g.x.), colour = "#00a2ed") +
-    geom_point(
-        data = df.2,
-        colour = "black",
-        aes(x = w, y = u1.indicadora....c...g.w.),
-        size = 0.05,
-        alpha = 0.4
-    ) +
-    theme_minimal() +
-    labs(title = "Acceptance-Rejection Sampling",
-         x = "x",
-         y = "y")
+  # geom_line(aes(x = x, y = f.x.), colour = "#1e40ca") +
+  geom_line(aes(x = x, y = g.x.), colour = "#1e40ca") +
+  geom_line(aes(x = x, y = c * g.x.), colour = "#00a2ed") +
+  geom_point(
+    data = df.2,
+    colour = "black",
+    aes(x = w, y = u1.indicadora....c...g.w.),
+    size = 0.05,
+    alpha = 0.4
+  ) +
+  theme_minimal() +
+  labs(title = "Acceptance-Rejection Sampling",
+       x = "x",
+       y = "y")
 
 plots <- list(p.1)
 

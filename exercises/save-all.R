@@ -5,6 +5,6 @@ source_files <- source_files[source_files != "save-all.R"]
 source_files <- source_files[source_files != "plot-save.R"]
 
 for (file in source_files) {
-    source(paste0(path, file))
-    print(file)
+  source(paste0(path, file))
+  print(file)
 }

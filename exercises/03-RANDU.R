@@ -7,24 +7,24 @@ options(scipen = 9)
 seed <- as.double(1)
 
 RANDU <- function() {
-    seed <<-
-        ((2 ^ 16 + 3) * seed) %% (2 ^ 31) # changes seed globally
-    seed / (2 ^ 31)
+  seed <<-
+    ((2^16 + 3) * seed) %% (2^31) # changes seed globally
+  seed / (2^31)
 }
 
 randu <- NULL
 for (i in 1:1000)
-    randu[i] <- RANDU()
+  randu[i] <- RANDU()
 
 df <-
-    data.frame(x = randu[2:length(randu)], y = randu[1:length(randu) - 1])
+  data.frame(x = randu[2:length(randu)], y = randu[1:length(randu) - 1])
 
 p.1 <- ggplot(df, aes(x = x, y = y)) +
-    geom_point(size = 0.5) +
-    theme_minimal() +
-    labs(title = "RANDU",
-         x = expression(u[i]),
-         y = expression(u[i - 1]))
+  geom_point(size = 0.5) +
+  theme_minimal() +
+  labs(title = "RANDU",
+       x = expression(u[i]),
+       y = expression(u[i - 1]))
 
 plots <- list(p.1)
 

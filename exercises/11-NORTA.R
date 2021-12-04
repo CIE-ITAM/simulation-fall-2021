@@ -14,30 +14,30 @@ z <- mvrnorm(n = n, mu = mu, Sigma = sigma)
 X <- data.frame(x = z[, 1], y = z[, 2])
 
 p.1 <- ggplot(X) +
-    geom_point(aes(x = x, y = y), size = 0.1) +
-    theme_minimal() +
-    labs(title = "NORTA",
-         caption = "Normal distributions")
+  geom_point(aes(x = x, y = y), size = 0.1) +
+  theme_minimal() +
+  labs(title = "NORTA",
+       caption = "Normal distributions")
 
 # Uniform distributions
 u <- qunif(pnorm(z))
 X <- data.frame(x = u[, 1], y = u[, 2])
 
 p.2 <- ggplot(X) +
-    geom_point(aes(x = x, y = y), size = 0.1) +
-    theme_minimal() +
-    labs(title = "NORTA",
-         caption = "Uniform distributions")
+  geom_point(aes(x = x, y = y), size = 0.1) +
+  theme_minimal() +
+  labs(title = "NORTA",
+       caption = "Uniform distributions")
 
 # Poisson distributions
 pois <- qpois(pnorm(z), lambda = 5)
 X <- data.frame(x = pois[, 1], y = pois[, 2])
 
 p.3 <- ggplot(X) +
-    geom_point(aes(x = x, y = y), size = 0.5) +
-    theme_minimal() +
-    labs(title = "NORTA",
-         caption = "Poisson distributions")
+  geom_point(aes(x = x, y = y), size = 0.5) +
+  theme_minimal() +
+  labs(title = "NORTA",
+       caption = "Poisson distributions")
 
 plots <- list(p.1, p.2, p.3)
 
