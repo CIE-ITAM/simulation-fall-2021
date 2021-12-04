@@ -2,12 +2,12 @@
 title: 'EST--24107: Tarea 3'
 runningheader: 'Tarea 3'
 author: |
-  Carlos Lezama, Marco Medina, \
-  Emiliano Ramírez y Santiago Villarreal
+    Carlos Lezama, Marco Medina, \
+    Emiliano Ramírez y Santiago Villarreal
 date: 'Lunes, 4 de octubre de 2021'
 output:
     tufte::tufte_handout:
-      citation_package: natbib
+        citation_package: natbib
 link-citations: yes
 ---
 
@@ -23,10 +23,10 @@ knitr::opts_chunk$set(
   fig.height = 8,
   fig.pos = '!h',
   fig.width = 8,
-  message=FALSE,
+  message = FALSE,
   out.extra = '',
-  out.width='75%',
-  warning=FALSE
+  out.width = '75%',
+  warning = FALSE
 )
 
 options(htmltools.dir.version = FALSE)
@@ -40,15 +40,15 @@ options(htmltools.dir.version = FALSE)
 
 copula_normal_4 <-
   normalCopula(c(0, 2 * (sin((
-    -0.7 * pi
-  ) / 6)), 2 * (sin((
-    0.5 * pi
-  ) / 6)), 2 * (sin((
-    0.2 * pi
-  ) / 6)), 2 * (sin((
-    0.4 * pi
-  ) / 6)), 0),
-  dim = 4, dispstr = "un")
+                               -0.7 * pi
+                             ) / 6)), 2 * (sin((
+                                                 0.5 * pi
+                                               ) / 6)), 2 * (sin((
+                                                                   0.2 * pi
+                                                                 ) / 6)), 2 * (sin((
+                                                                                     0.4 * pi
+                                                                                   ) / 6)), 0),
+               dim = 4, dispstr = "un")
 
 set.seed(170309)
 
@@ -145,24 +145,24 @@ Como la Tau de Kendall entre $X$ e $Y$ es de $0.55$ y la función $1/X$ es monó
 
 # Problema 3
 
-> Mostrar que cuando $\theta \rightarrow \infty$, $C^{Fr}(u_1, u_2) \rightarrow min\{u_1, u_2\}$, donde $C^{Fr}$ es la cópula de Frank. 
+> Mostrar que cuando $\theta \rightarrow \infty$, $C^{Fr}(u_1, u_2) \rightarrow min\{u_1, u_2\}$, donde $C^{Fr}$ es la cópula de Frank.
 
 \vspace{3mm}
 
-Primero, supongamos que $u_2>u_1$. Sabemos que la cópula de Frank tiene la siguiente forma analítica para el caso bivariado: 
+Primero, supongamos que $u_2>u_1$. Sabemos que la cópula de Frank tiene la siguiente forma analítica para el caso bivariado:
 
 $$
 \begin{aligned}
- C^{F r}\left(u_{1}, u_{2}\right)&=-\frac{1}{\theta} \log \left(1+\frac{\left(e^{-\theta u_{1}}-1\right)\left(e^{-\theta u_{2}}-1\right)}{e^{-\theta}-1}\right) \\
- &=-\frac{1}{\theta} \log \left(1+\frac{e^{-\theta u_1 - \theta u_2} -e^{\theta u1} -e^{\theta u_2} + 1}{e^{-\theta}-1}\right) \\
- \text{Cuando $\theta \rightarrow \infty$ entonces $e^{-\theta}-1 \approx -1$, por lo que } \\
- &\approx -\frac{1}{\theta} \log \left(1- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2} - 1\right) \\
- &\approx -\frac{1}{\theta} \log \left(- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2}\right) \\
- &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta u_2}e^{\theta u1})\right) \\
- &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)})\right) \\
- \text{ya que $u_2 > u_1$, $-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)} \rightarrow 1$ cuando $\theta \rightarrow \infty$  } \\
- &\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1} \right) \\
- &\approx u_1 = min\{u_1,u_2\}
+C^{F r}\left(u_{1}, u_{2}\right)&=-\frac{1}{\theta} \log \left(1+\frac{\left(e^{-\theta u_{1}}-1\right)\left(e^{-\theta u_{2}}-1\right)}{e^{-\theta}-1}\right) \\
+&=-\frac{1}{\theta} \log \left(1+\frac{e^{-\theta u_1 - \theta u_2} -e^{\theta u1} -e^{\theta u_2} + 1}{e^{-\theta}-1}\right) \\
+\text{Cuando $\theta \rightarrow \infty$ entonces $e^{-\theta}-1 \approx -1$, por lo que } \\
+&\approx -\frac{1}{\theta} \log \left(1- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2} - 1\right) \\
+&\approx -\frac{1}{\theta} \log \left(- e^{-\theta u_1 - \theta u_2} +e^{\theta u1} +e^{\theta u_2}\right) \\
+&\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta u_2}e^{\theta u1})\right) \\
+&\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1}(-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)})\right) \\
+\text{ya que $u_2 > u_1$, $-e^{-\theta u2} + 1 + e^{-\theta (u_2-u_1)} \rightarrow 1$ cuando $\theta \rightarrow \infty$  } \\
+&\approx -\frac{1}{\theta} \log \left(e^{-\theta u_1} \right) \\
+&\approx u_1 = min\{u_1,u_2\}
 \end{aligned}
 $$
 
@@ -188,7 +188,7 @@ Sea $u_{m} = \min\{u_{1},u_{2}\}$, suponemos que $u_{m}\neq 0$. Dividimos y mult
 
 $$\implies \lim_{\theta\to\infty} -\frac{\sum_{i}u_{i}^{-\theta}\ln{u_{i}}}{\sum_{i}u_{i}^{-\theta} -1} = \lim_{\theta\to\infty} -\frac{\sum_{i}(u_{m}/u_{i})^{\theta}\ln{u_{i}}}{\sum_{i}(u_{m}/u_{i})^{\theta} -1}$$
 
-Notemos que si $u_{i} \neq u_{m}$, entonces $u_{m}/u_{i} < 1$, por lo que $\lim_{\theta\to\infty} (u_{m}/u_{i})^{\theta} = 0$. Si $u_{i} = u_{m}$, entonces $u_{m}/u_{i} = 1$ y $\lim_{\theta\to\infty} (u_{m}/u_{i})^{\theta} = 1$. 
+Notemos que si $u_{i} \neq u_{m}$, entonces $u_{m}/u_{i} < 1$, por lo que $\lim_{\theta\to\infty} (u_{m}/u_{i})^{\theta} = 0$. Si $u_{i} = u_{m}$, entonces $u_{m}/u_{i} = 1$ y $\lim_{\theta\to\infty} (u_{m}/u_{i})^{\theta} = 1$.
 
 $$\implies \lim_{\theta\to\infty} -\frac{\sum_{i}(u_{m}/u_{i})^{\theta}\ln{u_{i}}}{\sum_{i}(u_{m}/u_{i})^{\theta} -1} = -\frac{\ln{u_{m}}}{-1} = \ln{u_{m}}$$
 
@@ -217,9 +217,9 @@ empCopula <- function(u, v, xvec, yvec) {
     rango_x[i] = length(xvec[xvec <= xvec[i]])
     rango_y[i] = length(yvec[yvec <= yvec[i]])
     if (rango_x[i] / (length(xvec) + 1) <= u &
-        rango_y[i] / (length(xvec) + 1) <= v) {
+      rango_y[i] / (length(xvec) + 1) <= v) {
       vect_res[i] = 1
-    } else{
+    } else {
       vect_res[i] = 0
     }
   }
@@ -241,7 +241,7 @@ Sea la densidad conjunta correspondiente a la cópula Farlie-Gumbel-Morgenstern:
 $$\frac{\partial^{2}}{\partial u v} C(u,v) =  [1+\alpha(1-u)(1-v)] -\alpha v(1-u)-\alpha u(1-v) + \alpha u v$$
 
 $$\implies \frac{\partial^{2}}{\partial u v} C(u,v) =  1 + \alpha(2u-1)(2v-1)$$
-Basta con probar que $(2u-1)(2v-1) \geq -1$ para probar que $\frac{\partial^{2}}{\partial u v} C(u,v) \geq 0$. 
+Basta con probar que $(2u-1)(2v-1) \geq -1$ para probar que $\frac{\partial^{2}}{\partial u v} C(u,v) \geq 0$.
 
 $$(2u-1)(2v-1) \geq -1 \iff \left[(2u-1)\geq\frac{-1}{(2v-1)} \land (2v-1) > 0 \right] \lor \left[(2u-1)\leq\frac{-1}{(2v-1)} \land (2v-1) < 0 \right] $$
 
@@ -358,7 +358,7 @@ Simulamos 500 puntos cuya distribución son las cópulas del ejercicio 8 anterio
 
 ```{r echo=FALSE}
 normCopula0_9 <- normalCopula(param = 0.9, dim = 2)
-rcop09<- rCopula(500, normCopula0_9)
+rcop09 <- rCopula(500, normCopula0_9)
 pairs(rcop09, main = "Parámetro 0.9")
 ```
 
@@ -366,7 +366,7 @@ pairs(rcop09, main = "Parámetro 0.9")
 
 ```{r echo=FALSE}
 normCopula0_2 <- normalCopula(param = 0.2, dim = 2)
-rcop02<- rCopula(500, normCopula0_2)
+rcop02 <- rCopula(500, normCopula0_2)
 pairs(rcop02, main = "Parámetro 0.2")
 ```
 

@@ -6,8 +6,8 @@ author: |
   Emiliano Ramírez y Santiago Villarreal
 date: 'Miércoles, 17 de noviembre de 2021'
 output:
-    tufte::tufte_handout:
-      citation_package: natbib
+  tufte::tufte_handout:
+    citation_package: natbib
 link-citations: yes
 ---
 
@@ -24,10 +24,10 @@ knitr::opts_chunk$set(
   fig.height = 8,
   fig.pos = '!h',
   fig.width = 8,
-  message=FALSE,
+  message = FALSE,
   out.extra = '',
-  out.width='75%',
-  warning=FALSE
+  out.width = '75%',
+  warning = FALSE
 )
 
 options(htmltools.dir.version = FALSE)
@@ -38,96 +38,96 @@ options(htmltools.dir.version = FALSE)
 Inciso (A)
 
 ```{r}
-pos<-c(1,2,3,4,5)
-probs<-c(1,2,3,4,5)/15
-n<-100
-test<-runif(1)
-registro<-pos
-L<-c()
-for(i in 1:n){
-   test<-runif(1)
-   if(test<=sum(probs[1:1])){
-      primero<-1}
-   if(sum(probs[1:1])<test & test<=sum(probs[1:2])){
-      primero<-2}
-   if(sum(probs[1:2])<test & test<=sum(probs[1:3])){
-      primero<-3}
-   if(sum(probs[1:3])<test & test<=sum(probs[1:4])){
-      primero<-4}
-   if(sum(probs[1:4])<test & test<=sum(probs[1:5])){
-      primero<-5}
-   L[i]<-match(primero,pos)
-   pos<-pos[pos!=primero]
-   pos<-c(primero,pos)
-   registro<-rbind(registro,pos)
+pos <- c(1, 2, 3, 4, 5)
+probs <- c(1, 2, 3, 4, 5) / 15
+n <- 100
+test <- runif(1)
+registro <- pos
+L <- c()
+for (i in 1:n) {
+  test <- runif(1)
+  if (test <= sum(probs[1:1])) {
+    primero <- 1 }
+  if (sum(probs[1:1]) < test & test <= sum(probs[1:2])) {
+    primero <- 2 }
+  if (sum(probs[1:2]) < test & test <= sum(probs[1:3])) {
+    primero <- 3 }
+  if (sum(probs[1:3]) < test & test <= sum(probs[1:4])) {
+    primero <- 4 }
+  if (sum(probs[1:4]) < test & test <= sum(probs[1:5])) {
+    primero <- 5 }
+  L[i] <- match(primero, pos)
+  pos <- pos[pos != primero]
+  pos <- c(primero, pos)
+  registro <- rbind(registro, pos)
 }
-L_gorro<-mean(L)
+L_gorro <- mean(L)
 L_gorro
 ```
- 
+
 Inciso (B)
 
-Sea $\mathbb{E}(N_i)=N*p_i$, es decir, el número de lanzamientos multiplicado por la probabilidad de que salga cada número de las posiciones. Por lo tanto, la esperanza de $N_i$ para toda i, es $N=100*(1/15,2/15,3/15,4/15,5/15)=(100/15,200/15,300/15,400/15,500/15)=(6.667,13.333,20,26.667,33.333)$ 
- 
+Sea $\mathbb{E}(N_i)=N*p_i$, es decir, el número de lanzamientos multiplicado por la probabilidad de que salga cada número de las posiciones. Por lo tanto, la esperanza de $N_i$ para toda i, es $N=100*(1/15,2/15,3/15,4/15,5/15)=(100/15,200/15,300/15,400/15,500/15)=(6.667,13.333,20,26.667,33.333)$
+
 Inciso (C)
 
 ```{r}
-N<-Y<-c()
-for (i in 1:5){
-  N[i]=length(L[L==i])
-  Y[i]=i*N[i]
+N <- Y <- c()
+for (i in 1:5) {
+  N[i] = length(L[L == i])
+  Y[i] = i * N[i]
 }
 ```
-La correlación entre L y Y es negativa, ya que Y/N equivale a la esperanza de que se del número a seleccionar. Esta esperanza aumenta conforme sea mayor la probabilidad de selección, por lo tanto, entre mayor sea L (la posición del número) significa que el número es poco seleccionado y por lo tanto la correlación es negativa. 
+La correlación entre L y Y es negativa, ya que Y/N equivale a la esperanza de que se del número a seleccionar. Esta esperanza aumenta conforme sea mayor la probabilidad de selección, por lo tanto, entre mayor sea L (la posición del número) significa que el número es poco seleccionado y por lo tanto la correlación es negativa.
 
-Inciso (D) 
+Inciso (D)
 
 ```{r}
 
-L<-y<-l<-c()
-for(j in 1:100){
-  pos<-c(1,2,3,4,5)
-  probs<-c(1,2,3,4,5)/15
-  n<-100
-  test<-runif(1)
-  registro<-pos
-   for(i in 1:n){
-      test<-runif(1)
-      if(test<=sum(probs[1:1])){
-         primero<-1}
-      if(sum(probs[1:1])<test & test<=sum(probs[1:2])){
-         primero<-2}
-      if(sum(probs[1:2])<test & test<=sum(probs[1:3])){
-         primero<-3}
-      if(sum(probs[1:3])<test & test<=sum(probs[1:4])){
-         primero<-4}
-      if(sum(probs[1:4])<test & test<=sum(probs[1:5])){
-         primero<-5}
-      L[i]<-match(primero,pos)
-      pos<-pos[pos!=primero]
-      pos<-c(primero,pos)
-      registro<-rbind(registro,pos)
-   }
-   l[j]<-sum(L)
-   N<-Y<-c()
-   for (k in 1:5){
-      N[k]=length(registro[,1][registro[,1]==k])
-      Y[k]=k*N[k]
-   }
-   y[j]=sum(Y)
+L <- y <- l <- c()
+for (j in 1:100) {
+  pos <- c(1, 2, 3, 4, 5)
+  probs <- c(1, 2, 3, 4, 5) / 15
+  n <- 100
+  test <- runif(1)
+  registro <- pos
+  for (i in 1:n) {
+    test <- runif(1)
+    if (test <= sum(probs[1:1])) {
+      primero <- 1 }
+    if (sum(probs[1:1]) < test & test <= sum(probs[1:2])) {
+      primero <- 2 }
+    if (sum(probs[1:2]) < test & test <= sum(probs[1:3])) {
+      primero <- 3 }
+    if (sum(probs[1:3]) < test & test <= sum(probs[1:4])) {
+      primero <- 4 }
+    if (sum(probs[1:4]) < test & test <= sum(probs[1:5])) {
+      primero <- 5 }
+    L[i] <- match(primero, pos)
+    pos <- pos[pos != primero]
+    pos <- c(primero, pos)
+    registro <- rbind(registro, pos)
+  }
+  l[j] <- sum(L)
+  N <- Y <- c()
+  for (k in 1:5) {
+    N[k] = length(registro[, 1][registro[, 1] == k])
+    Y[k] = k * N[k]
+  }
+  y[j] = sum(Y)
 }
-plot(y,l)
+plot(y, l)
 ```
 
-En la gráfica anterior podemos ver la relación negativa entre L y Y. Finalmente, para estimar L a través de Y como variable de control, podemos hacer una regresión lineal simple entre ambas variables: 
+En la gráfica anterior podemos ver la relación negativa entre L y Y. Finalmente, para estimar L a través de Y como variable de control, podemos hacer una regresión lineal simple entre ambas variables:
 
 ```{r}
-mod<-lm(l~y)
+mod <- lm(l ~ y)
 mod
 ```
-Por lo tanto, $\mathbb{E}[L]= \beta_0 -\beta_1*\mathbb{E}[Y]$ donde $\mathbb{E}[Y]=\sum_{i=1}^{n}i\mathbb{E}[N_i]=1*6.667+2*13.3333+3*20+4*26.6667+5*33.333=366.6654$ por lo tanto 
+Por lo tanto, $\mathbb{E}[L]= \beta_0 -\beta_1*\mathbb{E}[Y]$ donde $\mathbb{E}[Y]=\sum_{i=1}^{n}i\mathbb{E}[N_i]=1*6.667+2*13.3333+3*20+4*26.6667+5*33.333=366.6654$ por lo tanto
 ```{r}
-EL=summary(mod)$coefficients[1,1]+summary(mod)$coefficients[2,1]*366.6654
+EL = summary(mod)$coefficients[1, 1] + summary(mod)$coefficients[2, 1] * 366.6654
 EL
 ```
 
@@ -195,14 +195,14 @@ set.seed(1234)
 
 theta1 <- function(n) {
   u <- runif(n)
-  theta <- (exp(u ^ 2) + exp((1 - u) ^ 2)) / 2
+  theta <- (exp(u^2) + exp((1 - u)^2)) / 2
   return(c(estimate = mean(theta),
            sd = sd(theta)))
 }
 theta2 <- function(n) {
   u1 <- runif(n)
   u2 <- runif(n)
-  theta <- (exp(u1 ^ 2) + exp((u2) ^ 2)) / 2
+  theta <- (exp(u1^2) + exp((u2)^2)) / 2
   return(c(estimate = mean(theta),
            sd = sd(theta)))
 }
@@ -230,39 +230,39 @@ Las variables antitéticas hacen el proceso más eficiente al solo necesitar un 
 
 Inciso (A)
 ```{r}
-a<-3
-X <- rnorm(100,mean=1,sd=2) 
-cor(ifelse(X<a,1,0),X)
+a <- 3
+X <- rnorm(100, mean = 1, sd = 2)
+cor(ifelse(X < a, 1, 0), X)
 
-a<-4
-Y <- rnorm(100,mean=-2,sd=5) 
-cor(ifelse(Y<a,1,0),Y)
+a <- 4
+Y <- rnorm(100, mean = -2, sd = 5)
+cor(ifelse(Y < a, 1, 0), Y)
 
 ```
 
 Inciso (B)
 
 ```{r}
-a<-0.5
-x<-runif(100)
-beta<--lm(ifelse(x<a,1,0)~x)$coefficients[2]
+a <- 0.5
+x <- runif(100)
+beta <- -lm(ifelse(x < a, 1, 0) ~ x)$coefficients[2]
 x <- runif(1000)
-y <- ifelse(x<a,1,0)
-control_y <- y + beta*(x-mean(x))
-porcentaje_reduct<-(sd(control_y)-sd(y))/(sd(y))
+y <- ifelse(x < a, 1, 0)
+control_y <- y + beta * (x - mean(x))
+porcentaje_reduct <- (sd(control_y) - sd(y)) / (sd(y))
 porcentaje_reduct
 ```
 
 Inciso (C)
 
 ```{r}
-a<-0.5
-x<-rexp(100,1)
-beta<--lm(ifelse(x<a,1,0)~x)$coefficients[2]
-x <- rexp(1000,1)
-y <- ifelse(x<a,1,0)
-control_y <- y + beta*(x-mean(x))
-porcentaje_reduct<-(sd(control_y)-sd(y))/(sd(y))
+a <- 0.5
+x <- rexp(100, 1)
+beta <- -lm(ifelse(x < a, 1, 0) ~ x)$coefficients[2]
+x <- rexp(1000, 1)
+y <- ifelse(x < a, 1, 0)
+control_y <- y + beta * (x - mean(x))
+porcentaje_reduct <- (sd(control_y) - sd(y)) / (sd(y))
 porcentaje_reduct
 ```
 
@@ -284,9 +284,9 @@ tal que
 
 \begin{align*}
 P(X \leq 20) &= \int_0^1 P(X \leq 20 \mid u) du \\
-             &= \int_0^1 \sum_{i = 0}^{20} \frac{e^{-\lambda} \lambda^i}{i!} du \\
-             &= \sum_{i = 0}^{20} \frac{1}{i!} \int_0^1 e^{-\lambda} \lambda^i du \\
-             &= \sum_{i = 0}^{20} \frac{1}{i!} F(i).
+&= \int_0^1 \sum_{i = 0}^{20} \frac{e^{-\lambda} \lambda^i}{i!} du \\
+&= \sum_{i = 0}^{20} \frac{1}{i!} \int_0^1 e^{-\lambda} \lambda^i du \\
+&= \sum_{i = 0}^{20} \frac{1}{i!} F(i).
 \end{align*}
 
 Entonces, podemos estimar cada integral $F(i)$, $\forall i = 0, 1, 2, \dots, 20$ como sigue:
@@ -296,7 +296,7 @@ f <- NULL
 
 for (i in 0:20) {
   u <- runif(100000)
-  y <- exp(-15 / (0.5 + u)) * (15 / (0.5 + u)) ^ i
+  y <- exp(-15 / (0.5 + u)) * (15 / (0.5 + u))^i
   f[i + 1] <- mean(y)
 }
 
@@ -350,8 +350,8 @@ f <- NULL
 
 for (i in 0:20) {
   u <- runif(5000)
-  u1 <- exp(-15 / (0.5 + u)) * (15 / (0.5 + u)) ^ i
-  u2 <- exp(-15 / (0.5 + (1 - u))) * (15 / (0.5 + (1 - u))) ^ i
+  u1 <- exp(-15 / (0.5 + u)) * (15 / (0.5 + u))^i
+  u2 <- exp(-15 / (0.5 + (1 - u))) * (15 / (0.5 + (1 - u)))^i
   f[i + 1] <- (mean(u1) + mean(u2)) / 2
 }
 
@@ -375,13 +375,13 @@ p
 # o análogo muestral
 
 #funcion h definida por el problema 
-h_aux<-function(x) min(x[1]+x[4],x[1]+x[3]+x[5],x[2]+x[3]+x[4],x[2]+x[5])
+h_aux <- function(x) min(x[1] + x[4], x[1] + x[3] + x[5], x[2] + x[3] + x[4], x[2] + x[5])
 
 #valores que puede tomar el parámetro de la uniforme 
-a <- c(1,2,3,1,2)
+a <- c(1, 2, 3, 1, 2)
 
 #Ahora notamos que x=aU donde U es una uniforme estándar, luego transformamos 
-h <- function(x) h_aux(a*x)
+h <- function(x) h_aux(a * x)
 
 #definimos vector de esperanzas para la estimacipon cruda de MC
 Esperanzas <- NULL
@@ -391,18 +391,18 @@ n <- 10000
 #simulamos las 1000 observaciones de uniforme estándar y después aplicamos función h para después 
 #aplicar estimacion cruda de MC
 
-for(i in 1:n){
-  Esperanzas[i]<-h(runif(5))
+for (i in 1:n) {
+  Esperanzas[i] <- h(runif(5))
 }
 
 #ahora obtenemos la estimacion MC 
 Estim_MC <- mean(Esperanzas)
 
 #obtenemos varianza muestral del estimador
-Var_MC <- var(Esperanzas)/n
+Var_MC <- var(Esperanzas) / n
 
 #Obtenemos desviación estaándar del estimador 
-Sd_MC <- sd(Esperanzas)/sqrt(n)
+Sd_MC <- sd(Esperanzas) / sqrt(n)
 
 Estim_MC
 Var_MC
@@ -413,63 +413,63 @@ Sd_MC
 
 #ahora necesitaremos dos vectores de esperanzas para las varibles atitéticas que se generarán
 Esperanzas1 <- Esperanzas2 <- NULL
-for(i in 1:n/2){
+for (i in 1:n / 2) {
   u <- runif(5)
   Esperanzas1[i] <- h(u)
-  Esperanzas2[i] <- h(1-u)
+  Esperanzas2[i] <- h(1 - u)
 }
 
 #revisamos si tienen covarianza negativa las variadas antitéticas 
 cov(Esperanzas1, Esperanzas2)
 
 #generamos el estimador de varaibles antitéticas 
-E_VA <- (Esperanzas1+Esperanzas2)/2
+E_VA <- (Esperanzas1 + Esperanzas2) / 2
 
 #obtenemos estimación por variables antitéticas
 Estim_VA <- mean(E_VA)
 
 #obtenemos varianza muestral del estimador
-Var_VA <- var(E_VA)/n
+Var_VA <- var(E_VA) / n
 
 #Obtenemos desviación estaándar del estimador 
-Sd_VA <- sd(E_VA)/sqrt(n)
+Sd_VA <- sd(E_VA) / sqrt(n)
 
 Estim_VA
 Var_VA
 Sd_VA
 
 #calculamos la reducción de varianza obtenida 
-rvo_va <- (Var_MC - Var_VA)/Var_MC
+rvo_va <- (Var_MC - Var_VA) / Var_MC
 
 #obtenemos estimador por variable de control 
 
 # escogemos la función min{x[1]+x[4],x[2]+x[5]} pues lo más probable es que loss caminos más cortos
 # sean los de dos aristas
 
-y_aux <- function(x) min(x[1]+x[4],x[2]+x[5])
-y <- function(x) y_aux(a*x)
+y_aux <- function(x) min(x[1] + x[4], x[2] + x[5])
+y <- function(x) y_aux(a * x)
 
 #hacemos estudio piloto para obtener correlación entre y y x 
 
 #hacemos mil simulaciones de las distancias de los caminos
-u <- matrix(runif(n*5),nrow=n,ncol=5)
+u <- matrix(runif(n * 5), nrow = n, ncol = 5)
 #aplicamos nuestras funciones a los renglones
-Y <- apply(u,1,h)
-Y_control <- apply(u,1,y)
-aa <- cor(Y,Y_control)
+Y <- apply(u, 1, h)
+Y_control <- apply(u, 1, y)
+aa <- cor(Y, Y_control)
 
 #ahora obtenemo la eseperanza de nuestra variable de control
 
 #obtenemos el estimador por variable de control
-YY <- Y-aa*(Y_control-15/16)
+YY <- Y - aa * (Y_control - 15 / 16)
 
 E_VC <- mean(YY)
 
 #obtenemos varianza muestral del estimador
-Var_VC <- var(YY)/n
+Var_VC <- var(YY) / n
 
 #Obtenemos desviación estaándar del estimador 
-Sd_VC <- sd(YY)/sqrt(n)
+Sd_VC <- sd(YY) / sqrt(n)
 
 E_VC
 Var_VC
@@ -477,7 +477,7 @@ Sd_VC
 
 
 #calculamos la reducción de varianza obtenida 
-rvo_vc <- (Var_MC - Var_VC)/Var_MC
+rvo_vc <- (Var_MC - Var_VC) / Var_MC
 
 #obtenemos estimador por condicionamiento
 
@@ -496,8 +496,8 @@ rvo_vc <- (Var_MC - Var_VC)/Var_MC
 Z1_aux <- function(x) min(x[4], x[3] + x[5])
 Z2_aux <- function(x) min(x[5], x[3] + x[4])
 
-Z1 <- function(x) Z1_aux(a*x)
-Z2 <- function(x) Z2_aux(a*x)
+Z1 <- function(x) Z1_aux(a * x)
+Z2 <- function(x) Z2_aux(a * x)
 
 
 #ahora definimos las funciones para   Y1 y  Y2
@@ -505,36 +505,36 @@ Y1 <- function(x) x[1] + Z1
 Y2 <- function(x) x[2] + Z2
 
 #definimos nuestra funcion h(x) que resulta del condicionamiento 
-Y_C <- function(x) min(Y1,Y2)
+Y_C <- function(x) min(Y1, Y2)
 
 #simulamos las observaciones que vienen de las uniformes Y1 y Y2 
 
 yc <- NULL
-for (i in 1:n){
+for (i in 1:n) {
   u <- runif(5)
   Z_1 <- Z1(u)
   Z_2 <- Z2(u)
-  
+
   #ahora definimos las funciones para   Y1 y  Y2
   #Y_1 <- u[1] + Z_1
   #Y_2 <- 2*u[2] + Z_2
-  
-  Y_1 <- runif(1,Z_1, Z_1 +1)
-  Y_2 <- runif(1,Z_2, Z_2 +2)
-  
+
+  Y_1 <- runif(1, Z_1, Z_1 + 1)
+  Y_2 <- runif(1, Z_2, Z_2 + 2)
+
   #definimos nuestra funcion h(x) que resulta del condicionamiento 
-  yc[i] <- min(Y_1,Y_2)
-  
+  yc[i] <- min(Y_1, Y_2)
+
 }
 
 #obtenemos estimación por montecarlo crudo después del condicionamiento 
 
 E_cond <- mean(yc)
-Var_cond <- var(yc)/n
-Sd_cond <- sd(yc)/sqrt(n)
+Var_cond <- var(yc) / n
+Sd_cond <- sd(yc) / sqrt(n)
 
 #calculamos la reducción de varianza obtenida 
-rvo_cond <- (Var_MC - Var_cond)/Var_MC
+rvo_cond <- (Var_MC - Var_cond) / Var_MC
 
 #imprimimos las reducciones en varianza obtenidas de los distintos métodos
 rvo_va
@@ -549,7 +549,7 @@ rvo_cond
 
 # Problema 8
 
-Problema 8 
+Problema 8
 
 \vspace{3mm}
 
@@ -577,12 +577,12 @@ Así pues, tenemos que $P\left(S_{100}>380\right)\leq 0.3244.$
 
 # Problema 9
 
-Sea $Y|\theta \sim Gamma(1,\theta)$ y $\theta \sim InvGamma(\alpha,\beta)$. 
+Sea $Y|\theta \sim Gamma(1,\theta)$ y $\theta \sim InvGamma(\alpha,\beta)$.
 Por lo tanto, la función de densidad a priori del parámetro está dada por:
 
-$f_\theta(\theta) = \frac{\beta^\alpha e^{-\beta/\theta}}{\Gamma(\alpha) \theta^{\alpha+1}} \propto \frac{e^{-\beta/\theta}}{\theta^{\alpha+1}}$ 
+$f_\theta(\theta) = \frac{\beta^\alpha e^{-\beta/\theta}}{\Gamma(\alpha) \theta^{\alpha+1}} \propto \frac{e^{-\beta/\theta}}{\theta^{\alpha+1}}$
 
-Ahora, si tuviéramos una sucesión de v.a.i.i.d $Y_i|\theta$, la función de verosimilitud de la muestra está dada por: 
+Ahora, si tuviéramos una sucesión de v.a.i.i.d $Y_i|\theta$, la función de verosimilitud de la muestra está dada por:
 
 $L(Y;\theta) = \prod_{i=1}^{n} f_{Y_i|\theta}(y_i) = \prod_{i=1}^{n}\frac{y_i^{1-1}e^{-y_i/\theta}}{\theta \Gamma(1)} = \theta^{-n}e^{\frac{-1}{\theta}\sum_{i=1}^{n}Yi}$
 
@@ -590,9 +590,9 @@ Por lo tanto, por Teorema de Bayes podemos concluir lo siguiente sobre la distri
 
 $f_{\theta|Y}(\theta) \propto L(Y;\theta) * f_\theta(\theta) = \frac{e^{-\frac{1}{\theta}\sum_{i=1}^{n}Yi} * e^{-\frac{\beta}{\theta}}}{\theta^{n}*\theta^{\alpha+1}} = \frac{e^{-\frac{1}{\theta}(\sum_{i=1}^{n}Yi+\beta)}}{\theta^{\alpha+1+n}}$
 
-y, completando constantes de proporcionalidad para que la densidad integre 1 sobre el dominio de $\theta$, resulta que $\theta|Y \sim InvGamma(\alpha+n,\beta+\sum_{i=1}^{n}Yi)$ 
+y, completando constantes de proporcionalidad para que la densidad integre 1 sobre el dominio de $\theta$, resulta que $\theta|Y \sim InvGamma(\alpha+n,\beta+\sum_{i=1}^{n}Yi)$
 
-Por lo tanto, la esperanza, varianza y moda posterior del parámetro $\theta|Y$ están dadas por: 
+Por lo tanto, la esperanza, varianza y moda posterior del parámetro $\theta|Y$ están dadas por:
 
 $\mathbb{E}[\theta|Y]=\frac{\beta+\sum_{i=1}^{n}Yi}{\alpha+n-1}$
 
@@ -647,7 +647,7 @@ n <- length(sample)
 u.1 <- rchisq(10000, (n - 1))
 u.2 <- rnorm(10000)
 
-sigma <- sqrt((n - 1) * (sample.sd ^ 2) / u.1)
+sigma <- sqrt((n - 1) * (sample.sd^2) / u.1)
 mu <- sample.mean - ((u.2 * sigma) / sqrt(n))
 
 hist(
@@ -674,47 +674,47 @@ Ahora bien, definiremos la siguiente función para obtener las curvas de nivel d
 
 ```{r}
 posterior <- function(f, a, b, c, d, rate.1, rate.2) {
-    aa <- seq(a, b, rate.1)
-    bb <- seq(c, d, rate.2)
-    post <- outer(aa, bb, f)
-    rownames(post) = aa
-    colnames(post) = bb
-    post <- as.data.frame(post) %>%
-        rownames_to_column(var = 'row') %>%
-        gather(col, value,-row) %>%
-        mutate(row = as.numeric(row),
-               col = as.numeric(col))
-    post <- post[!is.infinite(rowSums(post)), ]
-    post <- na.omit(post)
-    p <- ggplot(post, aes(
-        x = row,
-        y = col,
-        z = value,
-        fill = value
-    )) +
-        geom_tile() +
-        geom_contour(color = 'black', size = 0.5) +
-        scale_fill_viridis(option = 'mako',
-                           direction = -1) +
-        theme_minimal() +
-        labs(x = expression(mu),
-             y = expression(sigma),
-             fill = NULL)
-    p.mu <- ggplot(post, aes(x = row,
-                             y = value)) +
-        geom_point(size = 0.1) +
-        theme_minimal() +
-        labs(x = expression(mu),
-             y = NULL) +
-        theme(axis.text.y = element_blank())
-    p.sigma <- ggplot(post, aes(x = col,
-                                y = value)) +
-        geom_point(size = 0.1) +
-        theme_minimal() +
-        labs(x = expression(sigma),
-             y = NULL) +
-        theme(axis.text.y = element_blank())
-    return(list(p, p.mu, p.sigma))
+  aa <- seq(a, b, rate.1)
+  bb <- seq(c, d, rate.2)
+  post <- outer(aa, bb, f)
+  rownames(post) = aa
+  colnames(post) = bb
+  post <- as.data.frame(post) %>%
+    rownames_to_column(var = 'row') %>%
+    gather(col, value, -row) %>%
+    mutate(row = as.numeric(row),
+           col = as.numeric(col))
+  post <- post[!is.infinite(rowSums(post)),]
+  post <- na.omit(post)
+  p <- ggplot(post, aes(
+    x = row,
+    y = col,
+    z = value,
+    fill = value
+  )) +
+    geom_tile() +
+    geom_contour(color = 'black', size = 0.5) +
+    scale_fill_viridis(option = 'mako',
+                       direction = -1) +
+    theme_minimal() +
+    labs(x = expression(mu),
+         y = expression(sigma),
+         fill = NULL)
+  p.mu <- ggplot(post, aes(x = row,
+                           y = value)) +
+    geom_point(size = 0.1) +
+    theme_minimal() +
+    labs(x = expression(mu),
+         y = NULL) +
+    theme(axis.text.y = element_blank())
+  p.sigma <- ggplot(post, aes(x = col,
+                              y = value)) +
+    geom_point(size = 0.1) +
+    theme_minimal() +
+    labs(x = expression(sigma),
+         y = NULL) +
+    theme(axis.text.y = element_blank())
+  return(list(p, p.mu, p.sigma))
 }
 ```
 
@@ -736,11 +736,11 @@ De esta forma, podemos definir
 
 ```{r}
 bayes.norm <- function(a, b) {
-  b ^ (-n - 1) *
-    exp(-1 / (2 * b ^ 2) *
-          (((n - 1) * (sample.sd ^ 2)) +
-             (n * ((sample.mean - a) ^ 2
-             ))))
+  b^(-n - 1) *
+    exp(-1 / (2 * b^2) *
+          (((n - 1) * (sample.sd^2)) +
+            (n * ((sample.mean - a)^2
+            ))))
 }
 ```
 
@@ -807,21 +807,21 @@ Finalmente, en la siguiente página, definimos las funciones para $1$ y $3$ grad
 ```{r}
 bayes.t.1 <- function(a, b) {
   (sqrt(n) / (b * sample.sd)) *
-    (1 + ((((n - 1) * (sample.sd ^ 2)
+    (1 + ((((n - 1) * (sample.sd^2)
     ) +
-      (n * ((sample.mean - a) ^ 2
+      (n * ((sample.mean - a)^2
       ))) /
-      (sample.sd ^ 2))) ^ (-1)
+      (sample.sd^2)))^(-1)
 }
 
 bayes.t.3 <- function(a, b) {
   (sqrt(n) / (b * sample.sd)) *
-    (1 + (((((n - 1) * (sample.sd ^ 2)
+    (1 + (((((n - 1) * (sample.sd^2)
     ) +
       (
-        n * ((sample.mean - a) ^ 2)
+        n * ((sample.mean - a)^2)
       )) /
-      (sample.sd ^ 2)) / 3)) ^ (-2)
+      (sample.sd^2)) / 3))^(-2)
 }
 ```
 
@@ -878,7 +878,7 @@ Finalmente, podemos observar su distribución posterior:
 
 ```{r, echo=FALSE, out.width='100%'}
 bayes.bernoulli <- function(x) {
-  (x ^ (n * sample.mean)) * ((1 - x) ^ (n * (1 - sample.mean)))
+  (x^(n * sample.mean)) * ((1 - x)^(n * (1 - sample.mean)))
 }
 
 x <- seq(-5, 5, 0.001)

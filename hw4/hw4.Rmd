@@ -6,8 +6,8 @@ author: |
   Emiliano Ramírez y Santiago Villarreal
 date: 'Lunes, 25 de octubre de 2021'
 output:
-    tufte::tufte_handout:
-      citation_package: natbib
+  tufte::tufte_handout:
+    citation_package: natbib
 link-citations: yes
 ---
 
@@ -21,10 +21,10 @@ knitr::opts_chunk$set(
   fig.height = 8,
   fig.pos = '!h',
   fig.width = 8,
-  message=FALSE,
+  message = FALSE,
   out.extra = '',
-  out.width='75%',
-  warning=FALSE
+  out.width = '75%',
+  warning = FALSE
 )
 
 options(htmltools.dir.version = FALSE)
@@ -39,19 +39,19 @@ Sea $S =\{(0,0),(1,0),(0,1),(1,1)\} $ el espacio de estados del proceso donde $(
 
 \vspace{3mm}
 
-Suponemos que los estados son independientes. Creemos que este supuesto es razonable ya que también es razonable que las máquinas sean independientes, por ende, la eficiencia de cada máquina es independiente de la otra. 
+Suponemos que los estados son independientes. Creemos que este supuesto es razonable ya que también es razonable que las máquinas sean independientes, por ende, la eficiencia de cada máquina es independiente de la otra.
 
 \vspace{3mm}
 
 Obtengamos las probabilidades de cada estado dado que la probabilidad de la máquina 1 de producir una pieza no defectuosa es 0.3 y para la máquina 2 es de 0.5.
 
 \begin{equation*}
-    \begin{aligned}
-     \mathbb{P}(0,0)&=0.3^2(0.5)^2=0.0225 \\
-     \mathbb{P}(1,0)&=(1-0.3^2)0.5^2=0.2275 \\
-     \mathbb{P}(0,1)&=0.3^2(1-0.5^2)=0.0675 \\
-     \mathbb{P}(1,1)&=(1-0.3^2)(1-0.5^2)=0.6825
-    \end{aligned}
+\begin{aligned}
+\mathbb{P}(0,0)&=0.3^2(0.5)^2=0.0225 \\
+\mathbb{P}(1,0)&=(1-0.3^2)0.5^2=0.2275 \\
+\mathbb{P}(0,1)&=0.3^2(1-0.5^2)=0.0675 \\
+\mathbb{P}(1,1)&=(1-0.3^2)(1-0.5^2)=0.6825
+\end{aligned}
 \end{equation*}
 
 Notemos que la probabilidad de que una máquina esté apagada (y por ende, su armario esté lleno) se traduce a la probabilidad de que la máquina produzca dos piezas consecutivas no defectuosas:
@@ -69,7 +69,7 @@ Así pues, sea $X_t$ nuestro proceso de Markov que es mapeado al espacio de esta
 Por tanto, nuestra matriz de transición tiene la siguiente forma:
 
 \begin{equation*}
-    P=\left(\begin{array}{cccc}
+P=\left(\begin{array}{cccc}
 0.0225 & 0.2275 & 0.0675 & 0.6825 \\
 0.0225 & 0.2275 & 0.0675 & 0.6825 \\
 0.0225 & 0.2275 & 0.0675 & 0.6825 \\
@@ -84,22 +84,22 @@ Donde cada renglón suma a uno y cada entrada es mayor o igual que cero mostrand
 ```{r}
 
 #matriz de transición
-P <- matrix(c(rep(c(0.0225, 0.2275 , 0.0675 , 0.6825),4)),
-            byrow=T, nrow=4)
+P <- matrix(c(rep(c(0.0225, 0.2275, 0.0675, 0.6825), 4)),
+            byrow = T, nrow = 4)
 n <- 500 #numero de simulaciones del proceso.
 X <- NULL
 
 #escogemos el estado 1 (0,0) que denota a las dos máquinas apagadas
 #como condición inicial pues denota el inicio de la producción.
-X[1] <- 1 
+X[1] <- 1
 
-for(i in 2:n) X[i] <- sample(1:4, 1, prob=P[X[i-1],])
+for (i in 2:n) X[i] <- sample(1:4, 1, prob = P[X[i - 1],])
 
 #mostramos los 500 pasos de la cadena de Markov simumlada.
 X
 
 
-table(X)/n
+table(X) / n
 
 
 ```
@@ -108,7 +108,7 @@ Luego, la proporción del tiempo que pasa cada una de las máquinas apagadas es 
 
 \vspace{3mm}
 
-Proporción de tiempo que pasa la máquina 2 apagada es del 23.6\%. 
+Proporción de tiempo que pasa la máquina 2 apagada es del 23.6\%.
 
 Proporción de tiempo que pasa la máquina 1 apagada es del 10.2\% .
 
@@ -171,7 +171,7 @@ N <- 10000
 
 for (i in 1:N) {
   x <- inhomogeneousPoisson(10)
-  
+
   fr <- c(fr, ifelse(sum(x$points[x$count > 2] > 1.25 &
                            x$points[x$count > 2] <= 3) > 0, 1, 0))
 }
@@ -187,17 +187,17 @@ Simulamos un proceso Poisson no homógeno con parámetro de intensidad $\lambda(
 ```{r ppnh}
 lambdat <- function(t)(abs(sin(t)))
 
-poisson_nohomogeneo <- function(lambdat, n){
+poisson_nohomogeneo <- function(lambdat, n) {
   lambda <- 1
   TT <- rexp(n, lambda)
   s <- cumsum(TT)
   u <- runif(n)
-  ss <- s[u <= lambdat(s)/lambda]
+  ss <- s[u <= lambdat(s) / lambda]
   Ns <- 1:length(ss)
-  
+
   plot(ss, Ns, type = "s", xlab = "épocas", ylab = "N(t)",
        main = "Simulación Proceso Poisson no homogéneo")
-  
+
   return(list(epocas = ss, cuenta = Ns))
 }
 
@@ -239,26 +239,26 @@ $N_t \sim \mathcal{P} (\lambda_1 (1 - p_1) + \lambda_2 (1 - p_2)) = \mathcal{P} 
 “Durante un año de ’El Niño’, la probabilidad de dos o más huracanes
 haciendo contacto con tierra en los estados Unidos es 0.28”
 
-Tomando en cuenta el enunciado anterior, odemos asumir que la medida de tiempo será en años, y por lo tanto t=1. Entonces, tenemos que el Proceso de Poisson que modela la llegada de huracanes de forma anual es de intensidad lambda*t con t=1. 
+Tomando en cuenta el enunciado anterior, odemos asumir que la medida de tiempo será en años, y por lo tanto t=1. Entonces, tenemos que el Proceso de Poisson que modela la llegada de huracanes de forma anual es de intensidad lambda*t con t=1.
 
 Para encontrar la tasa lambda, sabemos que:
 
 P(N1>=2)=0.28 syss 1-P(X<2)=0.28 syss P(X=0)+P(X=1)=0.72
 syss (e^-lambda)+lambda*e^-lambda=0.72
 
-Ecuación que tiene la siguiente solución: 
+Ecuación que tiene la siguiente solución:
 
 
 ```{r,echo=FALSE}
-curve(exp(-x)+x*exp(-x)-0.72,from=0,to=2)
-abline(h=0,col='red')
+curve(exp(-x) + x * exp(-x) - 0.72, from = 0, to = 2)
+abline(h = 0, col = 'red')
 ```
 
 ```{r}
-for (i in seq(from=0,to=2,by=0.01)){
-   if (exp(-i)+i*exp(-i)-0.72<0){
-      print(i)
-     break}
+for (i in seq(from = 0, to = 2, by = 0.01)) {
+  if (exp(-i) + i * exp(-i) - 0.72 < 0) {
+    print(i)
+    break }
 }
 ```
 
@@ -268,7 +268,7 @@ Por lo tanto, como la tasa de intensidad tiene que ser positiva, concluimos que 
 
 # Problema 6
 
-Tenemos un restaurante que abre a las 12:00pm, en el que los comensales llegan a una tasa de 5 clientes por minuto, y el tiempo de permanencia sigue una distribución exponencial con media de 40 minutos. 
+Tenemos un restaurante que abre a las 12:00pm, en el que los comensales llegan a una tasa de 5 clientes por minuto, y el tiempo de permanencia sigue una distribución exponencial con media de 40 minutos.
 
 Sea $\lambda = 5$ la tasa de arribo al restaurante por minuto y $1/\mu = 40$ el tiempo de permanencia promedio en el restaurante. Sea $C(t)$ el número de clientes en el restaurante en al tiempo $t$, tal que $C(t)$ sigue un proceso Poisson con tasa:
 
@@ -277,7 +277,7 @@ donde $S(\cdot)$ y $F(\cdot)$ son la función de supervivencia y la función de 
 
 La lógica es la siguiente: si $\lambda$ clientes llegan al restaurante al tiempo $s$, ellos seguirán en el restaurante a la hora $t$ si y solo su tiempo de permanencia ha sido mayor que $t-s$. De tal manera:
 
-$$\delta(t) = \int_{0}^{t} \lambda e^{-\mu(t-s)}ds = \lambda e^{-\mu t} \int_{0}^{t}  e^{\mu s}ds = \lambda e^{-\mu t} \left[\frac{1}{\mu}(e^{\mu t} - 1)\right] = \frac{\lambda}{\mu}(1-e^{\mu t})$$ 
+$$\delta(t) = \int_{0}^{t} \lambda e^{-\mu(t-s)}ds = \lambda e^{-\mu t} \int_{0}^{t}  e^{\mu s}ds = \lambda e^{-\mu t} \left[\frac{1}{\mu}(e^{\mu t} - 1)\right] = \frac{\lambda}{\mu}(1-e^{\mu t})$$
 
 Como $C(t)$ sigue un proceso Poisson, la media y la varianza del proceso al tiempo $t$ son precisamente la tasa $\delta(t)$. Sea $t = 120$ (las 2:00pm):
 
@@ -286,14 +286,14 @@ $$\delta(200) = 5\cdot40(1-e^{-\frac{1}{40}120}) \approx 190.04$$
 Ahora simulamos el restaurante para calcular la media y la varianza
 
 ```{r restaurante, include  = FALSE}
-clientes_rest <- function(t){
+clientes_rest <- function(t) {
   # Creamos vector de tiempo
   tiempo <- c(1:t)
   # Obtenemos el número de clientes que arrivan en tiempo t hast tmax
   clientes <- rpois(t, 5)
   clientes_tiempo <- rep(tiempo, clientes)
   # Obtenemos el tiempo de permanencia de cada cliente que arriba
-  permanencia <- rexp(length(clientes_tiempo), 1/40)
+  permanencia <- rexp(length(clientes_tiempo), 1 / 40)
   # Calculamos la hora de salida de los clientes
   hora_salida <- clientes_tiempo + permanencia
   # Contamos aquellos que siguen en el restaurante después de tmax
@@ -308,8 +308,8 @@ set.seed(1231573)
 t <- 120
 reps <- 5000
 clientes <- rep(NA, reps)
-for (i in 1:reps){
-  clientes[i] <- clientes_rest(t)  
+for (i in 1:reps) {
+  clientes[i] <- clientes_rest(t)
 }
 # Obtenemos la media y varianza muestral
 mean(clientes)
@@ -322,34 +322,34 @@ var(clientes)
 
 \vspace{3mm}
 
-Sea $G=\text{log}(S)$, luego 
+Sea $G=\text{log}(S)$, luego
 
 \[\frac{\partial G}{\partial S}=\frac{1}{S}, \quad \frac{\partial^{2} G}{\partial S^{2}}=-\frac{1}{S^{2}}, \quad \frac{\partial G}{\partial t}=0\]
 
-y usando el Lema de Ito, 
+y usando el Lema de Ito,
 
 \[d G=\left(\frac{\partial G}{\partial S} \mu S+\frac{\partial G}{\partial t}+\frac{1}{2} \frac{\partial^{2} G}{\partial S^{2}} \sigma^{2} S^{2}\right) d t+\frac{\partial G}{\partial S} \sigma S d z\]
 
-tenemos que 
+tenemos que
 
 \[d\text{log}(S)=\left(\frac{-11}{24}\right)dt + \frac{1}{2}dZ_t\].
 
 
 \vspace{3mm}
 
-Podemos concluir que $S_t \rightarrow 0$ para $t$ grande. Asimismo, para $\bar{S}_{100}$ podemos concluir que el corte "transversal" de la trayectoria en el tiempo t es prácticamente cero. 
+Podemos concluir que $S_t \rightarrow 0$ para $t$ grande. Asimismo, para $\bar{S}_{100}$ podemos concluir que el corte "transversal" de la trayectoria en el tiempo t es prácticamente cero.
 
 ```{r}
 
 #creamos función que simula proceso de Wiener generalizado
-BG <- function(n, TT, a, b, S0 = 1){
+BG <- function(n, TT, a, b, S0 = 1) {
   #Función para generar un proceso Browniano Geométrico
   #n es el número de puntos de partición del intervalo [0,TT]
   #a es el drift y b la volatilidad
-  dt <- TT/n #incremento de los intervalos para cubrir [0,TT]
+  dt <- TT / n #incremento de los intervalos para cubrir [0,TT]
   S <- S0 #valor inicial
-  for(i in 2:(n+1)){
-    S <- append(S, S[i-1]*exp((a-b^2/2)*dt + b*sqrt(dt)*rnorm(1)))
+  for (i in 2:(n + 1)) {
+    S <- append(S, S[i - 1] * exp((a - b^2 / 2) * dt + b * sqrt(dt) * rnorm(1)))
   }
   return(S)
 }
@@ -357,44 +357,44 @@ BG <- function(n, TT, a, b, S0 = 1){
 #Ahora definimos una matriz en blanco para almacenar ahí nuestras 10 trayectorias de St 
 #con t=30.
 
-Simulaciones <- matrix(NA, nrow = 10, ncol =31)
+Simulaciones <- matrix(NA, nrow = 10, ncol = 31)
 
-for(i in 1:10){
-  Simulaciones[i,]<-BG(30, 30, -1/3, 1/2, 1)
+for (i in 1:10) {
+  Simulaciones[i,] <- BG(30, 30, -1 / 3, 1 / 2, 1)
 }
 
 
 #graficamos las 10 simulaciones
 
-plot(Simulaciones[1,], type = "l", ylim = c(0,1.4),
-    main = "Diez trayectorias de St",
+plot(Simulaciones[1,], type = "l", ylim = c(0, 1.4),
+     main = "Diez trayectorias de St",
      xlab = "tiempo", ylab = expression(S[t]))
 abline(h = 0)
-for(i in 2:10){
+for (i in 2:10) {
   lines(Simulaciones[i,])
 }
 
 
 #Ahora evaluemos la especie de media muestral de las trayectorias 
-S_barra_gral=colSums(Simulaciones)
-S_barra_gral=(1/10)*S_barra_gral
+S_barra_gral = colSums(Simulaciones)
+S_barra_gral = (1 / 10) * S_barra_gral
 
-S_barra_30=S_barra_gral[31]
+S_barra_30 = S_barra_gral[31]
 S_barra_30
 
 #ahora simulamos 100 trayectorias independientes
 
-Simulaciones100 <- matrix(NA, nrow = 100, ncol =101)
+Simulaciones100 <- matrix(NA, nrow = 100, ncol = 101)
 
-for(i in 1:100){
-  Simulaciones100[i,]<-BG(100, 100, -1/3, 1/2, 1)
+for (i in 1:100) {
+  Simulaciones100[i,] <- BG(100, 100, -1 / 3, 1 / 2, 1)
 }
 
 
 #Ahora evaluemos la especie de media muestral de las trayectorias 
-S_barra_gral=colSums(Simulaciones100)
-S_barra_gral=(1/100)*S_barra_gral
-S_barra_100=S_barra_gral[101]
+S_barra_gral = colSums(Simulaciones100)
+S_barra_gral = (1 / 100) * S_barra_gral
+S_barra_100 = S_barra_gral[101]
 S_barra_100
 
 ```
@@ -406,32 +406,32 @@ S_barra_100
 Primero se programó la función que simula un proceso de Weiner Geométtico de forma general. Después de programar la función, se hará la partición de 60,000 puntos (5000 años en términos de meses) ya que el cambio en t es de 1/12. También, sabemos que el drift del proceso es de 0.1 y la volatilidad (vol) es de 0.3
 
 ```{r}
-geo_weiner<-function(n,int,drift,vol,init){
- incremento<-int/n
- s<-init
- for (i in 2:(n+1)){
-   s<-append(s,s[i-1]*exp((drift-vol^2/2)*incremento+vol*sqrt(incremento)*rnorm(1)))
- }
- return(s)
+geo_weiner <- function(n, int, drift, vol, init) {
+  incremento <- int / n
+  s <- init
+  for (i in 2:(n + 1)) {
+    s <- append(s, s[i - 1] * exp((drift - vol^2 / 2) * incremento + vol * sqrt(incremento) * rnorm(1)))
+  }
+  return(s)
 }
 ```
 
 ```{r}
-res<-geo_weiner(5000*12,5000,.1,.3,1)
-logres<-log(res)
-t<-seq(0,5000,1/12)
-res1<-logres/t
-res2<-(1/t)*(logres-0.055*t)^2
+res <- geo_weiner(5000 * 12, 5000, .1, .3, 1)
+logres <- log(res)
+t <- seq(0, 5000, 1 / 12)
+res1 <- logres / t
+res2 <- (1 / t) * (logres - 0.055 * t)^2
 ```
 
-El valor teórico del límite L de la expresión (1/t)log(St) lo sabemos ya que al ser St un proceso de Weiner Geométrico, sabemos que log(St) se distribuye lognormal con media log(So)+(drift-0.5vol^2) y varianza t*vol^2. Por lo tanto, el límite L cuando t tiende a infinito es de 
+El valor teórico del límite L de la expresión (1/t)log(St) lo sabemos ya que al ser St un proceso de Weiner Geométrico, sabemos que log(St) se distribuye lognormal con media log(So)+(drift-0.5vol^2) y varianza t*vol^2. Por lo tanto, el límite L cuando t tiende a infinito es de
 
 log(So)+(drift-0.5vol^2) = log(1)+0.1-(0.3^2)/2 = 0.055
 
 Como se puede ver en la gráfica y en las últimas entradas del vector de resultados, observamos que la simulación se acerca al límite cuando el t tiende a infinito.
 
 ```{r, echo=FALSE}
-plot(t,res1,xlab='Años',ylab='(1/t)log(St)')
+plot(t, res1, xlab = 'Años', ylab = '(1/t)log(St)')
 ```
 
 ```{r}
@@ -440,7 +440,7 @@ tail(res1)
 Ahora, al evaluar (1/t)(log(St)-Lt)^2 y graficarlo como función de t, podemos ver lo siguiente:
 
 ```{r, echo=FALSE}
-plot(t,res2,xlab='Años',ylab='(1/t)*(log(St)-L*t)^2')
+plot(t, res2, xlab = 'Años', ylab = '(1/t)*(log(St)-L*t)^2')
 ```
 Por lo tanto, la expresión tiende a un proceso de Weiner y no a un límite.
 

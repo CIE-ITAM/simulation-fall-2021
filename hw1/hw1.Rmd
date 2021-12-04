@@ -6,8 +6,8 @@ author: |
   Emiliano Ramírez y Santiago Villarreal
 date: 'Jueves, 26 de agosto de 2021'
 output:
-    tufte::tufte_handout:
-      citation_package: natbib
+  tufte::tufte_handout:
+    citation_package: natbib
 link-citations: yes
 ---
 
@@ -24,10 +24,10 @@ knitr::opts_chunk$set(
   fig.height = 8,
   fig.pos = '!h',
   fig.width = 8,
-  message=FALSE,
+  message = FALSE,
   out.extra = '',
-  out.width='75%',
-  warning=FALSE
+  out.width = '75%',
+  warning = FALSE
 )
 
 options(htmltools.dir.version = FALSE)
@@ -41,7 +41,7 @@ Con el fin de comprobar la propiedad de falta de memoria de una distribución ex
 $$ P(X > t + s \mid X > t) = P(X > s) . $$
 ```
 
-$$F(x;\lambda) = 
+$$F(x;\lambda) =
 \begin{cases}
 1-e^{-\lambda x} & x \ge 0, \\
 0 & x < 0.
@@ -51,16 +51,16 @@ definimos la  siguiente función:
 
 ```{r}
 exponential_memoryless <- function(N, lambda) {
-    t <- sample(1:10, N, replace = TRUE) # t
-    s <- sample(1:10, N, replace = TRUE) # s
-    
-    # P(X > t + s | X > t)
-    prob.1 <- (1 - pexp(t + s, lambda)) / (1 - pexp(t, lambda))
-    
-    # P(X > s)
-    prob.2 <- 1 - pexp(s, lambda)
-    
-    return(tibble(prob.1, prob.2, almost.equal(prob.1, prob.2)))
+  t <- sample(1:10, N, replace = TRUE) # t
+  s <- sample(1:10, N, replace = TRUE) # s
+
+  # P(X > t + s | X > t)
+  prob.1 <- (1 - pexp(t + s, lambda)) / (1 - pexp(t, lambda))
+
+  # P(X > s)
+  prob.2 <- 1 - pexp(s, lambda)
+
+  return(tibble(prob.1, prob.2, almost.equal(prob.1, prob.2)))
 }
 ```
 
@@ -73,24 +73,24 @@ lambda <- 1 / 3 # Parámetro
 r.1 <- exponential_memoryless(100, lambda) # 100 simulaciones
 r.2 <- exponential_memoryless(1000000, lambda) # 1 000 000 simulaciones
 
-r.1[r.1[, 3] == FALSE, ]
-r.2[r.2[, 3] == FALSE, ]
+r.1[r.1[, 3] == FALSE,]
+r.2[r.2[, 3] == FALSE,]
 ```
 
 Nótese que la igualdad se cumple en todos los casos, corroborando que:
 
 \begin{align*}
 P(X > t + s \mid X > t) &= \frac{P\left(X > t + s, X > t \right)}{P(X > t)}\\
-                        &= \frac{P(X > t + s)}{P(X > t)}\\
-                        &= \frac{1 - F_X(t + s)}{1 - F_X(t)}\\
-                        &= \frac{e^{-\lambda (t + s)}}{e^{-\lambda t}}\\
-                        &= e^{-\lambda s}\\
-                        &= P(X > s) .
+&= \frac{P(X > t + s)}{P(X > t)}\\
+&= \frac{1 - F_X(t + s)}{1 - F_X(t)}\\
+&= \frac{e^{-\lambda (t + s)}}{e^{-\lambda t}}\\
+&= e^{-\lambda s}\\
+&= P(X > s) .
 \end{align*}
 
 \newpage
 
-# Problema 2 
+# Problema 2
 
 ```{r}
 lanzamientos <- rbinom(500, 1, 0.5)
@@ -102,13 +102,13 @@ for (i in 1:500) {
   if (lanzamientos[i] == 'S') {
     cont = cont + 1
     y[i] = cont
-  } else{
+  } else {
     y[i] = cont
   }
 }
 ```
 
-## Inciso (i) 
+## Inciso (i)
 
 ```{r}
 x <- c(1:500)
@@ -146,20 +146,20 @@ plot(
 
 Podemos observar que la razón r/n se aproxima a 0.5 cuando el número de lanzamientos tiende a infinito; comportamiento que tiene sentido ya que al haber una probabilidad de 1/2 de obtener un águila o un sol, sabemos que aproximadamente en la mitad de nuestros lanzamientos tiraremos un sol.
 
-En el segundo gráfico, podemos ver que la diferencia entre el número de águilas y soles obtenidos se centra alrededor del 0: es decir, conforme vamos aumentando el número de lanzamientos, tenemos aproximadamente la misma cantidad de soles y de águilas.  
+En el segundo gráfico, podemos ver que la diferencia entre el número de águilas y soles obtenidos se centra alrededor del 0: es decir, conforme vamos aumentando el número de lanzamientos, tenemos aproximadamente la misma cantidad de soles y de águilas.
 
 \newpage
 
-# Problema 3 
+# Problema 3
 
 Los supuestos iniciales que consideramos para modelar la situación de las personas que llegaron a la isla fueron los siguientes:
 
-  1. Las personas llegan a la isla con 20 años de edad. 
-  2. No hay cambios de pareja a lo largo del tiempo. 
+  1. Las personas llegan a la isla con 20 años de edad.
+  2. No hay cambios de pareja a lo largo del tiempo.
   3. Todas las personas recién llegadas se emparejan (es decir, hay 3 parejas).
-  4. Cada pareja puede tener 1 bebé al año con probabilidad 0.6. La probabilidad de que el bebé sea hombre es de 0.4 y de que sea mujer 0.6. 
-  5. La probabilidad de que el bebé sobreviva es de 0.7 
-  6. Las parejas pueden tener, a lo más, 2 bebés. 
+  4. Cada pareja puede tener 1 bebé al año con probabilidad 0.6. La probabilidad de que el bebé sea hombre es de 0.4 y de que sea mujer 0.6.
+  5. La probabilidad de que el bebé sobreviva es de 0.7
+  6. Las parejas pueden tener, a lo más, 2 bebés.
 
 ```{r}
 n <- 6 #población total inicial
@@ -178,22 +178,23 @@ for (tiempo in t) {
     semilla_sexo <- rbinom(1, 1, 0.6)
     semilla_muerte <- rbinom(1, 1, 0.3)
     if (tabla[persona, 3] == 'S' &&
-        tabla[persona, 1] == 'M' && tabla[persona, 4] < 2) {
+      tabla[persona, 1] == 'M' &&
+      tabla[persona, 4] < 2) {
       if (semilla_embarazo == 1) {
         if (semilla_sexo == 1) {
           dato_nuevo <- c('M', 0, 'N', 0)
           n <- n + 1
         }
-        else{
+        else {
           dato_nuevo <- c('H', 0, 'N', NaN)
-          
+
           n <- n + 1
         }
         if (semilla_muerte == 1) {
           dato_nuevo <- NaN
           n <- n - 1
         }
-        else{
+        else {
           tabla[persona, 4] = tabla[persona, 4] + 1
           tabla_nuevos <- rbind(tabla_nuevos, dato_nuevo)
         }
@@ -208,7 +209,7 @@ for (tiempo in t) {
 }
 ```
 
-En las siguientes tablas (tabla de población original y tabla de bebés recié nacidos), podemos observar el comportamiento de la población tomando en cuenta los supuestos previamente mencionados. Al ejecutar el código anterior un total de 10 veces, obtuvimos que el tiempo (t) en que la población de duplica es de 3,6,7,3,8,4,5,5,7 y 4 años, promediando un total de 5.2 años. 
+En las siguientes tablas (tabla de población original y tabla de bebés recié nacidos), podemos observar el comportamiento de la población tomando en cuenta los supuestos previamente mencionados. Al ejecutar el código anterior un total de 10 veces, obtuvimos que el tiempo (t) en que la población de duplica es de 3,6,7,3,8,4,5,5,7 y 4 años, promediando un total de 5.2 años.
 
 ```{r,echo=FALSE}
 print(tabla)
@@ -218,9 +219,9 @@ print(tabla_nuevos)
 Otros supuestos que se pueden tomar, a largo plazo, que nos parecieron adecuados para un problema de este estilo son:
 
 * A qué edad los bebés pueden emparejarse y comenzar a reproducirse.
-* Cambios de parejas entre las personas. 
+* Cambios de parejas entre las personas.
 * Número límite de bebés.
-* Edad a la que las mujeres dejan de tener bebés. 
+* Edad a la que las mujeres dejan de tener bebés.
 
 \newpage
 
@@ -238,15 +239,15 @@ arrived <- rbinom(N, 1, 0.9) # qué pacientes llegaron
 k <- length(which(arrived == 1)) # cuántos pacientes llegaron
 
 arrival[which(arrived == 1)] <-
-    5 + sample(-2:2,
-               k,
-               prob = c(0.1, 0.2, 0.4, 0.2, 0.1),
-               replace = TRUE)
+  5 + sample(-2:2,
+             k,
+             prob = c(0.1, 0.2, 0.4, 0.2, 0.1),
+             replace = TRUE)
 duration[which(arrived == 1)] <-
-    sample(2:9,
-           k,
-           prob = c(0.1, 0.1, 0.1, 0.2, 0.2, 0.1, 0.1, 0.1),
-           replace = TRUE)
+  sample(2:9,
+         k,
+         prob = c(0.1, 0.1, 0.1, 0.2, 0.2, 0.1, 0.1, 0.1),
+         replace = TRUE)
 
 arrival.time <- cumsum(arrival)
 
@@ -258,18 +259,18 @@ queue <- as.data.frame(table(cut(departure, breaks = seq(0, N * 5, by = 5))))
 
 ```{r fig.width = 10, fig.height = 3, fig.fullwidth = TRUE, cache=TRUE, echo=FALSE}
 ggplot(queue, aes(x = Var1, y = Freq, group = 1)) +
-    geom_point() +
-    geom_line() +
-    labs(title = 'Clientes en espera cada 5 horas',
-         x = '',
-         y = 'Clientes') +
-    theme_minimal() +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          axis.text.x=element_blank())
+  geom_point() +
+  geom_line() +
+  labs(title = 'Clientes en espera cada 5 horas',
+       x = '',
+       y = 'Clientes') +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_blank())
 ```
 
-\newpage 
+\newpage
 
 # Problema 5
 
@@ -289,14 +290,14 @@ Base de inducción: por demostrar $\{U_1 + U_2\} \thicksim \mathcal{U}[0,1]$
 
 \vspace{3mm}
 
-Se trata de una transformación de variables aleatoria por tanto definamos las siguientes variables aleatorias. 
+Se trata de una transformación de variables aleatoria por tanto definamos las siguientes variables aleatorias.
 
 \vspace{3mm}
 
 
 \begin{align*}
-    U_1 = Z -U_2 \\
-    U_2=W
+U_1 = Z -U_2 \\
+U_2=W
 \end{align*}
 
 \vspace{3mm}
@@ -306,13 +307,13 @@ Obtenemos el Jacobiano de nuestro sistema de variables aleatorias para obtener l
 \vspace{3mm}
 
 $$J(z,w) = \begin{vmatrix}
-1 & -1 \\ 
+1 & -1 \\
 0 & 1  \notag
 \end{vmatrix} = 1$$
 
 \vspace{3mm}
 
-Por ende, 
+Por ende,
 
 $$K(z,w)= \mathbb{I}\{0 \leq z - w \leq 1 \}(z) \mathbb{I}\{0 \leq w \leq 1 \}(w) \Rightarrow$$
 
@@ -325,7 +326,7 @@ Para obtener $f_{{U_1 + U_2}}(u)$ obtenemos la distribución marginal $K_Z(z)$
 \vspace{3mm}
 
 $$f_{\{U_1 + U_2\}}(u) = K_Z(z) = \int_{\mathcal{R}}K(z,w)dw =
-\begin{cases} 
+\begin{cases}
 \int \mathbb{I}\{w \leq z  \leq 1 \}(z) \mathbb{I}\{0 \leq w \leq z \}(w) dw \\
 \int \mathbb{I}\{w \leq z  \leq 2 \}(z) \mathbb{I}\{z-1 \leq w \leq 1 \}(w) dw
 \end{cases}
@@ -333,25 +334,25 @@ $$
 
 \vspace{3mm}
 
-Son dos casos para la integral pues la región de integración no es simple. 
+Son dos casos para la integral pues la región de integración no es simple.
 
-$$K_Z(z)=\begin{cases} 
+$$K_Z(z)=\begin{cases}
 \int_0^z \mathbb{I}\{w \leq z  \leq 1 \}(z) dw \\
-\int_{z-1}^1 \mathbb{I}\{w \leq z  \leq 2 \}(z) dw 
+\int_{z-1}^1 \mathbb{I}\{w \leq z  \leq 2 \}(z) dw
 \end{cases} = \begin{cases}
 z & , 0\leq z \leq 1 \\
 2-z & , 1 \leq z \leq 2
 \end{cases} $$
 
-Así pues, 
+Así pues,
 
 \vspace{3mm}
 
 \begin{equation*}
-    \begin{aligned}
-        F_{\{U_1+U_2\}}(u)= \mathbb{P}[\{U_1 + U_2\} \leq u] &= \int_{0}^u f_{\{1+2\}}(v)dv + \int_{1}^{1+v} f_{\{1+2\}}(v)dv \\
-        &= \frac{v^2}{2}\Bigg]^u_{0} + 2v\Bigg]^{1+u}_1-\frac{v^2}{2}\Bigg]^{1+u}_{1}=u
-    \end{aligned}
+\begin{aligned}
+F_{\{U_1+U_2\}}(u)= \mathbb{P}[\{U_1 + U_2\} \leq u] &= \int_{0}^u f_{\{1+2\}}(v)dv + \int_{1}^{1+v} f_{\{1+2\}}(v)dv \\
+&= \frac{v^2}{2}\Bigg]^u_{0} + 2v\Bigg]^{1+u}_1-\frac{v^2}{2}\Bigg]^{1+u}_{1}=u
+\end{aligned}
 \end{equation*}
 
 \vspace{3mm}
@@ -371,28 +372,28 @@ $$\{U_1 + \cdots + U_{n+1} \} = \{\underbrace{\{U_1 + \cdots + U_n\}}_{\text{se 
 
 # Problema 6
 
-Mostremos la función de cuadrado medio que calcula Zn a partir de Zn-1 y que imprime la lista del periodo de la semilla. 
+Mostremos la función de cuadrado medio que calcula Zn a partir de Zn-1 y que imprime la lista del periodo de la semilla.
 
 ```{r}
 cuadradoMedio <- function(semilla) {
   condicion = 0
-  
+
   #definimos vector donde irá lista de periodo de generación de numeros
   cMLista <- NULL
-  
+
   #condicion de paro
   while (condicion == 0) {
     #checamos si la semilla tiene número de carácteres pares o impares
-    semilla2 <- semilla ^ 2
+    semilla2 <- semilla^2
     semilla2 <- as.character(semilla2)
-    
+
     if (nchar(semilla) %% 2 == 0) {
       #si semilla tiene #car par
       numDigRmv <- nchar(semilla2) / 4
       medio <- substr(semilla2, numDigRmv + 1, nchar(semilla2) - numDigRmv)
       medioNum <- as.numeric(medio)
     }
-    
+
     #si la semilla es impar
     if (nchar(semilla) %% 2 != 0) {
       if (nchar(semilla2) == 1) {
@@ -407,14 +408,14 @@ cuadradoMedio <- function(semilla) {
         medioNum <- as.numeric(medio)
       }
     }
-    
+
     if (medio %in% cMLista == TRUE) {
       condicion = 1
     }
-    
+
     if (medio %in% cMLista == FALSE) {
       cMLista <- rbind(cMLista, medio)
-      
+
       semilla <- medioNum
     }
   }
@@ -430,7 +431,7 @@ knitr::include_graphics('periodos cm 1-99.png')
 
 \newpage
 
-El método del cuadrado medio es de baja calidad para la generación de números aleatorios ya que puede degenerar fácilmente en cero resultando en una lista de números aleatorios corta. Además, este método no pasa pruebas estándares de independecia y aleatoriedad por lo que no se recomienda su uso más que para fines didácticos. 
+El método del cuadrado medio es de baja calidad para la generación de números aleatorios ya que puede degenerar fácilmente en cero resultando en una lista de números aleatorios corta. Además, este método no pasa pruebas estándares de independecia y aleatoriedad por lo que no se recomienda su uso más que para fines didácticos.
 
 Diagrama de flujo de algorítmo de cuadrado medio:
 
@@ -444,7 +445,7 @@ knitr::include_graphics('diagrama de flujo cuadradomedio.png')
 
 Si dos dados están cargados de tal manera que en un dado, el valor 1 aparecerá exactamente el doble de veces que los otros valores, y el otro dato está igualmente cargado hacia el 6, calculen la probabilidad $p_{s}$ de que un total exactamente igual a $s$ aparecerá en la suma de los dados, para $2\leq s \leq 12$.
 
-Sea $D_{1}$ el dado cargado al valor 1 y $D_{6}$ el dado cargado al valor 6. En cada dado $D_{i}$, la probabilidad de obtener el valor $i$ es el doble de la probabilidad de obtener cualquier otro valor. Sea $q$ la probabilidad de obtener el valor $i$ en el dado $D_{i}$, y $q/2$ la probabilidad de obtener cualquier otro valor, por lo que: 
+Sea $D_{1}$ el dado cargado al valor 1 y $D_{6}$ el dado cargado al valor 6. En cada dado $D_{i}$, la probabilidad de obtener el valor $i$ es el doble de la probabilidad de obtener cualquier otro valor. Sea $q$ la probabilidad de obtener el valor $i$ en el dado $D_{i}$, y $q/2$ la probabilidad de obtener cualquier otro valor, por lo que:
 
 $$\sum_{k=1}^{6}P[D_{i} = k] =  q + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} + \frac{q}{2} = 1 \implies \frac{7q}{2} = 1 \implies q = \frac{2}{7}$$
 
@@ -454,53 +455,53 @@ Sea $s$ la suma del valor de los dados $D_{1}$ y $D_{6}$. Suponiendo que $D_{1}$
 
 \begin{align*}
 P[s = 2]  &= P[D_{1} = 1, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{1}{7} \\
-          &= \frac{2}{49} \\
+&= \frac{2}{7}\cdot\frac{1}{7} \\
+&= \frac{2}{49} \\
 P[s = 3]  &= P[D_{1} = 1, D_{6} = 2] + P[D_{1} = 2, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{3}{49} \\
-P[s = 4]  &= P[D_{1} = 1, D_{6} = 3] + P[D_{1} = 2, D_{6} = 2] \\ 
-          &+ P[D_{1} = 3, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{4}{49} \\
-P[s = 5]  &= P[D_{1} = 1, D_{6} = 4] + P[D_{1} = 2, D_{6} = 3] \\ 
-          &+ P[D_{1} = 3, D_{6} = 2] + P[D_{1} = 4, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{5}{49}
+&= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{3}{49} \\
+P[s = 4]  &= P[D_{1} = 1, D_{6} = 3] + P[D_{1} = 2, D_{6} = 2] \\
+&+ P[D_{1} = 3, D_{6} = 1] \\
+&= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{4}{49} \\
+P[s = 5]  &= P[D_{1} = 1, D_{6} = 4] + P[D_{1} = 2, D_{6} = 3] \\
+&+ P[D_{1} = 3, D_{6} = 2] + P[D_{1} = 4, D_{6} = 1] \\
+&= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{5}{49}
 \end{align*}
 
 \newpage
 
 \begin{align*}
-P[s = 6]  &= P[D_{1} = 1, D_{6} = 5] + P[D_{1} = 2, D_{6} = 4] \\ 
-          &+ P[D_{1} = 3, D_{6} = 3] + P[D_{1} = 4, D_{6} = 2] \\ 
-          &+ P[D_{1} = 5, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{6}{49} \\
+P[s = 6]  &= P[D_{1} = 1, D_{6} = 5] + P[D_{1} = 2, D_{6} = 4] \\
+&+ P[D_{1} = 3, D_{6} = 3] + P[D_{1} = 4, D_{6} = 2] \\
+&+ P[D_{1} = 5, D_{6} = 1] \\
+&= \frac{2}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{6}{49} \\
 P[s = 7]  &= P[D_{1} = 1, D_{6} = 6] + P[D_{1} = 2, D_{6} = 5] \\
-          &+ P[D_{1} = 3, D_{6} = 4] + P[D_{1} = 4, D_{6} = 3] \\ 
-          &+ P[D_{1} = 5, D_{6} = 2] + P[D_{1} = 6, D_{6} = 1] \\
-          &= \frac{2}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{9}{49} \\
-P[s = 8]  &= P[D_{1} = 2, D_{6} = 6] + P[D_{1} = 3, D_{6} = 5] \\ 
-          &+ P[D_{1} = 4, D_{6} = 4] + P[D_{1} = 5, D_{6} = 3] \\ 
-          &+ P[D_{1} = 6, D_{6} = 2] \\
-          &=  \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{6}{49} \\
-P[s = 9]  &= P[D_{1} = 3, D_{6} = 6] + P[D_{1} = 4, D_{6} = 5] \\ 
-          &+ P[D_{1} = 5, D_{6} = 4] + P[D_{1} = 6, D_{6} = 3] \\
-          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{5}{49} \\
-P[s = 10] &= P[D_{1} = 4, D_{6} = 6] + P[D_{1} = 5, D_{6} = 5] \\ 
-          &+ P[D_{1} = 6, D_{6} = 4] \\
-          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{4}{49} \\
+&+ P[D_{1} = 3, D_{6} = 4] + P[D_{1} = 4, D_{6} = 3] \\
+&+ P[D_{1} = 5, D_{6} = 2] + P[D_{1} = 6, D_{6} = 1] \\
+&= \frac{2}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{9}{49} \\
+P[s = 8]  &= P[D_{1} = 2, D_{6} = 6] + P[D_{1} = 3, D_{6} = 5] \\
+&+ P[D_{1} = 4, D_{6} = 4] + P[D_{1} = 5, D_{6} = 3] \\
+&+ P[D_{1} = 6, D_{6} = 2] \\
+&=  \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{6}{49} \\
+P[s = 9]  &= P[D_{1} = 3, D_{6} = 6] + P[D_{1} = 4, D_{6} = 5] \\
+&+ P[D_{1} = 5, D_{6} = 4] + P[D_{1} = 6, D_{6} = 3] \\
+&= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{5}{49} \\
+P[s = 10] &= P[D_{1} = 4, D_{6} = 6] + P[D_{1} = 5, D_{6} = 5] \\
+&+ P[D_{1} = 6, D_{6} = 4] \\
+&= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{4}{49} \\
 P[s = 11] &= P[D_{1} = 5, D_{6} = 6] + P[D_{1} = 6, D_{6} = 5] \\
-          &= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
-          &= \frac{3}{49} \\
+&= \frac{1}{7}\cdot\frac{2}{7} + \frac{1}{7}\cdot\frac{1}{7} \\
+&= \frac{3}{49} \\
 P[s = 12] &= P[D_{1} = 6, D_{6} = 6] \\
-          &= \frac{1}{7}\cdot\frac{2}{7} \\
-          &= \frac{2}{49}
+&= \frac{1}{7}\cdot\frac{2}{7} \\
+&= \frac{2}{49}
 \end{align*}
 
 Entonces, las probabilidades para $2 \leq s \leq 12$:

@@ -6,8 +6,8 @@ author: |
   Emiliano Ramírez y Santiago Villarreal
 date: 'Lunes, 13 de septiembre de 2021'
 output:
-    tufte::tufte_handout:
-      citation_package: natbib
+  tufte::tufte_handout:
+    citation_package: natbib
 link-citations: yes
 ---
 
@@ -25,10 +25,10 @@ knitr::opts_chunk$set(
   fig.height = 8,
   fig.pos = '!h',
   fig.width = 8,
-  message=FALSE,
+  message = FALSE,
   out.extra = '',
-  out.width='75%',
-  warning=FALSE
+  out.width = '75%',
+  warning = FALSE
 )
 
 options(htmltools.dir.version = FALSE)
@@ -38,17 +38,17 @@ options(htmltools.dir.version = FALSE)
 
 \vspace{3mm}
 
-Para este problema se impondrán los siguientes supuestos: 
+Para este problema se impondrán los siguientes supuestos:
 
 \begin{itemize}
-    \item La población es cerrada. Durante el tiempo de estudio asumimos que el tamaño poblacional $N$ permanece constante o, si se produce una variación en dicho tamaño, esta es insignificante respecto al verdadero tamaño poblacional.
-    \item Todos los individuos de la población tienen la misma probabilidad de ser capturados en la primera muestra.
-    \item La segunda muestra es también una muestra aleatoria. Para la validez de esta hipótesis, necesitamos que los métodos con los que se marquen a los individuos no afecten a la capturabilidad, de modo que en la recaptura, un individuo que no está marcado tenga la misma probabilidad de ser capturado que uno que no lo está.
+\item La población es cerrada. Durante el tiempo de estudio asumimos que el tamaño poblacional $N$ permanece constante o, si se produce una variación en dicho tamaño, esta es insignificante respecto al verdadero tamaño poblacional.
+\item Todos los individuos de la población tienen la misma probabilidad de ser capturados en la primera muestra.
+\item La segunda muestra es también una muestra aleatoria. Para la validez de esta hipótesis, necesitamos que los métodos con los que se marquen a los individuos no afecten a la capturabilidad, de modo que en la recaptura, un individuo que no está marcado tenga la misma probabilidad de ser capturado que uno que no lo está.
 \end{itemize}
 
 \vspace{3mm}
 
-Usaremos dos estimadores para el número total de la población de peces $N$. El primero corresponde al estimador conseguido por el método de Máxima Verosimilitud. El segundo corresponde al estimador propuesto por Chapman. El motivo del uso de los dos estimadores es que el estimador de MV puede indefinirse si en la segunda muestra aleatoria no se captura ningún pez marcado y que además no es insesgado ni asintóticamente insesgado así como su estimador de varianza. 
+Usaremos dos estimadores para el número total de la población de peces $N$. El primero corresponde al estimador conseguido por el método de Máxima Verosimilitud. El segundo corresponde al estimador propuesto por Chapman. El motivo del uso de los dos estimadores es que el estimador de MV puede indefinirse si en la segunda muestra aleatoria no se captura ningún pez marcado y que además no es insesgado ni asintóticamente insesgado así como su estimador de varianza.
 
 \vspace{3mm}
 
@@ -68,15 +68,15 @@ Por otro lado, el estimador de Chapman, denotado con $\tilde{N}$ tiene la siguie
 
 \vspace{3mm}
 
-Por tanto con los datos del problema tenemos que la estimación puntual de $N$ es, 
+Por tanto con los datos del problema tenemos que la estimación puntual de $N$ es,
 
 \[\hat{N}= ceil\left( \frac{250*174}{50}\right)=870 \]
 
-\[\tilde{N}= ceil\left(\frac{(250 +1)(174+ 1)}{50+1} - 1 = 861.\right)\] 
+\[\tilde{N}= ceil\left(\frac{(250 +1)(174+ 1)}{50+1} - 1 = 861.\right)\]
 
 \vspace{3mm}
 
-Ahora, para determinar el tamaño de $n_2$ y conseguir una buena aproximación de $N$ usaremos un nivel $\alpha = 0.05$ de significancia, la desigualdad de Chebyshev y como parámetros dados a $y$ y $n_1$. Para obtener el tamaño usaremos el estimador de Chapman y el estimador de la varianza de Chapman que tiene la siguiente expresión 
+Ahora, para determinar el tamaño de $n_2$ y conseguir una buena aproximación de $N$ usaremos un nivel $\alpha = 0.05$ de significancia, la desigualdad de Chebyshev y como parámetros dados a $y$ y $n_1$. Para obtener el tamaño usaremos el estimador de Chapman y el estimador de la varianza de Chapman que tiene la siguiente expresión
 
 \[\text{Desigualdad de Chebyshev: }\, \mathbb{P}\left(|\tilde{N} - \mu| \geq z_{1-\frac{\alpha}{2}} * \sqrt{var(\tilde{N})} \right) < \frac{var(\tilde{N})}{z_{1-\frac{\alpha}{2}} * \sqrt{var(\tilde{N})}}=0.95 \]
 
@@ -86,7 +86,7 @@ Donde,
 
 \vspace{3mm}
 
-A continuacion se presentará el código en \texttt{R} que calcula con una función la estimación de $N$ con simulación usando un intervalo de confianza al 95\% tanto con el estimador de máxima verosimilitud como con el de Chapman. Y también una función que calcula el tamaño de $n_2$ para el tamaño de población marcada $n_1$ y el número de población marcada que se obtuvo en el segundo muestreo $y$ dados.  
+A continuacion se presentará el código en \texttt{R} que calcula con una función la estimación de $N$ con simulación usando un intervalo de confianza al 95\% tanto con el estimador de máxima verosimilitud como con el de Chapman. Y también una función que calcula el tamaño de $n_2$ para el tamaño de población marcada $n_1$ y el número de población marcada que se obtuvo en el segundo muestreo $y$ dados.
 
 ```{r}
 ###### PROBLEMA UNO #######
@@ -106,13 +106,13 @@ captura_recaptura <- function(N, n1, S) {
   # n1 <- peces marcados y devueltos de la primera muestra
   # n2 <- tamaño de la muestra después de regresar al estanque
   # S <- número de simulaciones
-  
+
   # simulamos la muestra aleatoria del segundo muestreo
   n2 <- sample(0:N, 1)
-  
+
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1 - alfa / 2) #cuantil normal
-  
+
   # obtenemos una simulación de hipergeométrica para simular cuántos
   # peces marcados obtenemos de la segunda muestra
   y <- rhyper(S, n1, N - n1, n2)
@@ -123,14 +123,14 @@ captura_recaptura <- function(N, n1, S) {
   y <- rhyper(S, n1, N - n1, n2)
   # usamos nuestro estimador de máxima verosimilitud
   Nhat <- ceiling((n1 * n2) / y) #vector de estimaciones
-  
+
   # calculamos la varianza muestral de nuestro estimador
-  varNhat <- (n1 * n2 * (n1 - y) * (n2 - y)) / y ^ 2
-  
+  varNhat <- (n1 * n2 * (n1 - y) * (n2 - y)) / y^2
+
   # calculamos los intervalos de confianza para nuestro estimador
   limInf <- Nhat - z * sqrt(varNhat)
   limSup <- Nhat + z * sqrt(varNhat)
-  
+
   grafica <- plot(
     1:S,
     Nhat,
@@ -140,13 +140,13 @@ captura_recaptura <- function(N, n1, S) {
     xlab = 'Número de simulaciones',
     ylab = 'N hat MV - estimacion poblacion'
   )
-  
+
   lines(1:S, limInf, lty = 2, col = 'red')
   lines(1:S, limSup, lty = 2, col = 'red')
   abline(h = N, col = 'blue')
-  
+
   h <- hist(Nhat, prob = T)
-  
+
   return(grafica, h)
 }
 ```
@@ -246,46 +246,46 @@ tamanio_n2 <- function(N, n1, y) {
   #Dada la población N, los peces marcados n1 y el número de peces marcados
   # obtenidos de la segunda muestra aleatoria (variable) y
   # respondemos a la pregunta formulada arriba.
-  
+
   # Para caluclar el tamaño de n2, usaremos la desigualdad de Chebyshev
   # para alcanzar una buena aproximación a N
   # tomando un nivel de significancia de alfa =0.05
   # Dada la población N, los peces marcados n1 y el número de peces marcados
   # obtenidos de la segunda muestra aleatoria y
   # respondemos a la pregunta formulada arriba.
-  
+
   # Para caluclar el tamanio de n2, usaremos la desigualdad de Chebyshev
   # para alcanzar una buena aproximacion a N
   # tomando un nivel de significacnia alfa =0.05
-  
-  
+
+
   alfa <- 0.05 #nivel de significancia
   z <- qnorm(1 - alfa / 2) #cuantil normal
-  
+
   #vector de números consecutivos de 1 hasta la población,
   # pues n2 puede ser una muestra aleatoria de 1 o N elementos
   n2 <- c(1:N)
   # vector de numeros consecutivos de 1 hasta la población pues n2
   # puede ser una muestra aleatoria de 1 o N elementos
   n2 <- c(1:N)
-  
+
   # calculamos constante de chebysev
   c <- z * (1 - alfa)
-  
+
   # calculemos el error estándar de nuestro estimador
   # (usamos la estimación de la desviación estandar de Chapman)
-  sdNhat <- sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^
-                                                                 2 * (y + 2)))
+  sdNhat <- sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1)^
+    2 * (y + 2)))
   # calculemos el error estandar de nuestro estimador
   # usamos la estimacion de la desviacion estandar de Chapman
   sdNhat <-
-    sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1) ^
-                                                         2 * (y + 2)))
-  
+    sqrt(((y + 1) * (n2 + 1) * (n1 - y) * (n2 - y)) / ((y + 1)^
+      2 * (y + 2)))
+
   N2 <- ifelse(c <= sdNhat, 0, 1)
-  
+
   n2_size <- sum(N2)
-  
+
   #nos regresa el tamaño de n2 para alcanzar una buena aproximación de N
   return(n2_size)
 }
@@ -330,17 +330,17 @@ lines(x_real, fx_real, col = "red")
 b) Escriban una función para simular los activos de la compañía en el horizonte de tiempo $T$ y estimen: (1) la probabilidad de que la compañía se vaya a bancarrota, y (2) Los activos esperados al final de cinco años.
 
 ```{r include = FALSE}
-activos <- function(periodos, p, clientes = 1000, prima = 5500){
+activos <- function(periodos, p, clientes = 1000, prima = 5500) {
   Z <- 10000000
-  for (i in 1:periodos){
+  for (i in 1:periodos) {
     # Calculamos las primas que recibimos al inicio de cada año
-    primas <- clientes*prima
+    primas <- clientes * prima
 
     # Calculamos el número de reclamos que ocurren con probabilidad p
-    num_reclamos <- sum(sample(c(0,1), size = clientes, replace = T, prob = c(1-p, p)))
-    if (num_reclamos != 0){
+    num_reclamos <- sum(sample(c(0, 1), size = clientes, replace = T, prob = c(1 - p, p)))
+    if (num_reclamos != 0) {
       reclamos <- sum(rpareto(num_reclamos, location = 125000, shape = 5) - 125000)
-    } else{
+    } else {
       reclamos <- 0
     }
 
@@ -348,7 +348,7 @@ activos <- function(periodos, p, clientes = 1000, prima = 5500){
     Z <- Z + primas - reclamos
 
     # Si incurrimos en pérdidas, la empresa cierra
-    if (Z < 0){
+    if (Z < 0) {
       Z <- 0
       break
     }
@@ -369,25 +369,25 @@ set.seed(2419231)
 probs <- c(0.01, 0.1, 0.15, 0.2)
 periodos <- c(5, 10, 15, 20)
 
-for (prob in probs){
+for (prob in probs) {
   # Inicializamos el vector de probabilidades
   prob_bancarrota <- c()
-  for (per in periodos){
+  for (per in periodos) {
     # Inicializamos el vector de activos simulados
     activos_simulados <- c()
     # Simulamos 500 veces los activos acumulados en el período T
-    for (i in 1:500){
+    for (i in 1:500) {
       activos_simulados <- c(activos_simulados, activos(per, prob))
     }
-  # Obtenemos la probabilidad de bancarrota
-  prob_bancarrota <- c(prob_bancarrota,
-                       sum(activos_simulados == 0)/length(activos_simulados))
+    # Obtenemos la probabilidad de bancarrota
+    prob_bancarrota <- c(prob_bancarrota,
+                         sum(activos_simulados == 0) / length(activos_simulados))
   }
   # Graficamos la probabilidad de bancarrota para cada período T con probabilidad p
-  par(pty="s")
+  par(pty = "s")
   plot(periodos, prob_bancarrota, type = "l",
        main = str_c("Probabilidad Bancarrota con p = ", prob),
-       xlab = "Período (T)", ylab = "", ylim = c(0,1), cex = 0.5)
+       xlab = "Período (T)", ylab = "", ylim = c(0, 1), cex = 0.5)
 }
 ```
 
@@ -405,10 +405,10 @@ probs <- c(0.01, 0.1, 0.15, 0.2)
 
 # Inicializamos el vector de activos esperados
 expected_activos <- c()
-for (prob in probs){
+for (prob in probs) {
   activos_simulados <- c()
   # Simulamos 500 veces los activos acumulados en el período T = 5
-  for (i in 1:500){
+  for (i in 1:500) {
     activos_simulados <- c(activos_simulados, activos(5, prob))
   }
   # Obtenemos el valor esperado
@@ -416,8 +416,8 @@ for (prob in probs){
 }
 
 # Graficamos la probabilidad de bancarrota para cada período T con probabilidad p
-par(pty="s")
-plot(probs, expected_activos/1000000, xlim = c(0, 0.2), ylim = c(0, 40),
+par(pty = "s")
+plot(probs, expected_activos / 1000000, xlim = c(0, 0.2), ylim = c(0, 40),
      xlab = "Probabilidad de Reclamo", ylab = "Monto en millones",
      main = "Activos Esperados en T = 5")
 ```
@@ -427,18 +427,18 @@ Como podemos observar en la gráfica, en $T = 5$, los activos esperados con las 
 c) Toma de ganancias. Supongan ahora que la compañía toma ganancias al final de cada año. Usando este nuevo esquema, estimar: (1) la probabilidad de irse a la quiebra, (2) los activos esperados después de T años, y (3) Las ganancias totales esperadas después de T años.
 
 ```{r include = FALSE}
-activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
+activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500) {
   Z <- 10000000
   G <- 0
-  for (i in 1:periodos){
+  for (i in 1:periodos) {
     # Calculamos las primas que recibimos al inicio de cada año
-    primas <- clientes*prima
+    primas <- clientes * prima
 
     # Calculamos el número de reclamos que ocurren con probabilidad p
-    num_reclamos <- sum(sample(c(0,1), size = clientes, replace = T, prob = c(1-p, p)))
-    if (num_reclamos != 0){
+    num_reclamos <- sum(sample(c(0, 1), size = clientes, replace = T, prob = c(1 - p, p)))
+    if (num_reclamos != 0) {
       reclamos <- sum(rpareto(num_reclamos, location = 125000, shape = 5) - 125000)
-    } else{
+    } else {
       reclamos <- 0
     }
 
@@ -446,13 +446,13 @@ activos_ganancias <- function(periodos, p, clientes = 1000, prima = 5500){
     Z <- Z + primas - reclamos
 
     # Si incurrimos en pérdidas, la empresa cierra
-    if (Z < 0){
+    if (Z < 0) {
       Z <- 0
       break
     }
 
     # Calculamos las ganancias si existen
-    if(Z > 10000000){
+    if (Z > 10000000) {
       G <- G + Z - 10000000
       Z <- 1000000
     }
@@ -475,27 +475,27 @@ periodos <- c(5, 10, 15, 20)
 # Inicializamos un dataframe
 data_simul <- data.frame()
 
-for (prob in probs){
+for (prob in probs) {
   # Inicializamos el vector de probabilidades, y valos esperados
   prob_bancarrota <- c()
   expected_activos <- c()
   expected_ganancias <- c()
-  for (per in periodos){
+  for (per in periodos) {
     # Inicializamos el vector de activos y ganancias simuladas
     activos_simulados <- c()
     ganancias_simuladas <- c()
     # Simulamos 500 veces los activos y ganancias acumulados en el período T
-    for (i in 1:500){
+    for (i in 1:500) {
       simulacion <- activos_ganancias(per, prob)
       activos_simulados <- c(activos_simulados, simulacion[1])
       ganancias_simuladas <- c(ganancias_simuladas, simulacion[2])
     }
-  # Obtenemos la probabilidad de bancarrota
-  prob_bancarrota <- c(prob_bancarrota,
-                       sum(activos_simulados == 0)/length(activos_simulados))
-  # Obtenemos los promedios de los activos y ganancias
-  expected_activos <- c(expected_activos, mean(activos_simulados))
-  expected_ganancias <- c(expected_ganancias, mean(ganancias_simuladas))
+    # Obtenemos la probabilidad de bancarrota
+    prob_bancarrota <- c(prob_bancarrota,
+                         sum(activos_simulados == 0) / length(activos_simulados))
+    # Obtenemos los promedios de los activos y ganancias
+    expected_activos <- c(expected_activos, mean(activos_simulados))
+    expected_ganancias <- c(expected_ganancias, mean(ganancias_simuladas))
   }
 
   # Creamos la observación en el dataframe
@@ -514,7 +514,7 @@ for (prob in probs){
 ggplot(data_simul, aes(x = periodos, y = prob_bancarrota, color = factor(p))) +
   geom_line() +
   theme_classic() +
-  labs(title = "Probabilidad de Bancarrota", x = "Períodos (T)",y = "",
+  labs(title = "Probabilidad de Bancarrota", x = "Períodos (T)", y = "",
        color = "Probabilidad Reclamo") +
   theme(plot.title = element_text(hjust = 0.5, size = 12)) # Centramos el título
 ```
@@ -523,7 +523,7 @@ ggplot(data_simul, aes(x = periodos, y = prob_bancarrota, color = factor(p))) +
 
 ```{r echo = FALSE}
 # Graficamos los activos esperados
-ggplot(data_simul, aes(x = periodos, y = expected_activos/10000000, color = factor(p))) +
+ggplot(data_simul, aes(x = periodos, y = expected_activos / 10000000, color = factor(p))) +
   geom_line() +
   theme_classic() +
   labs(title = "Activos Esperados", x = "Períodos (T)", y = "Monto en millones",
@@ -535,7 +535,7 @@ ggplot(data_simul, aes(x = periodos, y = expected_activos/10000000, color = fact
 
 ```{r echo = FALSE}
 # Graficamos los activos esperados
-ggplot(data_simul, aes(x = periodos, y = expected_ganancias/10000000, color = factor(p))) +
+ggplot(data_simul, aes(x = periodos, y = expected_ganancias / 10000000, color = factor(p))) +
   geom_line() +
   theme_classic() +
   labs(title = "Ganancias Esperadas", x = "Períodos (T)", y = "Monto en millones",
@@ -554,9 +554,9 @@ Como podemos observar en la gráficas, se mantiene que la probabilidad de bancar
 Para simular la distribución Cauchy con función de densidad $f(x) = \frac{1}{\pi\beta[1 + (\frac{x-\gamma}{\beta}^{2})]}$, usamos el hecho que su función de distribución $F(x) = \frac{1}{\pi}\arctan{(\frac{x-\gamma}{\beta})}+\frac{1}{2}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \beta \tan{(\pi(U-\frac{1}{2}))}+\gamma$ sigue una distribución Cauchy con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
 ```{r}
-rcauchy <- function(n, param_gamma = 0, param_beta = 1){
+rcauchy <- function(n, param_gamma = 0, param_beta = 1) {
   unif <- runif(n)
-  cauchy <- param_beta*tan(pi*(unif-0.5))+param_gamma
+  cauchy <- param_beta * tan(pi * (unif - 0.5)) + param_gamma
   return(cauchy)
 }
 ```
@@ -574,10 +574,10 @@ n <- 5000
 cauchy <- rcauchy(n)
 
 # Calculamos X(n)
-xn_cauchy <- cumsum(cauchy)/1:n
+xn_cauchy <- cumsum(cauchy) / 1:n
 
 # Graficamos X(n)
-plot(1:n, xn_cauchy, type = "l", lwd = 2, bty="l",
+plot(1:n, xn_cauchy, type = "l", lwd = 2, bty = "l",
      main = "X(n) - Cauchy", xlab = "n", ylab = "X(n)")
 ```
 
@@ -590,9 +590,9 @@ Podemos notar de la gráfica que $\bar{X}(n)$ no converge a ningún valor, hecho
 Para simular la distribución Gumbel con función de densidad $f(x) = \frac{1}{\beta}\exp(-e^{-(x-\gamma)/\beta}-\frac{x-\gamma}{\beta})$, usamos el hecho que su función de distribución $F(x) = \exp(-e^{(x-\gamma)/\beta})$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(-\ln{(U)})}+\gamma$ sigue una distribución Gumbel con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
 ```{r}
-rgumbel <- function(n, param_gamma = 0, param_beta = 1){
+rgumbel <- function(n, param_gamma = 0, param_beta = 1) {
   unif <- runif(n)
-  gumbel <- -param_beta*log(-log(unif)) + param_gamma
+  gumbel <- -param_beta * log(-log(unif)) + param_gamma
   return(gumbel)
 }
 ```
@@ -610,10 +610,10 @@ n <- 5000
 gumbel <- rgumbel(n)
 
 # Calculamos X(n)
-xn_gumbel <- cumsum(gumbel)/1:n
+xn_gumbel <- cumsum(gumbel) / 1:n
 
 # Graficamos X(n)
-plot(1:n, xn_gumbel, type = "l", lwd = 2, bty="l",
+plot(1:n, xn_gumbel, type = "l", lwd = 2, bty = "l",
      main = "X(n) - Gumbel", xlab = "n", ylab = "X(n)")
 abline(h = -digamma(1), col = "red", lty = 2)
 ```
@@ -628,9 +628,9 @@ La media de la distribución Gumbel con $\gamma = 0$ y $\beta = 1$ es la constan
 Para simular la distribución Logística con función de densidad $f(x) = \frac{(1/\beta)e^{-(x-\gamma)/\beta}}{(1+e^{-(x-\gamma)/\beta})^2}$, usamos el hecho que su función de distribución $F(x) =  \frac{1}{(1+e^{-(x-\gamma)/\beta}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = -\beta\ln{(\frac{1-y}{y})}+\gamma$ sigue una distribución Logística con parámetro de escala $\beta > 0$ y de locación $\gamma$.
 
 ```{r}
-rlogistic <- function(n, param_gamma = 0, param_beta = 1){
+rlogistic <- function(n, param_gamma = 0, param_beta = 1) {
   unif <- runif(n)
-  logistic <- -param_beta*log((1-unif)/unif) + param_gamma
+  logistic <- -param_beta * log((1 - unif) / unif) + param_gamma
   return(logistic)
 }
 ```
@@ -648,10 +648,10 @@ n <- 5000
 logistic <- rlogistic(n)
 
 # Calculamos X(n)
-xn_logistic <- cumsum(logistic)/1:n
+xn_logistic <- cumsum(logistic) / 1:n
 
 # Graficamos X(n)
-plot(1:n, xn_logistic, type = "l", lwd = 2, bty="l",
+plot(1:n, xn_logistic, type = "l", lwd = 2, bty = "l",
      main = "X(n) - Logística", xlab = "n", ylab = "X(n)")
 abline(h = 0, col = "red", lty = 2)
 ```
@@ -667,9 +667,9 @@ La media de la distribución Logística es $\gamma = 0$. Podemos ver en la gráf
 Para simular la distribución Pareto con función de densidad $f(x) = \frac{\alpha_{2}c^{\alpha_{2}}}{x^{\alpha_{2}+1}}$, usamos el hecho que su función de distribución $F(x) = 1- (\frac{c}{x})^{\alpha_{2}}$ es una función invertible. Usando el teorema de la función inversa, sea $U\sim Unif[0,1]$, entonces $X = \frac{c}{(1-U)^{1/\alpha_{2}}}$ o $X = \frac{c}{(U)^{1/\alpha_{2}}}$ sigue una distribución Pareto con parámetro de escala $c > 0$ y de forma $\alpha_{2} > 0$.
 
 ```{r}
-rparet <- function(n, param_c = 1, param_alpha = 2){
+rparet <- function(n, param_c = 1, param_alpha = 2) {
   unif <- runif(n)
-  pareto <- param_c/(unif)^(1/param_alpha)
+  pareto <- param_c / (unif)^(1 / param_alpha)
   return(pareto)
 }
 ```
@@ -687,10 +687,10 @@ n <- 5000
 pareto <- rparet(n)
 
 # Calculamos X(n)
-xn_pareto <- cumsum(pareto)/1:n
+xn_pareto <- cumsum(pareto) / 1:n
 
 # Graficamos X(n)
-plot(1:n, xn_pareto, type = "l", lwd = 2, bty="l",
+plot(1:n, xn_pareto, type = "l", lwd = 2, bty = "l",
      main = "X(n) - Pareto", xlab = "n", ylab = "X(n)")
 abline(h = 2, col = "red", lty = 2)
 ```
@@ -704,9 +704,9 @@ La media de la distribución Pareto es $\frac{\alpha_{2}c}{\alpha_{2}-1} = 2$. P
 Para simular la distribución Vasicek con función de densidad $f(x) =\sqrt{\frac{1-\rho}{\rho}} \exp{\left(\frac{1}{2} \{ \Phi^{-1}(x)^{2} - \left(\frac{\sqrt{1-\rho}\Phi^{-1}(p)}{\sqrt{\rho}} \right)^{2} \}  \right)}$, usamos el hecho que $X = \Phi\left( \frac{\Phi^{-1}(p)-\sqrt{\rho}Z}{\sqrt{1-\rho}} \right)$ sigue una distribución Vasicek con parámetros $p$ y $\rho$, donde $Z$ sigue una distribución normal estándar y $\Phi$ es su función de distribución.
 
 ```{r}
-rvasicek <- function(n, param_rho, param_p){
+rvasicek <- function(n, param_rho, param_p) {
   normal <- rnorm(n)
-  vasicek <- pnorm((qnorm(p)-sqrt(rho)*normal)/sqrt(1-param_rho))
+  vasicek <- pnorm((qnorm(p) - sqrt(rho) * normal) / sqrt(1 - param_rho))
   return(vasicek)
 }
 ```
@@ -715,40 +715,40 @@ rvasicek <- function(n, param_rho, param_p){
 
 # Problema 4
 
-## Inciso (a) 
+## Inciso (a)
 
 Usamos primero el método de transformación con distribución inversa:
 ```{r}
-f1<-function(x){return(3/2*x^2)}
-raiz<-function(x){
-  sign(x)*abs(x)^(1/3)
+f1 <- function(x) { return(3 / 2 * x^2) }
+raiz <- function(x) {
+  sign(x) * abs(x)^(1 / 3)
 }
 
-n<-10000
-x1<-numeric(n)
+n <- 10000
+x1 <- numeric(n)
 
-for (i in 1:n){x1[i]=(raiz(2*runif(1)-1))} 
+for (i in 1:n) { x1[i] = (raiz(2 * runif(1) - 1)) }
 ```
 
 ```{r,echo=FALSE}
-hist(x1,prob=T,breaks=20)
-curve(expr=f1,from=-1,to=1,ylab="f(x)",add=T)
+hist(x1, prob = T, breaks = 20)
+curve(expr = f1, from = -1, to = 1, ylab = "f(x)", add = T)
 ```
 
 También, logramos emplear el método de aceptación/rechazo para aproximar la densidad:
 ```{r}
-n<-10000
-u1<-runif(n)
-u2<-runif(n)
-y1<-raiz(2*u2-1)
-aceptados<- u1<=f1(y1)/(0.1+2*y1^2)
-pts<-y1[aceptados]
+n <- 10000
+u1 <- runif(n)
+u2 <- runif(n)
+y1 <- raiz(2 * u2 - 1)
+aceptados <- u1 <= f1(y1) / (0.1 + 2 * y1^2)
+pts <- y1[aceptados]
 ```
 
 ```{r,echo=FALSE}
-curve(expr=(0.1+2*x^2),from=-1,to=1,ylab="g(x) y f(x)",col="green") 
-curve(expr=f1,from=-1,to=1,ylab="f(x)",add=T,col="blue")
-points(pts,u1[aceptados]*(0.1+2*pts^2),pch=16,ce=.2)
+curve(expr = (0.1 + 2 * x^2), from = -1, to = 1, ylab = "g(x) y f(x)", col = "green")
+curve(expr = f1, from = -1, to = 1, ylab = "f(x)", add = T, col = "blue")
+points(pts, u1[aceptados] * (0.1 + 2 * pts^2), pch = 16, ce = .2)
 ```
 
 ## Inciso (b)
@@ -756,40 +756,40 @@ points(pts,u1[aceptados]*(0.1+2*pts^2),pch=16,ce=.2)
 Para este inciso, utilizamos únicamente el método de transformación, que presentaba más dificultades al momento de calcular la solución de la distribución inversa.
 
 ```{r}
-f2<-function(w,a){
-  if (w>=0 && w<=a){return(w*(1/(a*(1-a))))}
-  else{if(w>=a && w<=1-a){return(1/(1-a))}
-        else{if(w>=1-a && w<=1){return((1-w)/(a*(1-a)))}
-            else {return(0)}}}
+f2 <- function(w, a) {
+  if (w >= 0 && w <= a) { return(w * (1 / (a * (1 - a)))) }
+  else { if (w >= a && w <= 1 - a) { return(1 / (1 - a)) }
+  else { if (w >= 1 - a && w <= 1) { return((1 - w) / (a * (1 - a))) }
+  else { return(0) } } }
 }
-a=0.2
-len=200
-x2 <- seq(-0.01,1.01,length=len)
-y2<-numeric(len)
-for (i in 1:len){
-  y2[i]<-f2(x2[i],a)
+a = 0.2
+len = 200
+x2 <- seq(-0.01, 1.01, length = len)
+y2 <- numeric(len)
+for (i in 1:len) {
+  y2[i] <- f2(x2[i], a)
 }
-plot(x2,y2,type="l",ylim=c(0,2),xlab="x",ylab="f(x)")  
+plot(x2, y2, type = "l", ylim = c(0, 2), xlab = "x", ylab = "f(x)")
 
 
-indicadora<-function(x,k1,k2){
-  ifelse(x>=k1 & x<=k2,1,0)
+indicadora <- function(x, k1, k2) {
+  ifelse(x >= k1 & x <= k2, 1, 0)
 }
-fx<-function(x,r){
-  indicadora(x,0,r)*sqrt(2*r*(1-r)*runif(1))+
-  indicadora(x,r,1-r)*(runif(1)*(1-r)+r/2)+
-  indicadora(x,1-r,1)*(1-sqrt(1-(runif(1)-(2+2*r-5*r^2)/(2*r*(1-r)))*2*r*(1-r)))
+fx <- function(x, r) {
+  indicadora(x, 0, r) * sqrt(2 * r * (1 - r) * runif(1)) +
+    indicadora(x, r, 1 - r) * (runif(1) * (1 - r) + r / 2) +
+    indicadora(x, 1 - r, 1) * (1 - sqrt(1 - (runif(1) - (2 + 2 * r - 5 * r^2) / (2 * r * (1 - r))) * 2 * r * (1 - r)))
 }
-x<-seq(-0.0001,1.0001,length=10000)
-y<-numeric(length(x))
-for(i in 1:length(x)){
-  y[i]<-fx(x[i],0.2)
+x <- seq(-0.0001, 1.0001, length = 10000)
+y <- numeric(length(x))
+for (i in 1:length(x)) {
+  y[i] <- fx(x[i], 0.2)
 }
 ```
 
 ```{r,echo=FALSE}
-plot(x2,y2,type="l",ylim=c(0,2),xlab="x",ylab="f(x)")  
-hist(y,prob=T,xlim=c(0,1),ylim=c(0,1.5),breaks=50,add=T)
+plot(x2, y2, type = "l", ylim = c(0, 2), xlab = "x", ylab = "f(x)")
+hist(y, prob = T, xlim = c(0, 1), ylim = c(0, 1.5), breaks = 50, add = T)
 ```
 
 \newpage
@@ -811,13 +811,13 @@ Obtendremos la muestra de 1,000 números de este problema usando el método de l
 \vspace{3mm}
 
 \begin{itemize}
-    \item Generamos $u \sim \mathcal{U}(0,1)$
-    \item Tomamos $x=x_{(i)}$, donde $F(x_{(i-1)}) < u \leq F(x_{(i)})$
+\item Generamos $u \sim \mathcal{U}(0,1)$
+\item Tomamos $x=x_{(i)}$, donde $F(x_{(i-1)}) < u \leq F(x_{(i)})$
 \end{itemize}
 
 \vspace{3mm}
 
-Usaremos una forma recursiva de la función acumulada de probabilidad de la distribución del problema. 
+Usaremos una forma recursiva de la función acumulada de probabilidad de la distribución del problema.
 
 \[F(x+1)=F(x) + f(x+1)=F(x) + f(x) + \frac{2}{k(k+1)} \]
 
@@ -862,18 +862,18 @@ knitr::include_graphics('problem6 hist.png')
 # Problema 7
 
 ```{r}
-n<-100000
-p<-0.4
-blli<-function(x,p){p^x*(1-p)^(1-x)}
-tam<-100
-muestra<-sample(1:tam,n,replace=T)
-binomial1<-numeric(n)
-for(i in 1:n){
-  numexitos<-c(rep(1,muestra[i]),rep(0,tam-muestra[i]))
-  binomial1[i]<-prod(blli(numexitos,p))*factorial(tam)/(factorial(muestra[i])*factorial(tam-muestra[i]))
+n <- 100000
+p <- 0.4
+blli <- function(x, p) { p^x * (1 - p)^(1 - x) }
+tam <- 100
+muestra <- sample(1:tam, n, replace = T)
+binomial1 <- numeric(n)
+for (i in 1:n) {
+  numexitos <- c(rep(1, muestra[i]), rep(0, tam - muestra[i]))
+  binomial1[i] <- prod(blli(numexitos, p)) * factorial(tam) / (factorial(muestra[i]) * factorial(tam - muestra[i]))
 }
 
-binomial2<-dbinom(muestra,tam,p)
+binomial2 <- dbinom(muestra, tam, p)
 ```
 
 Como podemos ver, las entradas de ambos vectores (uno simulado y otro calculado con la función) son iguales sobre la muestra que extraímos:
@@ -887,12 +887,12 @@ Al evaluar el tiempo de respuesta del programa para simular una binomial mediant
 
 ```{r}
 system.time(
-for(i in 1:n){
-  numexitos<-c(rep(1,muestra[i]),rep(0,tam-muestra[i]))
-  binomial1[i]<-prod(blli(numexitos,p))*factorial(tam)/(factorial(muestra[i])*factorial(tam-muestra[i]))
-})
+  for (i in 1:n) {
+    numexitos <- c(rep(1, muestra[i]), rep(0, tam - muestra[i]))
+    binomial1[i] <- prod(blli(numexitos, p)) * factorial(tam) / (factorial(muestra[i]) * factorial(tam - muestra[i]))
+  })
 
-system.time(binomial2<-dbinom(muestra,tam,p))
+system.time(binomial2 <- dbinom(muestra, tam, p))
 ```
 
 \newpage
@@ -903,7 +903,7 @@ system.time(binomial2<-dbinom(muestra,tam,p))
 set.seed(1234)
 
 mezcla <- function(n, p, mu1, mu2, s1, s2) {
-    p * rmvnorm(n, mean = mu1, sigma = s1) + (1 - p) * rmvnorm(n, mean = mu2, sigma = s2)
+  p * rmvnorm(n, mean = mu1, sigma = s1) + (1 - p) * rmvnorm(n, mean = mu2, sigma = s2)
 }
 
 n <- 1000 # observaciones
@@ -921,11 +921,11 @@ z <- as.data.frame(mezcla(n, p, mu1, mu2, s1, s2))
 plt <- c()
 
 for (i in 1:4) {
-    plt[[i]] <- ggplot(z, aes_string(x = names(z)[i])) +
-        geom_histogram(bins = 100,
-                       fill = '#2d6c5f',
-                       alpha = 0.8) +
-        theme_minimal()
+  plt[[i]] <- ggplot(z, aes_string(x = names(z)[i])) +
+    geom_histogram(bins = 100,
+                   fill = '#2d6c5f',
+                   alpha = 0.8) +
+    theme_minimal()
 }
 ```
 
@@ -948,13 +948,13 @@ ggpairs(z) + theme_minimal()
 
 ```{r}
 wishart1 <- function(k, n, mean, sigma) {
-    require(mvtnorm)
-    W <- list(NULL)
-    for (i in 1:k) {
-        X <- rmvnorm(n, mean = mean, sigma = sigma)
-        W[[i]] <- t(X) %*% X
-    }
-    return(W)
+  require(mvtnorm)
+  W <- list(NULL)
+  for (i in 1:k) {
+    X <- rmvnorm(n, mean = mean, sigma = sigma)
+    W[[i]] <- t(X) %*% X
+  }
+  return(W)
 }
 ```
 
@@ -962,17 +962,17 @@ wishart1 <- function(k, n, mean, sigma) {
 
 ```{r}
 wishart2 <- function(k, n, mean, sigma) {
-    W <- list(NULL)
-    d <- length(mean)
-    A <- matrix(0, nrow = d, ncol = d)
-    for (i in 1:k) {
-        A[lower.tri(matrix(0, nrow = d, ncol = d))] <-
-            rnorm(d * (d + 1) / 2 - d)
-        diag(A) <- sqrt(rchisq(d, n - (1:d) + 1))
-        L <- chol(sigma)
-        W[[i]] <- L %*% A %*% t(A) %*% t(L)
-    }
-    return(W)
+  W <- list(NULL)
+  d <- length(mean)
+  A <- matrix(0, nrow = d, ncol = d)
+  for (i in 1:k) {
+    A[lower.tri(matrix(0, nrow = d, ncol = d))] <-
+      rnorm(d * (d + 1) / 2 - d)
+    diag(A) <- sqrt(rchisq(d, n - (1:d) + 1))
+    L <- chol(sigma)
+    W[[i]] <- L %*% A %*% t(A) %*% t(L)
+  }
+  return(W)
 }
 ```
 
@@ -997,27 +997,27 @@ toc()
 
 # Problema 10
 
-Después de generar las 500 observaciones de la distribución normal bivariada con su respectiva matriz de covaroanza, se tomó el exponencial de la matriz. Al exponenciar una variable aleatoria distribuida normal, obtenemos una  distribución lognormal. Lo que podemos observar en la gráfica, es que existen correlaciones que no pueden darse en una distribución lognormal, que terminan siendo muy cercanas a 0. 
+Después de generar las 500 observaciones de la distribución normal bivariada con su respectiva matriz de covaroanza, se tomó el exponencial de la matriz. Al exponenciar una variable aleatoria distribuida normal, obtenemos una  distribución lognormal. Lo que podemos observar en la gráfica, es que existen correlaciones que no pueden darse en una distribución lognormal, que terminan siendo muy cercanas a 0.
 
 ```{r}
 library(mvtnorm)
-SIG2<-seq(from=0.1,to=20,length.out = 100)
-RHO<-seq(from=-1,to=1,length.out=21)
-matriz<-matrix(numeric(),ncol=2)
-pts<-data.frame()
-for (i in 1:length(SIG2)){
-  for(j in 1:length(RHO)){
-  cvz<-matrix(c(1,sqrt(SIG2[i])*RHO[j],sqrt(SIG2[i])*RHO[j],SIG2[i]),ncol=2)
-  z<-rmvnorm(500,mean=c(0,0),sigma=cvz) 
-  expz<-exp(z)
-  p<-cor(expz[,1],expz[,2])
-  matriz<-rbind(matriz,c(SIG2[i],p)) 
+SIG2 <- seq(from = 0.1, to = 20, length.out = 100)
+RHO <- seq(from = -1, to = 1, length.out = 21)
+matriz <- matrix(numeric(), ncol = 2)
+pts <- data.frame()
+for (i in 1:length(SIG2)) {
+  for (j in 1:length(RHO)) {
+    cvz <- matrix(c(1, sqrt(SIG2[i]) * RHO[j], sqrt(SIG2[i]) * RHO[j], SIG2[i]), ncol = 2)
+    z <- rmvnorm(500, mean = c(0, 0), sigma = cvz)
+    expz <- exp(z)
+    p <- cor(expz[, 1], expz[, 2])
+    matriz <- rbind(matriz, c(SIG2[i], p))
   }
 }
 ```
 
 ```{r,echo=FALSE}
-plot(matriz[,1],matriz[,2],xlab="Sigma^2",ylab="Correlación")
+plot(matriz[, 1], matriz[, 2], xlab = "Sigma^2", ylab = "Correlación")
 ```
 \newpage
 
