@@ -19,40 +19,38 @@
 \newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
 % Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
 \newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
 \newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
 \newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
 \newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
 
 % Pandoc citation processing
 \newlength{\csllabelwidth}
@@ -140,72 +138,243 @@ in full within the abstract itself and cited in the text.
 
 \acknow{}
 
-\lipsum[1-1]
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Código de prueba}
-\NormalTok{m }\OtherTok{=} \DecValTok{10}
-\NormalTok{n }\OtherTok{=} \DecValTok{10}
-\NormalTok{ctr }\OtherTok{=} \DecValTok{0}
-\NormalTok{mymat }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, m, n)}
-
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{m) \{}
-  \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
-    \ControlFlowTok{if}\NormalTok{ (i }\SpecialCharTok{==}\NormalTok{ j) \{}
-      \ControlFlowTok{break}
-\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
-\NormalTok{      mymat[i, j] }\OtherTok{=}\NormalTok{ i }\SpecialCharTok{*}\NormalTok{ j}
-\NormalTok{      ctr }\OtherTok{=}\NormalTok{ ctr }\SpecialCharTok{+} \DecValTok{1}
-\NormalTok{    \}}
-\NormalTok{  \}}
-  \FunctionTok{print}\NormalTok{(i }\SpecialCharTok{*}\NormalTok{ j)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 1
-## [1] 4
-## [1] 9
-## [1] 16
-## [1] 25
-## [1] 36
-## [1] 49
-## [1] 64
-## [1] 81
-## [1] 100
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{print}\NormalTok{(ctr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 45
-\end{verbatim}
-
-\hypertarget{subtuxedtulo}{%
-\section*{Subtítulo}\label{subtuxedtulo}}
-\addcontentsline{toc}{section}{Subtítulo}
+\hypertarget{introducciuxf3n}{%
+\section*{Introducción}\label{introducciuxf3n}}
+\addcontentsline{toc}{section}{Introducción}
 
 Ejemplo de cita (1).
 
 \lipsum[2-4]
 
-\hypertarget{subsubtuxedtulo}{%
-\subsection*{Subsubtítulo}\label{subsubtuxedtulo}}
-\addcontentsline{toc}{subsection}{Subsubtítulo}
+\hypertarget{datos}{%
+\section*{Datos}\label{datos}}
+\addcontentsline{toc}{section}{Datos}
 
 \lipsum[4-6]
 
-\hypertarget{subsubtuxedtulo-1}{%
-\subsubsection*{Subsubtítulo}\label{subsubtuxedtulo-1}}
-\addcontentsline{toc}{subsubsection}{Subsubtítulo}
+\hypertarget{muxe9todos}{%
+\section*{Métodos}\label{muxe9todos}}
+\addcontentsline{toc}{section}{Métodos}
 
 \lipsum[6-8]
+
+\hypertarget{resultados}{%
+\section*{Resultados}\label{resultados}}
+\addcontentsline{toc}{section}{Resultados}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gamma.moments }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}
+\NormalTok{        data, iters, alpha}\FloatTok{.0}\NormalTok{, beta}\FloatTok{.0}
+\NormalTok{) \{}
+\NormalTok{  sample.mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(data)}
+\NormalTok{  sample.var }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(data)}
+\NormalTok{  mu}\FloatTok{.0} \OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(sample.mean, sample.var)}
+\NormalTok{  theta }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\DecValTok{2}\NormalTok{, iters)}
+\NormalTok{  theta[, }\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(alpha}\FloatTok{.0}\NormalTok{, beta}\FloatTok{.0}\NormalTok{)}
+
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\NormalTok{iters) \{}
+\NormalTok{    n }\OtherTok{\textless{}{-}}\NormalTok{ i }\SpecialCharTok{+} \DecValTok{100}
+\NormalTok{    simulated }\OtherTok{\textless{}{-}} \FunctionTok{rgamma}\NormalTok{(}
+\NormalTok{            n,}
+            \AttributeTok{shape =}\NormalTok{ theta[}\DecValTok{1}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{],}
+            \AttributeTok{scale =}\NormalTok{ theta[}\DecValTok{2}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]}
+\NormalTok{    )}
+\NormalTok{    mu }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{mean}\NormalTok{(simulated), }\FunctionTok{var}\NormalTok{(simulated))}
+\NormalTok{    mu.hat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{    h }\OtherTok{\textless{}{-}}\NormalTok{ u }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(simulated)) \{}
+\NormalTok{      u[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{digamma}\NormalTok{(theta[}\DecValTok{1}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]) }\SpecialCharTok{{-}}
+              \FunctionTok{log}\NormalTok{(theta[}\DecValTok{2}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]) }\SpecialCharTok{+}
+              \FunctionTok{log}\NormalTok{(simulated[j])}
+\NormalTok{      u[}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ (}\SpecialCharTok{{-}}\NormalTok{theta[}\DecValTok{1}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{] }\SpecialCharTok{/}\NormalTok{ theta[}\DecValTok{2}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]) }\SpecialCharTok{+}
+\NormalTok{              simulated[j] }\SpecialCharTok{/}\NormalTok{ (theta[}\DecValTok{2}\NormalTok{, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{      h[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ simulated[j]}
+\NormalTok{      h[}\DecValTok{2}\NormalTok{] }\OtherTok{\textless{}{-}}\NormalTok{ (simulated[j] }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(simulated))}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{      m }\OtherTok{\textless{}{-}}\NormalTok{ h }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(u)}
+\NormalTok{      mu.hat }\OtherTok{\textless{}{-}}\NormalTok{ mu.hat }\SpecialCharTok{+}\NormalTok{ m}
+\NormalTok{    \}}
+
+\NormalTok{    mu.hat }\OtherTok{\textless{}{-}}\NormalTok{ mu.hat }\SpecialCharTok{/} \FunctionTok{length}\NormalTok{(simulated)}
+
+\NormalTok{    par }\OtherTok{\textless{}{-}}\NormalTok{ theta[, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{] }\SpecialCharTok{+}
+            \FunctionTok{solve}\NormalTok{(mu.hat) }\SpecialCharTok{\%*\%}\NormalTok{ (mu}\FloatTok{.0} \SpecialCharTok{{-}}\NormalTok{ mu)}
+
+    \ControlFlowTok{if}\NormalTok{ (par[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ par[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) \{}
+\NormalTok{      theta[, i] }\OtherTok{\textless{}{-}}\NormalTok{ par}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      theta[, i] }\OtherTok{\textless{}{-}}\NormalTok{ theta[, i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{] }\SpecialCharTok{+}
+              \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+
+\NormalTok{  theta }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+          \AttributeTok{x =}\NormalTok{ theta[}\DecValTok{1}\NormalTok{,],}
+          \AttributeTok{y =}\NormalTok{ theta[}\DecValTok{2}\NormalTok{,],}
+          \AttributeTok{n =} \DecValTok{1}\SpecialCharTok{:}\NormalTok{iters}
+\NormalTok{  )}
+
+\NormalTok{  p}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(theta) }\SpecialCharTok{+}
+          \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ x),}
+                    \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+          \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
+               \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
+               \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(alpha))}
+
+\NormalTok{  p}\FloatTok{.2} \OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(theta) }\SpecialCharTok{+}
+          \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ y),}
+                    \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+          \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
+               \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
+               \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(beta))}
+
+\NormalTok{  shape }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta}\SpecialCharTok{$}\NormalTok{x)}
+\NormalTok{  scale }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta}\SpecialCharTok{$}\NormalTok{y)}
+
+\NormalTok{  dist.mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(shape }\SpecialCharTok{*}\NormalTok{ scale)}
+\NormalTok{  dist.var }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(shape }\SpecialCharTok{*}\NormalTok{ (scale}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+\NormalTok{  test }\OtherTok{\textless{}{-}} \FunctionTok{ks.test}\NormalTok{(}
+\NormalTok{          data, }\StringTok{"pgamma"}\NormalTok{,}
+          \AttributeTok{shape =}\NormalTok{ shape, }\AttributeTok{scale =}\NormalTok{ scale}
+\NormalTok{  )}
+
+\NormalTok{  results }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+\NormalTok{          test,}
+\NormalTok{          p}\FloatTok{.1}\NormalTok{, p}\FloatTok{.2}\NormalTok{,}
+\NormalTok{          shape, scale,}
+\NormalTok{          dist.mean, dist.var,}
+\NormalTok{          sample.mean, sample.var}
+\NormalTok{  )}
+
+  \FunctionTok{return}\NormalTok{(results)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  data
+## D = 0.092, p-value = 0.7
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-1} \end{flushleft}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-2} \end{flushleft}
+
+\begin{verbatim}
+## [1] 2.499
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 16.69
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 41.69
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 695.8
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 41.77
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 691.1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  data
+## D = 0.087, p-value = 0.7
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-3} \end{flushleft}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-4} \end{flushleft}
+
+\begin{verbatim}
+## [1] 2.476
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 16.7
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 41.35
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 690.4
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 41.77
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 691.1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  data
+## D = 0.12, p-value = 0.3
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-5} \end{flushleft}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/tests-6} \end{flushleft}
+
+\begin{verbatim}
+## [1] 2.62
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 16.68
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 43.71
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 729.1
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 41.77
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 691.1
+\end{verbatim}
+
+\lipsum[8-10]
+
+\hypertarget{conclusiones}{%
+\section*{Conclusiones}\label{conclusiones}}
+\addcontentsline{toc}{section}{Conclusiones}
+
+\lipsum[10-12]
+
+\hypertarget{anexos}{%
+\section*{Anexos}\label{anexos}}
+\addcontentsline{toc}{section}{Anexos}
 
 \hypertarget{referencias}{%
 \section*{Referencias}\label{referencias}}
