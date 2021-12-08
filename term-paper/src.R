@@ -1,7 +1,6 @@
 library(tidyverse)
 library(matlib)
 
-
 data <- na.omit(read.csv("data/cancer.csv"))
 
 sample.mean <- mean(data$DFS..in.months.)
@@ -11,14 +10,14 @@ mu.0 <- c(sample.mean, sample.var)
 
 iters <- 1000
 
-alpha.0 <- 20 # rnorm(1)
-beta.0 <- 10 # runif(1)
+alpha.0 <- 20
+beta.0 <- 10
 
 theta <- matrix(NA, 2, iters)
 theta[, 1] <- c(alpha.0, beta.0)
 
 for (i in 2:iters) {
-  n <- 2^i
+  n <- i + 100
   simulated <- rgamma(n, shape = theta[1, i - 1], scale = theta[2, i - 1])
   mu.hat <- c(mean(simulated), var(simulated)) # sum((simulated - mean(simulated))^2)
   mu.hat.1 <- matrix(0, 2, 2)
@@ -47,8 +46,13 @@ for (i in 2:iters) {
   print(i)
 }
 
-plot(theta[1,], type = "l")
-plot(theta[2,], type = "l")
+plot(theta[1,], type = "l", xlab = "Iteraciones", ylab = expression(alpha))
+plot(theta[2,], type = "l", xlab = "Iteraciones", ylab = expression(beta))
 
-mean(theta[1,] * theta[2,])
-mean(theta[1,] * (theta[2,]^2))
+shape <- mean(theta[1,])
+scale <- mean(theta[2,])
+
+dist.mean <- mean(shape * scale)
+dist.var <- mean(shape * (scale^2))
+
+komo.test <- ks.test(data$DFS..in.months., "pgamma", shape = shape, scale = scale)
