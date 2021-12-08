@@ -1,5 +1,5 @@
 ---
-title: Título
+title: Estimación de parámetros de la distribución de meses de supervivencia libre de cáncer colorrectal
 
 author:
   - name: Carlos Lezama
@@ -25,13 +25,13 @@ corresponding_author:
 lead_author_surname: Lezama, Medina, Ramírez y Villarreal
 
 abstract: |
-  Please provide an abstract of no more than 250 words in a single paragraph. Abstracts should explain to the general reader the major contributions of the article. References in the abstract must be cited in full within the abstract itself and cited in the text.
+  En el presente proyecto se estiman los parámetros de una distribución gamma para los datos de meses antes de recaer en casos de cáncer de colon. El algoritmo aplicado usa técnicas de optimización numérica, simulación y estadística para aproximar los híper-parámetros de la distribución. Para la solución del problema, nos basamos en el trabajo de Andrew Gelman.
 
 keywords:
-  - análisis bayesiano
   - aproximación estocástica
+  - ćancer colorrectal
   - estimación
-  - muestreo de importancia
+  - optimización numérica
 
 pnas_type: pnasresearcharticle
 
@@ -171,7 +171,13 @@ Así pues, podemos escribir a $f(x)=f(x+x_k-x_k)$ como sigue
 
 donde $\xi(x)$ es un punto desconocido en el intervalo $(x,x_k)$. 
 
-Sea $x=x^*$ tal que $f(x^*)=0$. Si $f$ fuera una función lineal entonces el problema sería realmente sencillo ya que $f^{\prime\prime}\equiv0$, por lo que podríamos encontrar la raíz de la función resolviendo $0=f\left(x_{k}\right)+f^{\prime}\left(x_{k}\right)\left(x^{*}-x_{k}\right), \text { dándonos como resultado } x^{*}=x_{k}-f\left(x_{k}\right) / f^{\prime}\left(x_{k}\right)$. 
+Sea $x=x^*$ tal que $f(x^*)=0$. Si $f$ fuera una función lineal entonces el problema sería realmente sencillo ya que $f^{\prime\prime}\equiv0$, por lo que podríamos encontrar la raíz de la función resolviendo
+
+$$f\left(x_{k}\right)+f^{\prime}\left(x_{k}\right)\left(x^{*}-x_{k}\right) = 0,$$
+
+dándonos como resultado
+
+$$x^{*}=x_{k}-f\left(x_{k}\right) / f^{\prime}\left(x_{k}\right).$$
 
 Si la función $f$ no es lineal entonces definimos la siguiente formula iterativa para $x_k$:
 
@@ -231,19 +237,23 @@ $$\hat{\mu}(\theta) = \frac{1}{N} \sum_{i = 1}^{N} h(x_{i})$$
 
 Por otro lado,
 
-$$\mu^{\prime}(\theta) = \frac{d}{d\theta}\mathbb{E}[h(x)|\theta] = \int h(x) \frac{d}{d\theta} f(x;\theta) dx = \mathbb{E}[h(x)U(x,\theta)^{T}]$$
+\begin{align*}
+\mu^{\prime}(\theta) &= \frac{d}{d\theta}\mathbb{E}[h(x)|\theta] \\
+&= \int h(x) \frac{d}{d\theta} f(x;\theta) dx \\
+&= \mathbb{E}[h(x)U(x,\theta)^{T}]
+\end{align*}
 
 Donde $U(x,\theta)^{T} = \frac{d}{d\theta} \log{f(x;\theta)}$. Sea entonces el estimador Monte Carlo para $\mu^{\prime}(\theta)$:
 
 $$\hat{\mu}^{\prime}(\theta) = \frac{1}{N} \sum_{i = 1}^{N} h(x_{i})U(x_{i},\theta)^{T}$$
 
-Para la implementación del algoritmo en nuestro caso particular, tomamos en cuenta lo siguiente. El vector de parámetros a estimar bidimensional, dado por: $\theta=(\alpha,\beta)$; la función $h(\vec{x})=(x_i, (x_i - \overline{\mathbf{x}})^{2})$ y, finalmente, nuestro sistema de ecuaciones $U(x,\theta)=\frac{d}{d\theta}log(f(\vec{x}))$, dado por: 
+Para la implementación del algoritmo en nuestro caso particular, tomamos en cuenta lo siguiente. El vector de parámetros a estimar bidimensional, dado por: $\theta=(\alpha,\beta)$; la función $h(\vec{x})=(x_i, (x_i - \overline{\mathbf{x}})^{2})$ y, finalmente, nuestro sistema de ecuaciones $U(x,\theta)= d / d \theta (log(f(\vec{x})))$, dado por:
 
-$$ \begin{cases} \frac{d}{d\alpha}=-\frac{\Gamma'(\alpha)}{\Gamma(\alpha)}-ln(\beta)+ln(x_i) \\ \frac{d}{d\beta}= -\frac{\alpha}{\beta} + \frac{x_i}{\beta^{2}}  \end{cases} \qquad i=1,2,...,N $$ 
+$$ \begin{cases} \frac{\displaystyle d}{\displaystyle d\alpha}=-\frac{\displaystyle \Gamma'(\alpha)}{\displaystyle \Gamma(\alpha)}-ln(\beta)+ln(x_i) \\ \frac{\displaystyle d}{\displaystyle d\beta}= -\frac{\displaystyle \alpha}{\displaystyle \beta} + \frac{\displaystyle x_i}{\displaystyle \beta^{2}}  \end{cases} \qquad i=1,2,...,N $$
 
 Después de definir las ecuaciones y funciones necesarias para el algoritmo, usamos los resultados de las simulaciones de la distribución objetivo para calcular $\hat{\mu}^{\prime}(\theta)$, $\hat{\mu}(\theta)$ y después, realizar la siguiente iteración del algoritmo de Newton-Raphson en 2 dimensiones, dada por: 
 
-$$ \theta_{t+1} = \theta_t + [\hat{\mu}^{\prime}(\theta_t)]^{-1}*(\mu_0 - \hat{\mu}(\theta_t)) \qquad t=1,2,... $$
+$$ \theta_{t+1} = \theta_t + [\hat{\mu}^{\prime}(\theta_t)]^{-1} \cdot (\mu_0 - \hat{\mu}(\theta_t)) \qquad t=1,2,... $$
 
 donde $\theta_t$ es un vector de 2x1 que contiene el valor de los parámetros de la iteración actual, $\hat{\mu}^{\prime}(\theta_t)$ es una matriz de 2x2, $\mu_0$ es un vector que contiene la media y varianza muestral y  $\hat{\mu}(\theta)$ es un vector de 2x1. 
 
@@ -304,18 +314,26 @@ gamma.moments <- function(
   )
 
   p.1 <- ggplot(theta) +
-          geom_line(aes(x = n, y = x),
-                    size = 0.1) +
-          labs(title = NULL,
-               x = "n",
-               y = expression(alpha))
+    geom_line(aes(x = n, y = x),
+              size = 0.1) +
+    labs(title = NULL,
+         x = "n",
+         y = expression(alpha),
+         caption = paste("alpha inicial =",
+                         alpha.0,
+                         "\nbeta inicial =",
+                         beta.0))
 
   p.2 <- ggplot(theta) +
-          geom_line(aes(x = n, y = y),
-                    size = 0.1) +
-          labs(title = NULL,
-               x = "n",
-               y = expression(beta))
+    geom_line(aes(x = n, y = y),
+              size = 0.1) +
+    labs(title = NULL,
+         x = "n",
+         y = expression(beta),
+         caption = paste("alpha inicial =",
+                         alpha.0,
+                         "\nbeta inicial =",
+                         beta.0))
 
   shape <- mean(theta$x)
   scale <- mean(theta$y)
@@ -343,13 +361,40 @@ gamma.moments <- function(
 ```{r tests, echo = FALSE, warning = FALSE}
 set.seed(1234)
 test.1 <- gamma.moments(data, 1000, 0.01, 0.01)
-test.1[[1]]; test.1[[2]]; test.1[[3]]; test.1[[4]]; test.1[[5]]; test.1[[6]]; test.1[[7]]; test.1[[8]]; test.1[[9]]
 set.seed(1234)
 test.2 <- gamma.moments(data, 1000, 2.5, 16.5)
-test.2[[1]]; test.2[[2]]; test.2[[3]]; test.2[[4]]; test.2[[5]]; test.2[[6]]; test.2[[7]]; test.2[[8]]; test.2[[9]]
 set.seed(1234)
 test.3 <- gamma.moments(data, 1000, 20, 50)
-test.3[[1]]; test.3[[2]]; test.3[[3]]; test.3[[4]]; test.3[[5]]; test.3[[6]]; test.3[[7]]; test.3[[8]]; test.3[[9]]
+```
+
+Para nuestras simulaciones, usamos 1000 iteraciones y distintos valores iniciales para estimar $\alpha$ y $\beta$. Esto es relevante porque el algoritmo es sensible a la cercanía del valor inicial respecto al valor de convergencia como podemos observar en las siguientes tabla y gráficas.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rrrr}
+&       &       &  \\
+\midrule
+\midrule
+\multicolumn{4}{c}{Tabla de resultados para distintos valores iniciales} \\
+\multicolumn{1}{c}{$(\alpha_0, \beta_0)$} & \multicolumn{1}{c}{(0.01,  0.01)} & \multicolumn{1}{c}{(2.5, 16.5)} & \multicolumn{1}{c}{(20, 50)} \\
+\midrule
+\multicolumn{1}{c}{$\alpha$} & \multicolumn{1}{c}{`r test.1[[4]]`} & \multicolumn{1}{c}{`r test.2[[4]]`} & \multicolumn{1}{c}{`r test.3[[4]]`} \\
+\multicolumn{1}{c}{$\beta$} & \multicolumn{1}{c}{`r test.1[[5]]`} & \multicolumn{1}{c}{`r test.2[[5]]`} & \multicolumn{1}{c}{`r test.3[[5]]`} \\
+\multicolumn{1}{c}{$\hat{\mu}$} & \multicolumn{1}{c}{`r test.1[[6]]`} & \multicolumn{1}{c}{`r test.2[[6]]`} & \multicolumn{1}{c}{`r test.3[[6]]`} \\
+\multicolumn{1}{c}{$\hat{\sigma}^2$} & \multicolumn{1}{c}{`r test.1[[7]]`} & \multicolumn{1}{c}{`r test.2[[7]]`} & \multicolumn{1}{c}{`r test.3[[7]]`} \\
+\multicolumn{1}{c}{$\bar{X}$} & \multicolumn{1}{c}{`r test.1[[8]]`} & \multicolumn{1}{c}{`r test.2[[8]]`} & \multicolumn{1}{c}{`r test.3[[8]]`} \\
+\multicolumn{1}{c}{$s^2$} & \multicolumn{1}{c}{`r test.1[[9]]`} & \multicolumn{1}{c}{`r test.2[[9]]`} & \multicolumn{1}{c}{`r test.3[[9]]`} \\
+\midrule
+\midrule
+&       &       &  \\
+\end{tabular}%
+\label{tab:addlabel}%
+\end{table}%
+
+```{r plots, echo = FALSE, warning = FALSE}
+test.1[[2]]; test.1[[3]]; test.1[[1]]
+test.2[[2]]; test.2[[3]]; test.2[[1]]
+test.3[[2]]; test.3[[3]]; test.3[[1]]
 ```
 
 # Conclusiones {-}
@@ -367,8 +412,6 @@ Para hacer más eficiente el algoritmo, el autor propone hacer muestro por impor
 Los alcances que tiene el proyecto son vastos y también mencionados en el trabajo de Gelman. En primer lugar y, evidentemente, el algoritmo es una herramienta con un gran trasfondo matemático y estadístico, por lo cual se puede trabajar con distribuciones de las cuales no conocemos la constante normalizadora. En nuestro caso, se empleó una distribución conocida y simple, para evidenciar que el algoritmo funciona a escala pequeña. Sin embargo, se puede extender, como se mencionó, a distribuciones cuya constante normalizadora sea una expresión difícil de calcular. También, como se menciona en el párrafo anterior, se puede emplear muestreo por importancia para hacer el algoritmo más eficiente. Otra alternativa para la cual se puede ajustar el algoritmo es, como se revisó en el curso, en caso de conocer únicamente la distribución límite, se puede simular la muestra usando el algoritmo de Metrópolis-Hastings. Finalmente, igual es posible implementar un ajuste de mínimos cuadrados en el caso de que el problema tenga más momentos definidos que parámetros (sobredeterminación), y, de esta forma, implementar el algoritmo de Newton-Raphson con un ajuste de regresión sobre las ecuaciones normales del problema. 
 
 Como pudimos observar, el algoritmo produce resultados y conclusiones válidas y aplicables en problemas de la vida real e, igualmente, es un método flexible que puede ajustarse a las múltiples condiciones que puede presentar cualquier problema. También, descansa sobre múltiples temas que se revisaron a lo largo del curso y esto permitió mejorar nuestro entendimiento de qué había que hacer al momento de la implementación.
-
-# Anexos {-}
 
 <!-- No cambiar nada desde aquí -->
 # Referencias {-}

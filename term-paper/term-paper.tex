@@ -82,7 +82,8 @@
 
 \templatetype{pnasresearcharticle}  % Choose template
 
-\title{Título}
+\title{Estimación de parámetros de la distribución de meses de
+supervivencia libre de cáncer colorrectal}
 
 \author[a,1,2]{Carlos Lezama}
 \author[a,1,2]{Marco Medina}
@@ -111,14 +112,16 @@ de la Vega Góngora. E-mail:
 \href{mailto:jorge.delavegagongora@gmail.com}{\nolinkurl{jorge.delavegagongora@gmail.com}}}
 
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
- \keywords{  análisis bayesiano |  aproximación
-estocástica |  estimación |  muestreo de importancia  } 
+ \keywords{  aproximación estocástica |  ćancer
+colorrectal |  estimación |  optimización numérica  } 
 
 \begin{abstract}
-Please provide an abstract of no more than 250 words in a single
-paragraph. Abstracts should explain to the general reader the major
-contributions of the article. References in the abstract must be cited
-in full within the abstract itself and cited in the text.
+En el presente proyecto se estiman los parámetros de una distribución
+gamma para los datos de meses antes de recaer en casos de cáncer de
+colon. El algoritmo aplicado usa técnicas de optimización numérica,
+simulación y estadística para aproximar los híper-parámetros de la
+distribución. Para la solución del problema, nos basamos en el trabajo
+de Andrew Gelman.
 \end{abstract}
 
 \dates{This manuscript was compiled on \today}
@@ -246,7 +249,7 @@ comentará si fue acertada la suposición.
 (1)}\label{muxe9todo-de-momentos-casella2021statistical}}
 
 El método de momentos para estimar parámetros es considerado uno de los
-métodos más viejos y ``confiables.'' Es ideal usarlo cuando los
+métodos más viejos y ``confiables''. Es ideal usarlo cuando los
 parámetros distribucionales que se quieren estimar están involucrados en
 la función de los momentos teóricos (comúnmente en media y varianza
 poblacional). El argumento en el que se basa su implementación es muy
@@ -334,7 +337,12 @@ Sea \(x=x^*\) tal que \(f(x^*)=0\). Si \(f\) fuera una función lineal
 entonces el problema sería realmente sencillo ya que
 \(f^{\prime\prime}\equiv0\), por lo que podríamos encontrar la raíz de
 la función resolviendo
-\(0=f\left(x_{k}\right)+f^{\prime}\left(x_{k}\right)\left(x^{*}-x_{k}\right), \text { dándonos como resultado } x^{*}=x_{k}-f\left(x_{k}\right) / f^{\prime}\left(x_{k}\right)\).
+
+\[f\left(x_{k}\right)+f^{\prime}\left(x_{k}\right)\left(x^{*}-x_{k}\right) = 0,\]
+
+dándonos como resultado
+
+\[x^{*}=x_{k}-f\left(x_{k}\right) / f^{\prime}\left(x_{k}\right).\]
 
 Si la función \(f\) no es lineal entonces definimos la siguiente formula
 iterativa para \(x_k\):
@@ -435,7 +443,11 @@ función dada, el estimador Monte Carlo para \(\mu(\theta)\) es:
 
 Por otro lado,
 
-\[\mu^{\prime}(\theta) = \frac{d}{d\theta}\mathbb{E}[h(x)|\theta] = \int h(x) \frac{d}{d\theta} f(x;\theta) dx = \mathbb{E}[h(x)U(x,\theta)^{T}]\]
+\begin{align*}
+\mu^{\prime}(\theta) &= \frac{d}{d\theta}\mathbb{E}[h(x)|\theta] \\
+&= \int h(x) \frac{d}{d\theta} f(x;\theta) dx \\
+&= \mathbb{E}[h(x)U(x,\theta)^{T}]
+\end{align*}
 
 Donde \(U(x,\theta)^{T} = \frac{d}{d\theta} \log{f(x;\theta)}\). Sea
 entonces el estimador Monte Carlo para \(\mu^{\prime}(\theta)\):
@@ -447,9 +459,9 @@ en cuenta lo siguiente. El vector de parámetros a estimar bidimensional,
 dado por: \(\theta=(\alpha,\beta)\); la función
 \(h(\vec{x})=(x_i, (x_i - \overline{\mathbf{x}})^{2})\) y, finalmente,
 nuestro sistema de ecuaciones
-\(U(x,\theta)=\frac{d}{d\theta}log(f(\vec{x}))\), dado por:
+\(U(x,\theta)= d / d \theta (log(f(\vec{x})))\), dado por:
 
-\[ \begin{cases} \frac{d}{d\alpha}=-\frac{\Gamma'(\alpha)}{\Gamma(\alpha)}-ln(\beta)+ln(x_i) \\ \frac{d}{d\beta}= -\frac{\alpha}{\beta} + \frac{x_i}{\beta^{2}}  \end{cases} \qquad i=1,2,...,N \]
+\[ \begin{cases} \frac{\displaystyle d}{\displaystyle d\alpha}=-\frac{\displaystyle \Gamma'(\alpha)}{\displaystyle \Gamma(\alpha)}-ln(\beta)+ln(x_i) \\ \frac{\displaystyle d}{\displaystyle d\beta}= -\frac{\displaystyle \alpha}{\displaystyle \beta} + \frac{\displaystyle x_i}{\displaystyle \beta^{2}}  \end{cases} \qquad i=1,2,...,N \]
 
 Después de definir las ecuaciones y funciones necesarias para el
 algoritmo, usamos los resultados de las simulaciones de la distribución
@@ -457,7 +469,7 @@ objetivo para calcular \(\hat{\mu}^{\prime}(\theta)\),
 \(\hat{\mu}(\theta)\) y después, realizar la siguiente iteración del
 algoritmo de Newton-Raphson en 2 dimensiones, dada por:
 
-\[ \theta_{t+1} = \theta_t + [\hat{\mu}^{\prime}(\theta_t)]^{-1}*(\mu_0 - \hat{\mu}(\theta_t)) \qquad t=1,2,... \]
+\[ \theta_{t+1} = \theta_t + [\hat{\mu}^{\prime}(\theta_t)]^{-1} \cdot (\mu_0 - \hat{\mu}(\theta_t)) \qquad t=1,2,... \]
 
 donde \(\theta_t\) es un vector de 2x1 que contiene el valor de los
 parámetros de la iteración actual, \(\hat{\mu}^{\prime}(\theta_t)\) es
@@ -537,18 +549,26 @@ y que no se estancara en la estimación anterior en caso de hacerlo.
 \NormalTok{  )}
 
 \NormalTok{  p}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(theta) }\SpecialCharTok{+}
-          \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ x),}
-                    \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
-          \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
-               \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
-               \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(alpha))}
+    \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ x),}
+              \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
+         \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
+         \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(alpha),}
+         \AttributeTok{caption =} \FunctionTok{paste}\NormalTok{(}\StringTok{"alpha inicial ="}\NormalTok{,}
+\NormalTok{                         alpha}\FloatTok{.0}\NormalTok{,}
+                         \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{beta inicial ="}\NormalTok{,}
+\NormalTok{                         beta}\FloatTok{.0}\NormalTok{))}
 
 \NormalTok{  p}\FloatTok{.2} \OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(theta) }\SpecialCharTok{+}
-          \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ y),}
-                    \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
-          \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
-               \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
-               \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(beta))}
+    \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ n, }\AttributeTok{y =}\NormalTok{ y),}
+              \AttributeTok{size =} \FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \ConstantTok{NULL}\NormalTok{,}
+         \AttributeTok{x =} \StringTok{"n"}\NormalTok{,}
+         \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(beta),}
+         \AttributeTok{caption =} \FunctionTok{paste}\NormalTok{(}\StringTok{"alpha inicial ="}\NormalTok{,}
+\NormalTok{                         alpha}\FloatTok{.0}\NormalTok{,}
+                         \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{beta inicial ="}\NormalTok{,}
+\NormalTok{                         beta}\FloatTok{.0}\NormalTok{))}
 
 \NormalTok{  shape }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta}\SpecialCharTok{$}\NormalTok{x)}
 \NormalTok{  scale }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta}\SpecialCharTok{$}\NormalTok{y)}
@@ -574,6 +594,40 @@ y que no se estancara en la estimación anterior en caso de hacerlo.
 \end{Highlighting}
 \end{Shaded}
 
+Para nuestras simulaciones, usamos 1000 iteraciones y distintos valores
+iniciales para estimar \(\alpha\) y \(\beta\). Esto es relevante porque
+el algoritmo es sensible a la cercanía del valor inicial respecto al
+valor de convergencia como podemos observar en las siguientes tabla y
+gráficas.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{rrrr}
+&       &       &  \\
+\midrule
+\midrule
+\multicolumn{4}{c}{Tabla de resultados para distintos valores iniciales} \\
+\multicolumn{1}{c}{$(\alpha_0, \beta_0)$} & \multicolumn{1}{c}{(0.01,  0.01)} & \multicolumn{1}{c}{(2.5, 16.5)} & \multicolumn{1}{c}{(20, 50)} \\
+\midrule
+\multicolumn{1}{c}{$\alpha$} & \multicolumn{1}{c}{2.4986} & \multicolumn{1}{c}{2.476} & \multicolumn{1}{c}{2.6199} \\
+\multicolumn{1}{c}{$\beta$} & \multicolumn{1}{c}{16.6873} & \multicolumn{1}{c}{16.6989} & \multicolumn{1}{c}{16.6827} \\
+\multicolumn{1}{c}{$\hat{\mu}$} & \multicolumn{1}{c}{41.6944} & \multicolumn{1}{c}{41.3465} & \multicolumn{1}{c}{43.7063} \\
+\multicolumn{1}{c}{$\hat{\sigma}^2$} & \multicolumn{1}{c}{695.7655} & \multicolumn{1}{c}{690.4403} & \multicolumn{1}{c}{729.1397} \\
+\multicolumn{1}{c}{$\bar{X}$} & \multicolumn{1}{c}{41.7742} & \multicolumn{1}{c}{41.7742} & \multicolumn{1}{c}{41.7742} \\
+\multicolumn{1}{c}{$s^2$} & \multicolumn{1}{c}{691.0629} & \multicolumn{1}{c}{691.0629} & \multicolumn{1}{c}{691.0629} \\
+\midrule
+\midrule
+&       &       &  \\
+\end{tabular}%
+\label{tab:addlabel}%
+\end{table}
+
+\%
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-1} \end{flushleft}
+
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-2} \end{flushleft}
+
 \begin{verbatim}
 ## 
 ##  One-sample Kolmogorov-Smirnov test
@@ -583,33 +637,9 @@ y que no se estancara en la estimación anterior en caso de hacerlo.
 ## alternative hypothesis: two-sided
 \end{verbatim}
 
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-1} \end{flushleft}
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-3} \end{flushleft}
 
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-2} \end{flushleft}
-
-\begin{verbatim}
-## [1] 2.499
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 16.69
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 41.69
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 695.8
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 41.77
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 691.1
-\end{verbatim}
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-4} \end{flushleft}
 
 \begin{verbatim}
 ## 
@@ -620,33 +650,9 @@ y que no se estancara en la estimación anterior en caso de hacerlo.
 ## alternative hypothesis: two-sided
 \end{verbatim}
 
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-3} \end{flushleft}
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-5} \end{flushleft}
 
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-4} \end{flushleft}
-
-\begin{verbatim}
-## [1] 2.476
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 16.7
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 41.35
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 690.4
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 41.77
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 691.1
-\end{verbatim}
+\begin{flushleft}\includegraphics{/home/carlos/Documents/simulation-fall-2021/term-paper/term-paper_files/figure-latex/plots-6} \end{flushleft}
 
 \begin{verbatim}
 ## 
@@ -655,34 +661,6 @@ y que no se estancara en la estimación anterior en caso de hacerlo.
 ## data:  data
 ## D = 0.12, p-value = 0.3
 ## alternative hypothesis: two-sided
-\end{verbatim}
-
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-5} \end{flushleft}
-
-\begin{flushleft}\includegraphics{term-paper_files/figure-latex/tests-6} \end{flushleft}
-
-\begin{verbatim}
-## [1] 2.62
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 16.68
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 43.71
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 729.1
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 41.77
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 691.1
 \end{verbatim}
 
 \hypertarget{conclusiones}{%
@@ -766,10 +744,6 @@ temas que se revisaron a lo largo del curso y esto permitió mejorar
 nuestro entendimiento de qué había que hacer al momento de la
 implementación.
 
-\hypertarget{anexos}{%
-\section*{Anexos}\label{anexos}}
-\addcontentsline{toc}{section}{Anexos}
-
 \hypertarget{referencias}{%
 \section*{Referencias}\label{referencias}}
 \addcontentsline{toc}{section}{Referencias}
@@ -780,26 +754,27 @@ implementación.
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{0}{0}
-\leavevmode\hypertarget{ref-casella2021statistical}{}%
+\leavevmode\vadjust pre{\hypertarget{ref-casella2021statistical}{}}%
 \CSLLeftMargin{1. }
 \CSLRightInline{Casella G, Berger RL (2021) \emph{Statistical inference}
 (Cengage Learning).}
 
-\leavevmode\hypertarget{ref-ascher2011first}{}%
+\leavevmode\vadjust pre{\hypertarget{ref-ascher2011first}{}}%
 \CSLLeftMargin{2. }
 \CSLRightInline{Ascher UM, Greif C (2011) \emph{A first course on
 numerical methods} (SIAM).}
 
-\leavevmode\hypertarget{ref-dobrow2016introduction}{}%
+\leavevmode\vadjust pre{\hypertarget{ref-dobrow2016introduction}{}}%
 \CSLLeftMargin{3. }
 \CSLRightInline{Dobrow RP (2016) \emph{Introduction to stochastic
 processes with r} (John Wiley \& Sons).}
 
-\leavevmode\hypertarget{ref-mainArt}{}%
+\leavevmode\vadjust pre{\hypertarget{ref-mainArt}{}}%
 \CSLLeftMargin{4. }
-\CSLRightInline{Gelman A (1995) Method of moments using monte carlo
-simulation. \emph{Journal of Computational and Graphical Statistics}
-4(1):36--54.}
+\CSLRightInline{Gelman A (1995)
+\href{http://www.jstor.org/stable/1390626}{Method of moments using monte
+carlo simulation}. \emph{Journal of Computational and Graphical
+Statistics} 4(1):36--54.}
 
 \end{CSLReferences}
 

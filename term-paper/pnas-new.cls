@@ -80,7 +80,7 @@
 
 \renewcommand\AB@affilsepx{; \protect\Affilfont}
 
-\renewcommand\Authands{, and }
+\renewcommand\Authands{, y }
 
 %% Choose template type
 \newcommand*{\templatetype}[1]{%
